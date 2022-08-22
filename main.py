@@ -1,6 +1,7 @@
 from converter import constants
-from logging.handlers import RotatingFileHandler
 from converter.convert import ConvertCsvToXml
+from logging.handlers import RotatingFileHandler
+
 import logging
 import sys
 
@@ -64,7 +65,6 @@ if __name__ == "__main__":
     logger = logging.getLogger(__name__)
 
     latest_gis_export_peilmarges_csv = constants.get_last_gis_export_peilmarges_csv()
-    assert latest_gis_export_peilmarges_csv.is_file()
     data_converter = ConvertCsvToXml(orig_csv_path=latest_gis_export_peilmarges_csv)
     data_converter.run()
     logger.info("shutting down app")
