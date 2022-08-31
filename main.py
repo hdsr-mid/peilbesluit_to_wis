@@ -26,7 +26,7 @@ def setup_logging() -> None:
 
     # handler: stream
     stream_handler = logging.StreamHandler()
-    stream_handler.setLevel(logging.INFO)
+    stream_handler.setLevel(logging.DEBUG)
     stream_handler.setFormatter(logging.Formatter(fmt="%(asctime)s %(levelname)s %(message)s", datefmt="%H:%M:%S"))
 
     # handler: rotating file
@@ -38,7 +38,10 @@ def setup_logging() -> None:
     )
     rotating_file_handler.setLevel(logging.INFO)
     rotating_file_handler.setFormatter(
-        logging.Formatter(fmt="%(asctime)s %(filename)s %(levelname)s %(message)s", datefmt="%Y-%m-%d %H:%M:%S",)
+        logging.Formatter(
+            fmt="%(asctime)s %(filename)s %(levelname)s %(message)s",
+            datefmt="%Y-%m-%d %H:%M:%S",
+        )
     )
 
     # handler: one time file (since rotating file is not created when I&A runs this app(?!?!)
@@ -46,7 +49,10 @@ def setup_logging() -> None:
     one_time_file_handler = logging.FileHandler(filename=one_time_file_path.as_posix(), mode="w")
     one_time_file_handler.setLevel(logging.INFO)
     one_time_file_handler.setFormatter(
-        logging.Formatter(fmt="%(asctime)s %(filename)s %(levelname)s %(message)s", datefmt="%Y-%m-%d %H:%M:%S",)
+        logging.Formatter(
+            fmt="%(asctime)s %(filename)s %(levelname)s %(message)s",
+            datefmt="%Y-%m-%d %H:%M:%S",
+        )
     )
 
     # root logger (with 3 handlers)

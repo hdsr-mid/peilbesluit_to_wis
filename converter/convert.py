@@ -1,9 +1,8 @@
 from converter import constants
+from converter.xml_builder import XmlSeriesBuilder
 from datetime import datetime
 from enum import Enum
 from pathlib import Path
-from typing import List
-from typing import TextIO
 
 import csv
 import logging
@@ -20,14 +19,6 @@ MIN_PEIL = -10  # [mnap]
 MAX_PEIL = 10  # [mnap]
 MIN_MARGE = 1  # [cm]
 MAX_MARGE = 100  # [cm]
-
-
-class MargeType:
-    peilbesluitpeil = "Peilbesluitpeil"
-    peilbesluitpeil_eerste_bovengrens = "Peilbesluitpeil eerste bovengrens"
-    peilbesluitpeil_tweede_bovengrens = "Peilbesluitpeil tweede bovengrens"
-    peilbesluitpeil_eerste_ondergrens = "Peilbesluitpeil eerste ondergrens"
-    peilbesluitpeil_tweede_ondergrens = "Peilbesluitpeil tweede ondergrens"
 
 
 class ColumnBase:
@@ -155,7 +146,7 @@ class ConvertCsvToXml:
         self._all_orig_csv_rows = None
         self._orig_csv_row_no_header = None
         self._orig_csv_header = None
-        self._validated_csv_rows = None
+        self._csv_rows_no_error = None
         self._output_xml_path = None
 
     @property
@@ -179,14 +170,14 @@ class ConvertCsvToXml:
         return self._all_orig_csv_rows
 
     @property
-    def orig_csv_row_no_header(self) -> List[List[str]]:
+    def orig_csv_row_no_header(self) -> list:
         if self._orig_csv_row_no_header is not None:
             return self._orig_csv_row_no_header
         self._orig_csv_row_no_header = [x for x in self.all_orig_csv_rows[1:]]
         return self._orig_csv_row_no_header
 
     @property
-    def orig_csv_header(self) -> List[str]:
+    def orig_csv_header(self) -> list:
         if self._orig_csv_header is not None:
             return self._orig_csv_header
         self._orig_csv_header = [x.replace(" ", "_").strip() for x in self.all_orig_csv_rows[0]]
@@ -200,215 +191,224 @@ class ConvertCsvToXml:
         msg: str,
         peilgebied_id: str,
         error_dict_index: dict = None,
-        error_dict_peilgebied: dict = None,
+        error_peilgebied: set = None,
     ):
-        error_type_id_str = f"error_type_id={error_type_id}"
-        if error_dict_index:
+        if error_dict_index is not None:
             if row_index not in error_dict_index:
-                error_dict_index[row_index] = {error_type_id_str: msg}
+                error_dict_index[row_index] = {error_type_id: msg}
             else:
-                error_dict_index[row_index][error_type_id_str] = msg
+                error_dict_index[row_index][error_type_id] = msg
+        if error_peilgebied is not None:
+            error_peilgebied.add(peilgebied_id)
+        return error_dict_index, error_peilgebied
 
-        if error_dict_peilgebied:
-            if peilgebied_id not in error_dict_peilgebied:
-                error_dict_peilgebied[peilgebied_id] = {error_type_id_str: msg}
-            else:
-                error_dict_peilgebied[peilgebied_id][error_type_id_str] = msg
-        return error_dict_index, error_dict_peilgebied
+    @classmethod
+    def get_value(cls, col_name: str, zipped_cols_values, convert_to_target: bool = True) -> any:
+        col_name, value = [x for x in zipped_cols_values if x[0] == col_name][0]
+        validator = COLUMN_VALIDATORS[col_name]
+        validated_value = validator.validate(value=value)
+        return validated_value if convert_to_target else value
 
     @property
-    def validated_csv_rows(self) -> List[List[str]]:
-        if self._validated_csv_rows is not None:
-            return self._validated_csv_rows
+    def csv_rows_no_error(self) -> list:
+        if self._csv_rows_no_error is not None:
+            return self._csv_rows_no_error
         nr_expected_columns = len(self.orig_csv_header)
         error_dict_index = {}
-        error_dict_peilgebied = {}
+        error_peilgebied = set()
         for row_index, row in enumerate(self.orig_csv_row_no_header):
+
             error_type_id = 1
-            zipped_data = [x for x in zip(self.orig_csv_header, row)]
-            peilgebied_id = [column_value for column_name, column_value in zipped_data if column_name == "pgid"][0]
+            zipped_cols_values = [x for x in zip(self.orig_csv_header, row)]
+            peilgebied_id = self.get_value(col_name="pgid", zipped_cols_values=zipped_cols_values)
 
             logger.info("check 1 (error) nr columns in this row must equal nr headers")
             nr_columns = len(row)
             if nr_columns != nr_expected_columns:
-                msg = f"Skipping csv row {row_index}, err=nr cells does not match nr csv columns {self.orig_csv_header}"
+                msg = f"nr cells does not match nr csv columns {self.orig_csv_header}"
                 if constants.RAISE_ON_CSV_ERROR_ROW:
                     raise AssertionError(msg)
                 logger.error(msg)
-                error_dict_index, error_dict_peilgebied = self.save_error(
+                error_dict_index, error_peilgebied = self.save_error(
                     row_index=row_index,
                     error_type_id=error_type_id,
                     error_dict_index=error_dict_index,
                     msg=msg,
                     peilgebied_id=peilgebied_id,
-                    error_dict_peilgebied=error_dict_peilgebied,
+                    error_peilgebied=error_peilgebied,
                 )
                 continue
 
             logger.debug("check 2 validate values")
-            for column_name, column_value in zipped_data:
+            for column_name, column_value in zipped_cols_values:
                 error_type_id += 1
                 column_validator = COLUMN_VALIDATORS[column_name]
                 try:
                     column_validator.validate(value=column_value)
                 except Exception as err:
-                    msg = f"Skipping csv row {row_index}, column={column_name}, err={err}"
+                    msg = f"column={column_name}, err={err}"
                     if constants.RAISE_ON_CSV_ERROR_ROW:
                         raise AssertionError(msg)
 
-                    error_dict_index, error_dict_peilgebied = self.save_error(
+                    error_dict_index, error_peilgebied = self.save_error(
                         row_index=row_index,
                         error_type_id=error_type_id,
                         error_dict_index=error_dict_index,
                         msg=msg,
                         peilgebied_id=peilgebied_id,
-                        error_dict_peilgebied=error_dict_peilgebied,
+                        error_peilgebied=error_peilgebied,
                     )
 
         logger.debug("check 3: validate values (dates) with other values in same row")
-        error_type_id = len(self.orig_csv_header) + 1
         for row_index, row in enumerate(self.orig_csv_row_no_header):
             if row_index in error_dict_index:
                 continue
 
-            zipped_data = [x for x in zip(self.orig_csv_header, row)]
-            peilgebied_id = [column_value for column_name, column_value in zipped_data if column_name == "pgid"][0]
-            if peilgebied_id in error_dict_peilgebied:
+            zipped_cols_values = [x for x in zip(self.orig_csv_header, row)]
+            peilgebied_id = self.get_value(col_name="pgid", zipped_cols_values=zipped_cols_values)
+            if peilgebied_id in error_peilgebied:
                 continue
 
             # check 3a: peilen onderling
-            eind_winter = COLUMN_VALIDATORS["eind_winter"].validate(
-                value=[column_value for column_name, column_value in zipped_data if column_name == "eind_winter"][0]
-            )
-            begin_zomer = COLUMN_VALIDATORS["begin_zomer"].validate(
-                value=[column_value for column_name, column_value in zipped_data if column_name == "begin_zomer"][0]
-            )
-            eind_zomer = COLUMN_VALIDATORS["eind_zomer"].validate(
-                value=[column_value for column_name, column_value in zipped_data if column_name == "eind_zomer"][0]
-            )
-            begin_winter = COLUMN_VALIDATORS["begin_winter"].validate(
-                value=[column_value for column_name, column_value in zipped_data if column_name == "begin_winter"][0]
-            )
+            eind_winter = self.get_value(col_name="eind_winter", zipped_cols_values=zipped_cols_values)
+            begin_zomer = self.get_value(col_name="begin_zomer", zipped_cols_values=zipped_cols_values)
+            eind_zomer = self.get_value(col_name="eind_zomer", zipped_cols_values=zipped_cols_values)
+            begin_winter = self.get_value(col_name="begin_winter", zipped_cols_values=zipped_cols_values)
             dates_are_ordered_ok = eind_winter < begin_zomer < eind_zomer < begin_winter
             if not dates_are_ordered_ok:
-                msg = (
-                    f"Skipping csv row {row_index} as dates are not ordered "
-                    f"(eind_winter < begin_zomer < eind_zomer < begin_winter)"
-                )
-                error_dict_index, error_dict_peilgebied = self.save_error(
+                msg = f"dates are not ordered (eind_winter < begin_zomer < eind_zomer < begin_winter)"
+                error_dict_index, error_peilgebied = self.save_error(
                     row_index=row_index,
-                    error_type_id=error_type_id,
+                    error_type_id=len(self.orig_csv_header) + 1,
                     error_dict_index=error_dict_index,
                     msg=msg,
                     peilgebied_id=peilgebied_id,
-                    error_dict_peilgebied=error_dict_peilgebied,
+                    error_peilgebied=error_peilgebied,
                 )
 
             # check 3b: validate bovenmarges onderling
-            error_type_id += 1
-            _2e_marge_boven = COLUMN_VALIDATORS["2e_marge_boven"].validate(
-                value=[column_value for column_name, column_value in zipped_data if column_name == "2e_marge_boven"][0]
-            )
-            _1e_marge_boven = COLUMN_VALIDATORS["1e_marge_boven"].validate(
-                value=[column_value for column_name, column_value in zipped_data if column_name == "1e_marge_boven"][0]
-            )
-            try:
-                boven_marges_are_ok = 0 < _1e_marge_boven < _2e_marge_boven
-            except Exception:
-                boven_marges_are_ok = False
+            _2e_marge_boven = self.get_value(col_name="2e_marge_boven", zipped_cols_values=zipped_cols_values)
+            _1e_marge_boven = self.get_value(col_name="1e_marge_boven", zipped_cols_values=zipped_cols_values)
+            boven_marges_are_ok = 0 < _1e_marge_boven < _2e_marge_boven
             if not boven_marges_are_ok:
-                msg = f"Skipping csv row {row_index} as boven marges are wrong (expected 0 < _1e_marge_boven < _2e_marge_boven)"
-                error_dict_index, error_dict_peilgebied = self.save_error(
+                msg = f"boven marges are wrong, we expected 0 < _1e_marge_boven < _2e_marge_boven"
+                error_dict_index, error_peilgebied = self.save_error(
                     row_index=row_index,
-                    error_type_id=error_type_id,
+                    error_type_id=len(self.orig_csv_header) + 2,
                     error_dict_index=error_dict_index,
                     msg=msg,
                     peilgebied_id=peilgebied_id,
-                    error_dict_peilgebied=error_dict_peilgebied,
+                    error_peilgebied=error_peilgebied,
                 )
 
             # check 3c: validate ondermarges onderling
-            error_type_id += 1
-            _2e_marge_onder = COLUMN_VALIDATORS["2e_marge_onder"].validate(
-                value=[column_value for column_name, column_value in zipped_data if column_name == "2e_marge_onder"][0]
-            )
-            _1e_marge_onder = COLUMN_VALIDATORS["1e_marge_onder"].validate(
-                value=[column_value for column_name, column_value in zipped_data if column_name == "1e_marge_onder"][0]
-            )
+            _2e_marge_onder = self.get_value(col_name="2e_marge_onder", zipped_cols_values=zipped_cols_values)
+            _1e_marge_onder = self.get_value(col_name="1e_marge_onder", zipped_cols_values=zipped_cols_values)
             onder_marges_are_ok = 0 < _1e_marge_onder < _2e_marge_onder
             if not onder_marges_are_ok:
-                msg = f"Skipping csv row {row_index} as boven marges are wrong (expected 0 < _1e_marge_onder < _2e_marge_onder)"
-                error_dict_index, error_dict_peilgebied = self.save_error(
+                msg = f"onder marges are wrong, we expected 0 < _1e_marge_onder < _2e_marge_onder"
+                error_dict_index, error_peilgebied = self.save_error(
                     row_index=row_index,
-                    error_type_id=error_type_id,
+                    error_type_id=len(self.orig_csv_header) + 3,
                     error_dict_index=error_dict_index,
                     msg=msg,
                     peilgebied_id=peilgebied_id,
-                    error_dict_peilgebied=error_dict_peilgebied,
+                    error_peilgebied=error_peilgebied,
                 )
 
-        logger.debug("check 4: filter out all rows of same peilgebied id if =>1 row with that peilgebied id is wrong")
-        error_type_id += 1
+        logger.debug(f"check 4: subsequent rows of the same pgid must connect (no gap, and no overlap")
+        index_pgid_column = self.orig_csv_header.index("pgid")
+        all_pgids = [x[index_pgid_column] for x in self.orig_csv_row_no_header]
+        pgid_dict = {}
+
+        # build dict
+        for index, pgid in enumerate(all_pgids):
+            if pgid in pgid_dict:
+                pgid_dict[pgid] += [index]
+            else:
+                pgid_dict[pgid] = [index]
+
+        # loop trough dict to compare csv rows with the same pgid
+        for pgid, indices in pgid_dict.items():
+            if len(indices) <= 1:
+                # nothing to compare
+                continue
+            pgid_rows = [self.orig_csv_row_no_header[x] for x in indices]
+            previous_enddate = None
+            for pgid_row, row_index in zip(pgid_rows, indices):
+                zipped_cols_values = [x for x in zip(self.orig_csv_header, pgid_row)]
+                startdate = self.get_value(col_name="startdatum", zipped_cols_values=zipped_cols_values)
+                enddate = self.get_value(col_name="einddatum", zipped_cols_values=zipped_cols_values)
+                if previous_enddate and startdate != previous_enddate:
+                    msg = f"startdate {startdate} must equal previous_enddate {previous_enddate}"
+                    error_dict_index, error_peilgebied = self.save_error(
+                        row_index=row_index,
+                        error_type_id=len(self.orig_csv_header) + 4,
+                        error_dict_index=error_dict_index,
+                        msg=msg,
+                        peilgebied_id=pgid,
+                        error_peilgebied=error_peilgebied,
+                    )
+                previous_enddate = enddate
+
+        logger.debug("check 5: filter out all rows of same peilgebied id if =>1 row with that peilgebied id is wrong")
         for row_index, row in enumerate(self.orig_csv_row_no_header):
-            if row_index in error_dict_index:
+            if row_index in error_dict_index.keys():
+                # this row is already excluded
                 continue
 
-            zipped_data = [x for x in zip(self.orig_csv_header, row)]
-            peilgebied_id = [column_value for column_name, column_value in zipped_data if column_name == "pgid"][0]
+            zipped_cols_values = [x for x in zip(self.orig_csv_header, row)]
+            peilgebied_id = self.get_value(col_name="pgid", zipped_cols_values=zipped_cols_values)
 
-            if peilgebied_id in error_dict_peilgebied:
-                msg = f"skip this okay row (pgid={peilgebied_id}) as in other rows this pgid has an error"
-                error_dict_index, error_dict_peilgebied = self.save_error(
+            if peilgebied_id in error_peilgebied:
+                msg = f"skip this okay row as in other row(s) this pgid has an error"
+                error_dict_index, error_peilgebied = self.save_error(
                     row_index=row_index,
-                    error_type_id=error_type_id,
+                    error_type_id=len(self.orig_csv_header) + 5,
                     error_dict_index=error_dict_index,
                     msg=msg,
                     peilgebied_id=peilgebied_id,
-                    error_dict_peilgebied=None,
+                    error_peilgebied=error_peilgebied,
                 )
                 continue
 
         row_indices_no_error = [x for x in range(0, len(self.orig_csv_row_no_header)) if x not in error_dict_index]
-        self._validated_csv_rows = [self.orig_csv_row_no_header[x] for x in row_indices_no_error]
-        nr_deleted_rows = len(self.orig_csv_row_no_header) - len(self._validated_csv_rows)
-        logger.info(f"deleted {nr_deleted_rows} rows (, nr rows left over = {len(row_indices_no_error)}")
+        self._csv_rows_no_error = [self.orig_csv_row_no_header[x] for x in row_indices_no_error]
+        nr_deleted_rows = len(self.orig_csv_row_no_header) - len(self._csv_rows_no_error)
+        logger.info(f"deleted {nr_deleted_rows} rows (nr rows left over = {len(row_indices_no_error)})")
 
-        _now = f"%Y%m%d_%H%M%S"
+        _now = datetime.now().strftime("%Y%m%d_%H%M%S")
+        max_error_type_id = max(
+            [inner_key for value in error_dict_index.values() for inner_key, inner_value in value.items()]
+        )
 
-        # create csv with error_dict_index
-        file_path = constants.DATA_OUTPUT_DIR / f"{datetime.now().strftime('%Y%m%d_%H%M%S')}_row_id).csv"
-        with open(file_path, mode="w") as error_csv1:
-            csv_writer = csv.writer(
-                error_csv1,
-                delimiter="\t",
-                lineterminator="\n",
-            )
-            headers = ["orig_row_index", "error_type_id", "error_msg"]
-            csv_writer.writerow(headers)
-            for orig_row_index, error_dict in error_dict_index.items():
-                for error_type_id, error_msg in error_dict.items():
-                    csv_writer.writerow([orig_row_index, error_type_id, error_msg])
-            error_csv1.close()
+        if constants.CREATE_CSV_WITH_ERRORS:
+            # create error csv (orig csv + 1 column with errors)
+            error_file_path = constants.DATA_OUTPUT_DIR / f"{self.orig_csv_path.stem}_errors_{_now}.csv"
+            csvoutput = open(file=error_file_path, mode="w")
+            writer = csv.writer(csvoutput, delimiter=",", lineterminator="\n")
 
-        # create csv with error_dict_index
-        file_path = constants.DATA_OUTPUT_DIR / f"{datetime.now().strftime(f'{_now}_peilgebied_id')}.csv"
-        with open(file_path, mode="w") as error_csv2:
-            csv_writer = csv.writer(
-                error_csv2,
-                delimiter="\t",
-                lineterminator="\n",
-            )
-            headers = ["pgid", "error_type_id", "error_msg"]
-            csv_writer.writerow(headers)
-            for orig_row_index, error_dict in error_dict_peilgebied.items():
-                for error_type_id, error_msg in error_dict.items():
-                    csv_writer.writerow([error_dict_peilgebied, error_type_id, error_msg])
-            error_csv2.close()
+            error_columns = ["has_error"] + [f"error_{x}" for x in range(1, max_error_type_id + 1)]
+            column_names = self.orig_csv_header + error_columns
+            writer.writerow(column_names)
+            for row_index, orig_row in enumerate(self.orig_csv_row_no_header):
+                errors = error_dict_index.get(row_index, "")
+                if not errors:
+                    has_error = False
+                    writer.writerow(orig_row + [has_error])
+                    continue
+                has_error = True
+                error_list = [has_error] + [""] * max_error_type_id
+                for error_type_id, error in errors.items():
+                    error = error.replace(",", " ")
+                    error_list[error_type_id] = error
+                writer.writerow(orig_row + error_list)
+            csvoutput.close()
 
-        return self._validated_csv_rows
+        return self._csv_rows_no_error
 
     @staticmethod
-    def add_xml_first_rows(xml_file: TextIO) -> TextIO:
+    def add_xml_first_rows(xml_file):
         xml_file.write('<?xml version="1.0" encoding="UTF-8" ?>\n')
         xml_file.write(
             'TimeSeries xmlns="http://www.wldelft.nl/fews/PI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.wldelft.nl/fews/PI http://fews.wldelft.nl/schemas/version1.0/pi-schemas/pi_timeseriesextended.xsd" version="1.2">\n'
@@ -416,96 +416,33 @@ class ConvertCsvToXml:
         xml_file.write("    <timeZone>1.0</timeZone>\n")
         return xml_file
 
-    def convert_row(self, row):
-        str_row = """<%s>%s</%s> \n""" * (len(header) - 1)
-        str_row = """<%s>%s""" + "\n" + str_row + """</%s>"""
-        var_values = [list_of_elments[k] for k in range(1, len(header)) for list_of_elments in [header, row, header]]
-        var_values = [header[0], row[0]] + var_values + [header[0]]
-        var_values = tuple(var_values)
-        return str_row % var_values
-
     def run(self):
         xml_path = constants.DATA_OUTPUT_DIR / f"PeilbesluitPi_{datetime.now().strftime('%Y%m%d_%H%M%S')}.xml"
-        with open(xml_path.as_posix(), mode="w") as xml_file:
-            xml_file = self.add_xml_first_rows(xml_file=xml_file)
-
-            for row in self.validated_csv_rows:
-                for column_name, column_value in zip(self.orig_csv_header, row):
-                    pass
-                    # print(1)
-        # print(2)
-
-    def create_and_save_xml(self):
-        """
-        <?xml version="1.0" encoding="UTF-8" ?>
-        <TimeSeries xmlns="http://www.wldelft.nl/fews/PI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.wldelft.nl/fews/PI http://fews.wldelft.nl/schemas/version1.0/pi-schemas/pi_timeseriesextended.xsd" version="1.2">
-            <timeZone>1.0</timeZone>
-        <series>
-            <header>
-                <type>instantaneous</type>
-             <locationId>PG0006</locationId>
-                <parameterId>Hpl</parameterId>
-                <timeStep unit="nonequidistant"/>
-                <startDate date="1990-01-01" time="00:00:00"></startDate>
-                <endDate date="2024-12-31" time="00:00:00"></endDate>
-                <missVal>-999.99</missVal>
-                <longName>Peilbesluitpeil</longName>
-                <units>m</units>
-                <sourceOrganisation></sourceOrganisation>
-                <sourceSystem>tijdreeks FEWS-PI.xls</sourceSystem>
-                <fileDescription></fileDescription>
-                <region></region>
-            </header>
-            <event date="1990-01-01" time="00:00:00" value="0.80" flag="0"/>
-            <event date="1990-04-01" time="00:00:00" value="0.95" flag="0"/>
-        </series>
-        <series>
-            ...
-        </series>
-
-
-        """
-        now = datetime.now()
-        xml_path = constants.DATA_OUTPUT_DIR / f"PeilbesluitPi_{now.strftime('%Y%m%d_%H%M%S')}.xml"
         xml_file = open(xml_path.as_posix(), mode="w")
+        xml_file = self.add_xml_first_rows(xml_file=xml_file)
+        pgid_done = []
+        for row in self.csv_rows_no_error:
+            kwargs = dict(zip(self.orig_csv_header, row))
+            pgid = kwargs["pgid"]
+            if pgid in pgid_done:
+                continue
+            all_rows_same_pgid = []
+            for _row in self.csv_rows_no_error:
+                zipped_cols_values = [x for x in zip(self.orig_csv_header, _row)]
+                peilgebied_id = self.get_value(col_name="pgid", zipped_cols_values=zipped_cols_values)
+                if peilgebied_id == pgid:
+                    all_rows_same_pgid.append(_row)
 
-        xml_file.write("	<series>\n")
-        xml_file.write("		<header>\n")
-        xml_file.write("			<type>instantaneous</type>\n")
-        xml_file.write("	<series>\n")
-        xml_file.write("		<header>\n")
-        xml_file.write("			<type>instantaneous</type>\n")
-        xml_file.write('			<locationId>" + str(pgid) + "</locationId>\n')
-        xml_file.write('			<parameterId>" + str(series[i]) + "</parameterId>\n')
-        xml_file.write('			<timeStep unit="nonequidistant"/>\n')
-        xml_file.write('		<startDate date="' + str(startdatum) + '" time="00:00:00"></startDate>\n')
-        xml_file.write('		<endDate date="' + str(einddatum) + '" time="00:00:00"></endDate>\n')
-        xml_file.write("			<missVal>-999.99</missVal>\n")
-        xml_file.write('			<longName>" + str(description[i]) + "</longName>\n')
-        xml_file.write("			<units>mNAP</units>\n")
-        xml_file.write("			<sourceOrganisation></sourceOrganisation>\n")
-        xml_file.write("			<sourceSystem>peilbesluit_invoer_tbv_WIS.csv</sourceSystem>\n")
-        xml_file.write("			<fileDescription></fileDescription>\n")
-        xml_file.write("			<region></region>\n")
-        xml_file.write("		</header>\n")
-
-        print(1)
-        # text = """<collection shelf="New Arrivals">""" + "\n" + '\n'.join([convert_row(row) for row in data[1:]]) + "\n" + "</collection >"
-        # print(text)
-        with open(xml_path.as_posix(), mode="w") as xml_file:
-            xml_file.write(header_text)
-
-        print(2)
-        # with open('output.xml', 'w') as myfile:
-        #     myfile.write(text)
-
-    # def run(self):
-    #     self.create_and_save_xml()
-
-    # for row in self.validated_csv_rows:
-    #     print(1)
-    #
-    # print(2)
-
-    # df = pd.read_csv('movies2.csv')
-    # header = list(df.columns)
+            nr_all_rows_same_pgid = len(all_rows_same_pgid)
+            for index, csv_row in enumerate(all_rows_same_pgid):
+                is_first_pgid_csv_row = index == 0
+                is_last_pgid_csv_row = index == nr_all_rows_same_pgid - 1
+                kwargs = dict(zip(self.orig_csv_header, csv_row))
+                xml_builder = XmlSeriesBuilder(
+                    xml_file=xml_file,
+                    is_first_pgid_csv_row=is_first_pgid_csv_row,
+                    is_last_pgid_csv_row=is_last_pgid_csv_row,
+                    **kwargs,
+                )
+                xml_file = xml_builder.run()
+        xml_file.close()
