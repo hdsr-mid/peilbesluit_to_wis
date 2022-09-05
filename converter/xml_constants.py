@@ -1,26 +1,8 @@
-def get_class_attributes(the_class) -> dict:
-    class_attributes = {}
-    for name in vars(the_class):
-        if name.startswith("__"):
-            continue
-        attr = getattr(the_class, name)
-        if callable(attr):
-            continue
-        class_attributes[name] = attr
-    return class_attributes
-
-
-class Timestamps:
-    startdatum = "startdatum"
+class TimestampColumns:
     eind_winter = "eind_winter"
     begin_zomer = "begin_zomer"
     eind_zomer = "eind_winter"
     begin_winter = "begin_winter"
-    einddatum = "einddatum"
-
-    @classmethod
-    def get_all(cls) -> list:
-        return list(get_class_attributes(the_class=cls))
 
 
 class TimeSeriesMetaBase:
@@ -41,7 +23,7 @@ class TimeSeriesMetaBase:
         raise NotImplementedError
 
     @property
-    def timestamps(self) -> list:
+    def timestamp_columns(self) -> list:
         raise NotImplementedError
 
 
@@ -49,7 +31,12 @@ class Peilbesluitpeil(TimeSeriesMetaBase):
     longname = "Peilbesluitpeil"
     units = "m"  # TODO: @roger/job: peil is to mnap en geen m (in voorbeeld xml staat m)
     parameter_id = "Hpl"
-    timestamps = Timestamps.get_all()
+    timestamp_columns = [
+        TimestampColumns.eind_winter,
+        TimestampColumns.begin_zomer,
+        TimestampColumns.eind_zomer,
+        TimestampColumns.begin_winter,
+    ]
 
 
 #         In WIS 7.0 Productie one can see that peilbesluit graphs (grafieken > ster > peilbesluitevaluatie > marges aanzetten (knopje rechtsboven)).
@@ -71,33 +58,47 @@ class TweedeOndergrens(TimeSeriesMetaBase):
     longname = " Peilbesluitpeil tweede ondergrens"
     units = "m"  # TODO: @roger/job: peil is to mnap en geen m (in voorbeeld xml staat m)
     parameter_id = "Hpl.2o.0"
-    timestamps = Timestamps.get_all()
+    timestamp_columns = [
+        TimestampColumns.eind_winter,
+        TimestampColumns.begin_zomer,
+        TimestampColumns.eind_zomer,
+        TimestampColumns.begin_winter,
+    ]
 
 
 class EersteOndergrens(TimeSeriesMetaBase):
     longname = " Peilbesluitpeil eerste ondergrens"
     units = "m"  # TODO: @roger/job: peil is to mnap en geen m (in voorbeeld xml staat m)
     parameter_id = "Hpl.o.0"
-    timestamps = [Timestamps.startdatum, Timestamps.begin_zomer, Timestamps.eind_zomer, Timestamps.einddatum]
+    timestamp_columns = [
+        TimestampColumns.begin_zomer,
+        TimestampColumns.eind_zomer,
+    ]
 
 
 class TweedeBovengrens(TimeSeriesMetaBase):
     longname = " Peilbesluitpeil tweede ondergrens"
     units = "m"  # TODO: @roger/job: peil is to mnap en geen m (in voorbeeld xml staat m)
     parameter_id = "Hpl.b.0"
-    timestamps = [Timestamps.startdatum, Timestamps.eind_winter, Timestamps.begin_winter, Timestamps.einddatum]
+    timestamp_columns = [
+        TimestampColumns.eind_winter,
+        TimestampColumns.begin_winter,
+    ]
 
 
 class EersteBovengrens(TimeSeriesMetaBase):
     longname = " Peilbesluitpeil eerste ondergrens"
     units = "m"  # TODO: @roger/job: peil is to mnap en geen m (in voorbeeld xml staat m)
     parameter_id = "Hpl.2b.0"
-    timestamps = [Timestamps.startdatum, Timestamps.eind_winter, Timestamps.begin_winter, Timestamps.einddatum]
+    timestamps = [
+        TimestampColumns.eind_winter,
+        TimestampColumns.begin_winter,
+    ]
 
 
 class XmlConstants:
-    peilbesluitpeil = Peilbesluitpeil
-    eerste_ondergrens = EersteOndergrens
-    tweede_ondergrens = TweedeOndergrens
-    eerste_bovengrens = EersteBovengrens
-    tweede_bovengrens = TweedeBovengrens
+    peilbesluitpeil = Peilbesluitpeil()
+    eerste_ondergrens = EersteOndergrens()
+    tweede_ondergrens = TweedeOndergrens()
+    eerste_bovengrens = EersteBovengrens()
+    tweede_bovengrens = TweedeBovengrens()

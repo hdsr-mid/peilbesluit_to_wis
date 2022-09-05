@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+TimeSeries xmlns="http://www.wldelft.nl/fews/PI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.wldelft.nl/fews/PI http://fews.wldelft.nl/schemas/version1.0/pi-schemas/pi_timeseriesextended.xsd" version="1.2">
+    <timeZone>1.0</timeZone>
+    <series>
+        <header>
+            <type>instantaneous</type>
+            <locationId>PG0566</locationId>
+            <parameterId>Hpl</parameterId>
+            <timeStep unit="nonequidistant"/>
+            <startDate date="20190101" time="00:00:00"></startDate>
+            <endDate date="20231023" time="00:00:00"></endDate>
+            <missVal>-999.99</missVal>
+            <longName>Peilbesluitpeil</longName>

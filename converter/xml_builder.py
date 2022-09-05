@@ -1,15 +1,19 @@
+from converter import constants
 from converter.xml_constants import XmlConstants
 from datetime import datetime
 
 
 class XmlSeriesBuilder:
+
+    tab = "    "
+
     def __init__(self, xml_file, is_first_pgid_csv_row: bool, is_last_pgid_csv_row: bool, **kwargs):
         self.xml_file = xml_file
         self.is_first_pgid_csv_row = is_first_pgid_csv_row
         self.is_last_pgid_csv_row = is_last_pgid_csv_row
         self.pgid = kwargs.pop("pgid")
-        self.startdatum = kwargs.pop("startdatum")
-        self.einddatum = kwargs.pop("einddatum")
+        self.startdatum = datetime.strptime(kwargs.pop("startdatum"), "%Y%m%d")
+        self.einddatum = datetime.strptime(kwargs.pop("einddatum"), "%Y%m%d")
         self.eind_winter = kwargs.pop("eind_winter")
         self.begin_zomer = kwargs.pop("begin_zomer")
         self.eind_zomer = kwargs.pop("eind_zomer")
@@ -25,15 +29,79 @@ class XmlSeriesBuilder:
     def add_xml_series(xml_file):
         return xml_file
 
-    def add_series_to_xml(self, xml_file) -> str:
+    @staticmethod
+    def get_xml_datestring(value) -> str:
+        datetime_obj = None
+        if isinstance(value, str):
+            try:
+                datetime_obj = datetime.strptime(value, "%Y%m%d")
+            except Exception:
+                datetime_obj = datetime.strptime(value, "%Y-%m-%d")
+        elif isinstance(value, datetime):
+            datetime_obj = value
+        return datetime_obj.strftime("%Y%m%d")
+
+    @staticmethod
+    def get_month_day(value: str):
+        datetime_obj = None
+        if isinstance(value, str):
+            for datestring_format in ("%m-%d", "%Y%m%d", "%Y-%m-%d"):
+                try:
+                    datetime_obj = datetime.strptime(value, datestring_format)
+                except Exception:  # noqa
+                    pass
+            assert datetime_obj
+        elif isinstance(value, datetime):
+            datetime_obj = value
+        return datetime_obj.month, datetime_obj.day
+
+    def add_header(self, timeseries_constants):
+        """
+        <series>
+            <header>
+                <type>instantaneous</type>
+                <locationId>PG0566</locationId>
+                <parameterId>Hpl</parameterId>
+                <timeStep unit="nonequidistant"/>
+                <startDate date="1990-01-01" time="00:00:00"></startDate>
+                <endDate date="2024-12-31" time="00:00:00"></endDate>
+                <missVal>-999.99</missVal>
+                <longName>Peilbesluitpeil</longName>
+                <units>m</units>
+                <sourceOrganisation></sourceOrganisation>
+                <sourceSystem>tijdreeks FEWS-PI.xls</sourceSystem>
+                <fileDescription></fileDescription>
+                <region></region>
+            </header>
+        """
+        self.xml_file.write(f"{self.tab}<series>\n")  # noqa
+        self.xml_file.write(f"{self.tab*2}<header>\n")  # noqa
+        self.xml_file.write(f"{self.tab*3}<type>instantaneous</type>\n")  # noqa
+        self.xml_file.write(f"{self.tab*3}<locationId>{self.pgid}</locationId>\n")
+        self.xml_file.write(f"{self.tab*3}<parameterId>{timeseries_constants.parameter_id}</parameterId>\n")
+        self.xml_file.write(f'{self.tab*3}<timeStep unit="nonequidistant"/>\n')
+        self.xml_file.write(
+            f'{self.tab*3}<startDate date="{self.get_xml_datestring(value=self.startdatum)}" time="00:00:00"></startDate>\n'
+        )
+        self.xml_file.write(
+            f'{self.tab*3}<endDate date="{self.get_xml_datestring(value=self.einddatum)}" time="00:00:00"></endDate>\n'
+        )
+        self.xml_file.write(f"{self.tab*3}<missVal>-999.99</missVal>\n")
+        self.xml_file.write(f"{self.tab*3}<longName>{timeseries_constants.longname}</longName>\n")
+        self.xml_file.write(f"{self.tab*3}<units>{timeseries_constants.units}</units>\n")
+        self.xml_file.write(f"{self.tab*3}<sourceOrganisation></sourceOrganisation>\n")
+        self.xml_file.write(f"{self.tab*3}<sourceSystem>tijdreeks FEWS-PI.xls</sourceSystem>\n")
+        self.xml_file.write(f"{self.tab*3}<fileDescription></fileDescription>\n")
+        self.xml_file.write(f"{self.tab*3}<region></region>\n")
+        self.xml_file.write(f"{self.tab*2}</header>\n")
+
+    def add_series_startdate(self):
         print(1)
 
-    def create_events(self):
-        # startdatum	einddatum	eind_winter	begin_zomer	eind_zomer	begin_winter
-        # 20190101	    20231023	1-Apr	    1-May	    1-Sep	    1-Oct
+    def create_series_peilbesluit(self):
         print(1)
 
-    def create_and_save_xml(self):
+    def _get_timeseries_value(self, month, day):
         """
         Below the first three rows of the input csv are shown:
 
@@ -59,7 +127,11 @@ class XmlSeriesBuilder:
 
         All csv rows with the same pgid (can be 1 row) result in multiple xml series, each with an own header.
         We see the xml result of the first csv two rows (the share the same pgid):
+        """
+        print(1)
 
+    def add_series_peilbesluitpeil(self):
+        """
         <?xml version="1.0" encoding="UTF-8" ?>
         <TimeSeries xmlns="http://www.wldelft.nl/fews/PI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.wldelft.nl/fews/PI http://fews.wldelft.nl/schemas/version1.0/pi-schemas/pi_timeseriesextended.xsd" version="1.2">
             <timeZone>1.0</timeZone>
@@ -95,7 +167,102 @@ class XmlSeriesBuilder:
             ...
             </series>
         </TimeSeries>
+
+        Peilbesluit timeseries is a block line with 4 levels (for 4 periods):
+            1) eind_winter - begin_zomer:   level = avg(zomer_peil, winter_peil)
+            2) begin_zomer - eind_zomer:    level = zomerpeil
+            3) eind_zomer - begin_winter:   level = avg(zomer_peil, winter_peil)
+            4) begin_winter - eind_winter:  level = winterpeil
+
         """
+        timeseries_constants = XmlConstants.peilbesluitpeil
+        if self.is_first_pgid_csv_row:
+            self.add_header(timeseries_constants=timeseries_constants)
+
+        current_dummy_year = 2000
+        for index, current_timestamp_column in enumerate(timeseries_constants.timestamp_columns):
+            current_month_day_datestring = getattr(self, current_timestamp_column)
+            current_month, current_day = self.get_month_day(value=current_month_day_datestring)
+            current_datetime_obj = datetime(year=current_dummy_year, month=current_month, day=current_day)
+
+            try:
+                next_timestamp_column = timeseries_constants.timestamp_columns[index + 1]
+                next_dummy_year = current_dummy_year
+            except Exception:
+                # this happens only one time (the last index)
+                next_timestamp_column = timeseries_constants.timestamp_columns[0]
+                next_dummy_year = current_dummy_year + 1
+            startdate_compare = datetime(year=next_dummy_year, month=self.startdatum.month, day=self.startdatum.day)
+            next_month_day_datestring = getattr(self, next_timestamp_column)
+            next_month, next_day = self.get_month_day(value=next_month_day_datestring)
+            next_datetime_obj = datetime(year=next_dummy_year, month=next_month, day=next_day)
+
+            if current_datetime_obj <= startdate_compare <= next_datetime_obj:
+                print(1)
+
+            print(1)
+
+        print(1)
+
+    def add_series_eerste_ondergrens(self):
+        if self.is_first_pgid_csv_row:
+            print(1)
+        timeseries_constants = XmlConstants.eerste_ondergrens
+        print(1)
+
+    def add_series_tweede_ondergrens(self):
+        if self.is_first_pgid_csv_row:
+            print(1)
+        timeseries_constants = XmlConstants.tweede_ondergrens
+        print(1)
+
+    def add_series_eerste_bovengrens(self):
+        timeseries_constants = XmlConstants.eerste_bovengrens
+        print(1)
+
+    def add_series_tweede_bovengrens(self):
+        timeseries_constants = XmlConstants.tweede_bovengrens
+        print(1)
+
+    def create_and_save_xml(self):
+
+        """
+        <?xml version="1.0" encoding="UTF-8" ?>
+        <TimeSeries xmlns="http://www.wldelft.nl/fews/PI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.wldelft.nl/fews/PI http://fews.wldelft.nl/schemas/version1.0/pi-schemas/pi_timeseriesextended.xsd" version="1.2">
+            <timeZone>1.0</timeZone>
+            <series>
+                <header>
+                    <type>instantaneous</type>
+                    <locationId>PG0566</locationId>
+                    <parameterId>Hpl</parameterId>
+                    <timeStep unit="nonequidistant"/>
+                    <startDate date="1990-01-01" time="00:00:00"></startDate>
+                    <endDate date="2024-12-31" time="00:00:00"></endDate>
+                    <missVal>-999.99</missVal>
+                    <longName>Peilbesluitpeil</longName>
+                    <units>m</units>
+                    <sourceOrganisation></sourceOrganisation>
+                    <sourceSystem>tijdreeks FEWS-PI.xls</sourceSystem>
+                    <fileDescription></fileDescription>
+                    <region></region>
+                </header>
+                <event date="1990-01-01" time="00:00:00" value="0.80" flag="0"/>            # startdate
+                <event date="1990-04-01" time="00:00:00" value="0.95" flag="0"/>            # eind_winter
+                <event date="1990-05-01" time="00:00:00" value="1.10" flag="0"/>            # begin_zomer
+                <event date="1990-09-01" time="00:00:00" value="0.95" flag="0"/>            # eind_zomer
+                <event date="1990-10-01" time="00:00:00" value="0.80" flag="0"/>            # begin_winter
+                <event date="1991-04-01" time="00:00:00" value="0.95" flag="0"/>            # eind_winter (!)
+                ...
+                <event date="2023-05-01" time="00:00:00" value="1.10" flag="0"/>            # begin_zomer
+                <event date="2023-09-01" time="00:00:00" value="0.95" flag="0"/>            # eind_zomer
+                <event date="2023-10-01" time="00:00:00" value="0.80" flag="0"/>            # begin_winter
+                <event date="2023-10-23" time="00:00:00" value="0.80" flag="0"/>            # <-- enddate
+            </series>
+            <series>
+            ...
+            </series>
+        </TimeSeries>
+
         now = datetime.now()
         xml_path = constants.DATA_OUTPUT_DIR / f"PeilbesluitPi_{now.strftime('%Y%m%d_%H%M%S')}.xml"
         xml_file = open(xml_path.as_posix(), mode="w")
@@ -119,6 +286,8 @@ class XmlSeriesBuilder:
         xml_file.write("			<fileDescription></fileDescription>\n")
         xml_file.write("			<region></region>\n")
         xml_file.write("		</header>\n")
+
+        """
 
     def add_header_to_xml(self, xml_file, pgid: str, parameter_id: str, startdate: datetime, enddate: datetime) -> str:
         """
@@ -154,12 +323,3 @@ class XmlSeriesBuilder:
         xml_file.write(f"			<region></region>\n")
         xml_file.write(f"		</header>\n")
         return xml_file
-
-    def create_timeseries(self):
-        pass
-
-    def run(self):
-        if self.is_first_pgid_csv_row:
-            print(1)
-
-        print(XmlConstants.peilbesluitpeil.longname)

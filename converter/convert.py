@@ -416,6 +416,24 @@ class ConvertCsvToXml:
         xml_file.write("    <timeZone>1.0</timeZone>\n")
         return xml_file
 
+    def add_xml_series(self, xml_file, all_rows_same_pgid, _func):
+        """Add one xml series build from one or more csv rows"""
+        xml_builder = None
+        nr_all_rows_same_pgid = len(all_rows_same_pgid)
+        for index, csv_row in enumerate(all_rows_same_pgid):
+            is_first_pgid_csv_row = index == 0
+            is_last_pgid_csv_row = index == nr_all_rows_same_pgid - 1
+            kwargs = dict(zip(self.orig_csv_header, csv_row))
+            xml_builder = XmlSeriesBuilder(
+                xml_file=xml_file,
+                is_first_pgid_csv_row=is_first_pgid_csv_row,
+                is_last_pgid_csv_row=is_last_pgid_csv_row,
+                **kwargs,
+            )
+            xml_builder_method = getattr(xml_builder, _func.__name__)
+            xml_builder_method()
+        return xml_builder.xml_file
+
     def run(self):
         xml_path = constants.DATA_OUTPUT_DIR / f"PeilbesluitPi_{datetime.now().strftime('%Y%m%d_%H%M%S')}.xml"
         xml_file = open(xml_path.as_posix(), mode="w")
@@ -432,17 +450,12 @@ class ConvertCsvToXml:
                 peilgebied_id = self.get_value(col_name="pgid", zipped_cols_values=zipped_cols_values)
                 if peilgebied_id == pgid:
                     all_rows_same_pgid.append(_row)
-
-            nr_all_rows_same_pgid = len(all_rows_same_pgid)
-            for index, csv_row in enumerate(all_rows_same_pgid):
-                is_first_pgid_csv_row = index == 0
-                is_last_pgid_csv_row = index == nr_all_rows_same_pgid - 1
-                kwargs = dict(zip(self.orig_csv_header, csv_row))
-                xml_builder = XmlSeriesBuilder(
-                    xml_file=xml_file,
-                    is_first_pgid_csv_row=is_first_pgid_csv_row,
-                    is_last_pgid_csv_row=is_last_pgid_csv_row,
-                    **kwargs,
-                )
-                xml_file = xml_builder.run()
+            for _func in (
+                XmlSeriesBuilder.add_series_peilbesluitpeil,
+                XmlSeriesBuilder.add_series_eerste_ondergrens,
+                XmlSeriesBuilder.add_series_tweede_ondergrens,
+                XmlSeriesBuilder.add_series_eerste_bovengrens,
+                XmlSeriesBuilder.add_series_tweede_bovengrens,
+            ):
+                xml_file = self.add_xml_series(xml_file=xml_file, all_rows_same_pgid=all_rows_same_pgid, _func=_func)
         xml_file.close()
