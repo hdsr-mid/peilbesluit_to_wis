@@ -213,6 +213,7 @@ class ConvertCsvToXml:
     def csv_rows_no_error(self) -> list:
         if self._csv_rows_no_error is not None:
             return self._csv_rows_no_error
+        logger.info(f"validating {self.orig_csv_path}")
         nr_expected_columns = len(self.orig_csv_header)
         error_dict_index = {}
         error_peilgebied = set()
@@ -222,7 +223,7 @@ class ConvertCsvToXml:
             zipped_cols_values = [x for x in zip(self.orig_csv_header, row)]
             peilgebied_id = self.get_value(col_name="pgid", zipped_cols_values=zipped_cols_values)
 
-            logger.info("check 1 (error) nr columns in this row must equal nr headers")
+            logger.debug("check 1 (error) nr columns in this row must equal nr headers")
             nr_columns = len(row)
             if nr_columns != nr_expected_columns:
                 msg = f"nr cells does not match nr csv columns {self.orig_csv_header}"
@@ -375,7 +376,7 @@ class ConvertCsvToXml:
         row_indices_no_error = [x for x in range(0, len(self.orig_csv_row_no_header)) if x not in error_dict_index]
         self._csv_rows_no_error = [self.orig_csv_row_no_header[x] for x in row_indices_no_error]
         nr_deleted_rows = len(self.orig_csv_row_no_header) - len(self._csv_rows_no_error)
-        logger.info(f"deleted {nr_deleted_rows} rows (nr rows left over = {len(row_indices_no_error)})")
+        logger.info(f"found {nr_deleted_rows} rows with error (nr rows left over = {len(row_indices_no_error)})")
 
         _now = datetime.now().strftime("%Y%m%d_%H%M%S")
         max_error_type_id = max(
@@ -383,8 +384,8 @@ class ConvertCsvToXml:
         )
 
         if constants.CREATE_CSV_WITH_ERRORS:
-            # create error csv (orig csv + 1 column with errors)
             error_file_path = constants.DATA_OUTPUT_DIR / f"{self.orig_csv_path.stem}_errors_{_now}.csv"
+            logger.info(f"create error csv (orig csv + 1 column with errors) at {error_file_path}")
             csvoutput = open(file=error_file_path, mode="w")
             writer = csv.writer(csvoutput, delimiter=",", lineterminator="\n")
 
@@ -435,6 +436,14 @@ class ConvertCsvToXml:
         return xml_builder.xml_file
 
     def run(self):
+        if constants.CREATE_CSV_WITH_ERRORS:
+            _ = self.csv_rows_no_error
+        else:
+            logger.info("skip creating csv with errors")
+
+        if not constants.CREATE_XML:
+            logger.info("skip creating xml")
+            return
         xml_path = constants.DATA_OUTPUT_DIR / f"PeilbesluitPi_{datetime.now().strftime('%Y%m%d_%H%M%S')}.xml"
         xml_file = open(xml_path.as_posix(), mode="w")
         xml_file = self.add_xml_first_rows(xml_file=xml_file)
