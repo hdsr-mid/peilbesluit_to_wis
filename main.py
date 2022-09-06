@@ -17,7 +17,7 @@ def check_python_version():
 
 
 def setup_logging() -> None:
-    """Adds 3 configured handlers to the root logger: stream, one_time_file_handler, log_rotating_file."""
+    """Adds 2 configured handlers to the root logger: stream, log_rotating_file."""
 
     # https://stackoverflow.com/questions/30861524/logging-basicconfig-not-creating-log-file-when-i-run-in-pycharm
     # Remove all handlers associated with the root logger object.
@@ -38,21 +38,15 @@ def setup_logging() -> None:
     )
     rotating_file_handler.setLevel(logging.INFO)
     rotating_file_handler.setFormatter(
-        logging.Formatter(fmt="%(asctime)s %(filename)s %(levelname)s %(message)s", datefmt="%Y-%m-%d %H:%M:%S",)
-    )
-
-    # handler: one time file (since rotating file is not created when I&A runs this app(?!?!)
-    one_time_file_path = constants.LOG_FILE_PATH.parent / "one_time.log"
-    one_time_file_handler = logging.FileHandler(filename=one_time_file_path.as_posix(), mode="w")
-    one_time_file_handler.setLevel(logging.INFO)
-    one_time_file_handler.setFormatter(
-        logging.Formatter(fmt="%(asctime)s %(filename)s %(levelname)s %(message)s", datefmt="%Y-%m-%d %H:%M:%S",)
+        logging.Formatter(
+            fmt="%(asctime)s %(filename)s %(levelname)s %(message)s",
+            datefmt="%Y-%m-%d %H:%M:%S",
+        )
     )
 
     # root logger (with 3 handlers)
     root_logger = logging.getLogger()
     root_logger.addHandler(stream_handler)
-    root_logger.addHandler(one_time_file_handler)
     root_logger.addHandler(rotating_file_handler)
     root_logger.setLevel(min([handler.level for handler in root_logger.handlers]))
     root_logger.info("setup logging done")

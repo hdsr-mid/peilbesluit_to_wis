@@ -1,3 +1,8 @@
+# exclude all files in output dir, but keep .gitignore (so dir exists)
+converter/data/output/*
+!converter/data/output/.gitignore
+!converter/data/output/log_rotating/.gitignore
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
