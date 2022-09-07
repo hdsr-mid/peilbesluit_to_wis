@@ -1,4 +1,5 @@
 from converter import constants
+from converter.timeseries_builder import PeilbesluitPeil
 from converter.xml_constants import XmlConstants
 from datetime import datetime
 
@@ -11,19 +12,19 @@ class XmlSeriesBuilder:
         self.xml_file = xml_file
         self.is_first_pgid_csv_row = is_first_pgid_csv_row
         self.is_last_pgid_csv_row = is_last_pgid_csv_row
-        self.pgid = kwargs.pop("pgid")
+        self.pgid = str(kwargs.pop("pgid"))
         self.startdatum = datetime.strptime(kwargs.pop("startdatum"), "%Y%m%d")
         self.einddatum = datetime.strptime(kwargs.pop("einddatum"), "%Y%m%d")
-        self.eind_winter = kwargs.pop("eind_winter")
-        self.begin_zomer = kwargs.pop("begin_zomer")
-        self.eind_zomer = kwargs.pop("eind_zomer")
-        self.begin_winter = kwargs.pop("begin_winter")
-        self.zomerpeil = kwargs.pop("zomerpeil")
-        self.winterpeil = kwargs.pop("winterpeil")
-        self._2e_marge_onder = kwargs.pop("2e_marge_onder")
-        self._1e_marge_onder = kwargs.pop("1e_marge_onder")
-        self._1e_marge_boven = kwargs.pop("1e_marge_boven")
-        self._2e_marge_boven = kwargs.pop("2e_marge_boven")
+        self.eind_winter = str(kwargs.pop("eind_winter"))
+        self.begin_zomer = str(kwargs.pop("begin_zomer"))
+        self.eind_zomer = str(kwargs.pop("eind_zomer"))
+        self.begin_winter = str(kwargs.pop("begin_winter"))
+        self.zomerpeil = float(kwargs.pop("zomerpeil"))
+        self.winterpeil = float(kwargs.pop("winterpeil"))
+        self._2e_marge_onder = float(kwargs.pop("2e_marge_onder"))
+        self._1e_marge_onder = float(kwargs.pop("1e_marge_onder"))
+        self._1e_marge_boven = float(kwargs.pop("1e_marge_boven"))
+        self._2e_marge_boven = float(kwargs.pop("2e_marge_boven"))
 
     @staticmethod
     def add_xml_series(xml_file):
@@ -35,7 +36,7 @@ class XmlSeriesBuilder:
         if isinstance(value, str):
             try:
                 datetime_obj = datetime.strptime(value, "%Y%m%d")
-            except Exception:
+            except Exception:  # noqa
                 datetime_obj = datetime.strptime(value, "%Y-%m-%d")
         elif isinstance(value, datetime):
             datetime_obj = value
@@ -179,28 +180,20 @@ class XmlSeriesBuilder:
         if self.is_first_pgid_csv_row:
             self.add_header(timeseries_constants=timeseries_constants)
 
-        current_dummy_year = 2000
-        for index, current_timestamp_column in enumerate(timeseries_constants.timestamp_columns):
-            current_month_day_datestring = getattr(self, current_timestamp_column)
-            current_month, current_day = self.get_month_day(value=current_month_day_datestring)
-            current_datetime_obj = datetime(year=current_dummy_year, month=current_month, day=current_day)
-
-            try:
-                next_timestamp_column = timeseries_constants.timestamp_columns[index + 1]
-                next_dummy_year = current_dummy_year
-            except Exception:
-                # this happens only one time (the last index)
-                next_timestamp_column = timeseries_constants.timestamp_columns[0]
-                next_dummy_year = current_dummy_year + 1
-            startdate_compare = datetime(year=next_dummy_year, month=self.startdatum.month, day=self.startdatum.day)
-            next_month_day_datestring = getattr(self, next_timestamp_column)
-            next_month, next_day = self.get_month_day(value=next_month_day_datestring)
-            next_datetime_obj = datetime(year=next_dummy_year, month=next_month, day=next_day)
-
-            if current_datetime_obj <= startdate_compare <= next_datetime_obj:
-                print(1)
-
-            print(1)
+        ts_builder = PeilbesluitPeil(
+            # baseclass arguments
+            pgid=self.pgid,
+            startdatum=self.startdatum,
+            einddatum=self.einddatum,
+            zomerpeil=self.zomerpeil,
+            winterpeil=self.winterpeil,
+            # subclass arguments
+            eind_winter=self.eind_winter,
+            begin_zomer=self.begin_zomer,
+            eind_zomer=self.eind_zomer,
+            begin_winter=self.begin_winter,
+        )
+        a = ts_builder.get_level_startdate()
 
         print(1)
 
