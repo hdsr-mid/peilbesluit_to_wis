@@ -193,7 +193,7 @@ class XmlSeriesBuilder:
             eind_zomer=self.eind_zomer,
             begin_winter=self.begin_winter,
         )
-        a = ts_builder.get_level_startdate()
+        series = ts_builder.create_series()
 
         print(1)
 

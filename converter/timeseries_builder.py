@@ -6,10 +6,10 @@ class ConstantPeriod:
         self.start = start
         self.end = end
         self.level = level
-        self.start_month_int = start.split("-")[0]
-        self.start_day_int = start.split("-")[1]
-        self.end_month_int = end.split("-")[0]
-        self.end_day_int = end.split("-")[1]
+        self.start_month_int = int(start.split("-")[0])
+        self.start_day_int = int(start.split("-")[1])
+        self.end_month_int = int(end.split("-")[0])
+        self.end_day_int = int(end.split("-")[1])
 
 
 class BuilderBase:
@@ -66,14 +66,14 @@ class BuilderBase:
     def _validate_periods(self) -> None:
         default_msg = f"{self.cls_name} has invalid (overlap/gap) periods:"
         assert all([isinstance(x, ConstantPeriod) for x in self.periods])
-        starts = [x.start for x in self._periods]
-        ends = [x.end for x in self._periods]
+        starts = [x.start for x in self.periods]
+        ends = [x.end for x in self.periods]
         assert len(starts) == len(set(starts)), f"{default_msg}: period startdates {starts} must be unique"
         assert len(starts) == len(set(starts)), f"{default_msg}: period enddates {ends} must be unique"
         first_start = starts[0]
         last_end = None
         previous_end = None
-        for period in self._periods:
+        for period in self.periods:
             current_start = period.start
             current_end = period.end
             assert current_start, f"{default_msg}: at least one period has an empty start"
@@ -85,28 +85,27 @@ class BuilderBase:
             last_end = current_end
         assert last_end == first_start, f"{default_msg}: last_end {last_end} must be first_start {first_start}"
 
-    def get_level_startdate(self):
+    def create_series(self):
+        startdatum_level = self.get_level_in_between_date(month=self.startdatum.month, day=self.startdatum.day)
+        einddatum_level = self.get_level_in_between_date(month=self.einddatum.month, day=self.einddatum.day)
 
-        for key, value in self.periods_mapper.items():
-            print(key)
-
+    def get_level_in_between_date(self, month: int, day: int):
         current_dummy_year = 2000
-        for index, current_timestamp_column in enumerate(timeseries_constants.timestamp_columns):
-            current_month_day_datestring = getattr(self, current_timestamp_column)
-            current_month, current_day = self.get_month_day(value=current_month_day_datestring)
-            current_datetime_obj = datetime(year=current_dummy_year, month=current_month, day=current_day)
-
-            try:
-                next_timestamp_column = timeseries_constants.timestamp_columns[index + 1]
-                next_dummy_year = current_dummy_year
-            except Exception:
-                # this happens only one time (the last index)
-                next_timestamp_column = timeseries_constants.timestamp_columns[0]
-                next_dummy_year = current_dummy_year + 1
-            startdate_compare = datetime(year=next_dummy_year, month=self.startdatum.month, day=self.startdatum.day)
-            next_month_day_datestring = getattr(self, next_timestamp_column)
-            next_month, next_day = self.get_month_day(value=next_month_day_datestring)
-            next_datetime_obj = datetime(year=next_dummy_year, month=next_month, day=next_day)
+        dummy_in_between_date = datetime(year=current_dummy_year, month=month, day=day)
+        for index, period in enumerate(self.periods):
+            is_last_element = index == len(self.periods) - 1
+            start_datetime_obj = datetime(
+                year=current_dummy_year, month=period.start_month_int, day=period.start_day_int
+            )
+            if is_last_element:
+                end_datetime_obj = datetime(
+                    year=current_dummy_year + 1, month=period.end_month_int, day=period.end_day_int
+                )
+            else:
+                end_datetime_obj = datetime(year=current_dummy_year, month=period.end_month_int, day=period.end_day_int)
+            if start_datetime_obj <= dummy_in_between_date <= end_datetime_obj:
+                return period.level
+        raise AssertionError("code error, this should not happen")
 
 
 class PeilbesluitPeil(BuilderBase):
