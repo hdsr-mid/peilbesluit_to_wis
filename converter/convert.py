@@ -1,7 +1,9 @@
 from converter import constants
+from converter.constants import DateFormats
+from converter.constants import TAB
+from converter.utils import get_progress
 from converter.xml_builder import XmlSeriesBuilder
 from datetime import datetime
-from enum import Enum
 from pathlib import Path
 
 import csv
@@ -51,12 +53,6 @@ class GeneralColumn(ColumnBase):
         return target_value
 
 
-class DateFormats(Enum):
-    yyyymmdd = "%Y%m%d"
-    dd_mm = "%d-%m"
-    yyyy_dd_mm = "%Y-%d-%m"
-
-
 class DateColumn(ColumnBase):
     def __init__(self, date_format: DateFormats, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -79,7 +75,7 @@ class DateColumn(ColumnBase):
             assert not year, f"argument year {year} is not possible in combination with {self.date_format.value}"
 
         try:
-            if self.date_format == DateFormats.dd_mm:  # 20-12
+            if self.date_format == DateFormats.dd_mm:  # 31-12
                 year = year if year else DUMMY_YEAR
                 date_obj = datetime.strptime(f"{year}-{value_stripped}", DateFormats.yyyy_dd_mm.value)
             else:
@@ -409,15 +405,20 @@ class ConvertCsvToXml:
         return self._csv_rows_no_error
 
     @staticmethod
-    def add_xml_first_rows(xml_file):
+    def _add_xml_first_rows(xml_file):
         xml_file.write('<?xml version="1.0" encoding="UTF-8" ?>\n')
         xml_file.write(
-            'TimeSeries xmlns="http://www.wldelft.nl/fews/PI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.wldelft.nl/fews/PI http://fews.wldelft.nl/schemas/version1.0/pi-schemas/pi_timeseriesextended.xsd" version="1.2">\n'
+            '<TimeSeries xmlns="http://www.wldelft.nl/fews/PI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.wldelft.nl/fews/PI http://fews.wldelft.nl/schemas/version1.0/pi-schemas/pi_timeseriesextended.xsd" version="1.2">\n'
         )
-        xml_file.write("    <timeZone>1.0</timeZone>\n")
+        xml_file.write(f"{TAB}<timeZone>1.0</timeZone>\n")
         return xml_file
 
-    def add_xml_series(self, xml_file, all_rows_same_pgid, _func):
+    @staticmethod
+    def _add_xml_last_rows(xml_file):
+        xml_file.write("</TimeSeries>\n")
+        return xml_file
+
+    def _add_xml_series(self, xml_file, all_rows_same_pgid, _func):
         """Add one xml series build from one or more csv rows"""
         xml_builder = None
         nr_all_rows_same_pgid = len(all_rows_same_pgid)
@@ -432,7 +433,7 @@ class ConvertCsvToXml:
                 **kwargs,
             )
             xml_builder_method = getattr(xml_builder, _func.__name__)
-            xml_builder_method()
+            xml_file = xml_builder_method()
         return xml_builder.xml_file
 
     def run(self):
@@ -446,13 +447,21 @@ class ConvertCsvToXml:
             return
         xml_path = constants.DATA_OUTPUT_DIR / f"PeilbesluitPi_{datetime.now().strftime('%Y%m%d_%H%M%S')}.xml"
         xml_file = open(xml_path.as_posix(), mode="w")
-        xml_file = self.add_xml_first_rows(xml_file=xml_file)
+        xml_file = self._add_xml_first_rows(xml_file=xml_file)
         pgid_done = []
-        for row in self.csv_rows_no_error:
+        nr_to_do = len(self.csv_rows_no_error)
+        for index, row in enumerate(self.csv_rows_no_error):
+            logger.info(f"progress = {get_progress(iteration_nr=index, nr_to_do=nr_to_do)}%")
             kwargs = dict(zip(self.orig_csv_header, row))
             pgid = kwargs["pgid"]
+
+            # # # TODO: remove this
+            # if pgid != "PG0403":
+            #     continue
+
             if pgid in pgid_done:
                 continue
+
             all_rows_same_pgid = []
             for _row in self.csv_rows_no_error:
                 zipped_cols_values = [x for x in zip(self.orig_csv_header, _row)]
@@ -466,5 +475,7 @@ class ConvertCsvToXml:
                 XmlSeriesBuilder.add_series_eerste_bovengrens,
                 XmlSeriesBuilder.add_series_tweede_bovengrens,
             ):
-                xml_file = self.add_xml_series(xml_file=xml_file, all_rows_same_pgid=all_rows_same_pgid, _func=_func)
+                xml_file = self._add_xml_series(xml_file=xml_file, all_rows_same_pgid=all_rows_same_pgid, _func=_func)
+            pgid_done.append(pgid)
+        xml_file = self._add_xml_last_rows(xml_file=xml_file)
         xml_file.close()
