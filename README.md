@@ -1,17 +1,30 @@
+[mit]: https://github.com/hdsr-mid/peilmarges_csv_to_xml/blob/main/LICENSE.txt
+[marges_csv_png]: ./converter/images/wis_marges_csv.png
+[marges_png]: ./converter/images/wis_marges.png
+
 ### Context
-* Created: August 2022
+* Created: September 2022
 * Authors: Renier Kramer (renier.kramer@hdsr.nl)
 * Python version: >3.6
 
 ### Description
-todo
+Covert a .csv to .xml to enable operationeel peilbesluit. Each peilgebied had 1 or more rows in the .csv, each row 
+with a startdate and enddate, so that these peilmarges can vary of time
+
+After validation of the .csv we convert this (yellow rows): 
+![marges_csv_png]
+to this (straight lines):
+![marges_png]
+
 
 ### Usage
 1. build conda environment from file if you don't have environment already
 ```
 > conda env create --name peilmarges_csv_to_xml --file <path_to_project>/environment.yml
 ```
-2. Define all constants in peilmarges_csv_to_xml/converter/constants.py 
+2. Define all constants in peilmarges_csv_to_xml/converter/constants.py
+   - set CREATE_CSV_WITH_ERRORS=False to create the validation result of the .csv 
+   - set CREATE_XML=True to create the .xml that goes into FEWS  
 3. run project:
 ```
 > conda activate peilmarges_csv_to_xml
@@ -21,7 +34,7 @@ todo
 ### License 
 [MIT][mit]
 
-[mit]: https://github.com/hdsr-mid/peilmarges_csv_to_xml/blob/main/LICENSE.txt
+
 
 ### Releases
 None

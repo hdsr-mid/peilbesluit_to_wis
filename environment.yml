@@ -2,6 +2,7 @@ channels:
   - conda-forge
 dependencies:
   - python=3.7
+  - pathlib
   - isort  # only required for auto-format code
   - black  # only required for auto-format code
   - pytest  # only required for running tests
