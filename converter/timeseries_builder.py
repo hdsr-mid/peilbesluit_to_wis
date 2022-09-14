@@ -1,3 +1,4 @@
+from converter.constants import DateFormats
 from datetime import datetime
 
 
@@ -6,10 +7,13 @@ class ConstantPeriod:
         self.start = start
         self.end = end
         self.level = level
-        self.start_month_int = int(start.split("-")[0])
-        self.start_day_int = int(start.split("-")[1])
-        self.end_month_int = int(end.split("-")[0])
-        self.end_day_int = int(end.split("-")[1])
+        self.start_month_int = datetime.strptime(start, DateFormats.dd_mm.value).month
+        self.start_day_int = datetime.strptime(start, DateFormats.dd_mm.value).day
+        self.end_month_int = datetime.strptime(end, DateFormats.dd_mm.value).month
+        self.end_day_int = datetime.strptime(end, DateFormats.dd_mm.value).day
+
+    def __repr__(self):
+        return f"start={self.start}, end={self.end}, level={self.level}"
 
 
 class BuilderBase:
@@ -32,19 +36,6 @@ class BuilderBase:
 
     @property
     def periods(self) -> list:
-        """
-        1) peilbesluitpeil [mNAP] has 4 periods:
-                1) eind_winter - begin_zomer:   level = avg(zomer_peil, winter_peil)
-                2) begin_zomer - eind_zomer:    level = zomerpeil
-                3) eind_zomer - begin_winter:   level = avg(zomer_peil, winter_peil)
-                4) begin_winter - eind_winter:  level = winterpeil
-        2) and 3) marge eerste en tweede bovengrens [mNAP] has 2 periods:
-                1) eind_winter - begin_winter
-                2) begin_winter - eind_winter
-        4) and 5) marge eerste en tweede ondergrens [mNAP] has 2 periods:
-                1) begin_zomer - eind_zomer
-                2) eind_zomer - begin_zomer
-        """
         raise NotImplementedError
 
     @property
@@ -56,12 +47,6 @@ class BuilderBase:
             (p.start_month_int, p.start_day_int, p.end_month_int, p.end_day_int): p for p in self.periods
         }
         return self._periods_mapper
-
-    @staticmethod
-    def month_day(datestring: str):
-        month = int(datestring.split("-")[0])
-        day = int(datestring.split("-")[1])
-        return month, day
 
     def _validate_periods(self) -> None:
         default_msg = f"{self.cls_name} has invalid (overlap/gap) periods:"
@@ -85,32 +70,74 @@ class BuilderBase:
             last_end = current_end
         assert last_end == first_start, f"{default_msg}: last_end {last_end} must be first_start {first_start}"
 
-    def create_series(self):
-        startdatum_level = self.get_level_in_between_date(month=self.startdatum.month, day=self.startdatum.day)
-        einddatum_level = self.get_level_in_between_date(month=self.einddatum.month, day=self.einddatum.day)
+    def get_series(self) -> list:
+        startdatum_period = self.get_period_in_between_date(month=self.startdatum.month, day=self.startdatum.day)
+        einddatum_period = self.get_period_in_between_date(month=self.einddatum.month, day=self.einddatum.day)
+        series_data = [(self.startdatum, startdatum_period.level)]
+        years = [x for x in range(self.startdatum.year, self.einddatum.year)]
+        years = sorted(set(years + [self.startdatum.year, self.einddatum.year]))
+        for year in years:
+            for period in self.periods:
+                possible_date = datetime(year=year, month=period.start_month_int, day=period.start_day_int)
+                last_date = series_data[-1][0]
+                if last_date < possible_date < self.einddatum:
+                    series_data.append((possible_date, period.level))
+        series_data.append((self.einddatum, einddatum_period.level))
+        return series_data
 
-    def get_level_in_between_date(self, month: int, day: int):
-        current_dummy_year = 2000
-        dummy_in_between_date = datetime(year=current_dummy_year, month=month, day=day)
-        for index, period in enumerate(self.periods):
-            is_last_element = index == len(self.periods) - 1
-            start_datetime_obj = datetime(
-                year=current_dummy_year, month=period.start_month_int, day=period.start_day_int
-            )
-            if is_last_element:
-                end_datetime_obj = datetime(
-                    year=current_dummy_year + 1, month=period.end_month_int, day=period.end_day_int
-                )
-            else:
-                end_datetime_obj = datetime(year=current_dummy_year, month=period.end_month_int, day=period.end_day_int)
+    def get_period_in_between_date(self, month: int, day: int) -> ConstantPeriod:
+        """
+        Find the related period where period_start < (month, day) < period_end. The difficulty is that we compare
+        month and days (no years),
+
+        Example:
+            self.periods:
+                1) (4, 1, 1.375),  # First period starts April 1 and has level 1.375 mNAP
+                2) (5, 1, 1.5),    # Second period starts May 1 and has level 1.5 mNAP
+                3) (9, 1, 1.375),  # etc..
+                4) (10, 1, 1.25)   # etc..
+
+            Example 1:
+                input = month=1, day=1
+                returns period 4 (1.24) as Oct 1 < Jan 1 < Apr 1
+
+            Example 2:
+                input = month=4, day=14
+                returns period 1 (1.375) as Apr 1 < Apr 14 < May 1
+
+            Example 3:
+                input = month=10, day=23
+                returns period 4 (1.24) as Oct 1 < Oct 23 < Apr 1
+        """
+        dummy_year = 2000
+        dummy_in_between_date = datetime(year=dummy_year, month=month, day=day)
+        for period in self.periods:
+            start_datetime_obj = datetime(year=dummy_year, month=period.start_month_int, day=period.start_day_int)
+            end_datetime_obj = datetime(year=dummy_year, month=period.end_month_int, day=period.end_day_int)
             if start_datetime_obj <= dummy_in_between_date <= end_datetime_obj:
-                return period.level
-        raise AssertionError("code error, this should not happen")
+                return period
+        # dummy_in_between_date must be between last and first period (= last and first element from self.periods)
+        start_first_period_this_year = datetime(
+            year=dummy_year, month=self.periods[0].start_month_int, day=self.periods[0].start_day_int
+        )
+        if dummy_in_between_date <= start_first_period_this_year:
+            return self.periods[-1]
+
+        start_last_period_this_year = datetime(
+            year=dummy_year, month=self.periods[-1].start_month_int, day=self.periods[-1].start_day_int
+        )
+        start_first_period_next_year = datetime(
+            year=dummy_year + 1, month=self.periods[0].start_month_int, day=self.periods[-1].start_day_int
+        )
+        if start_last_period_this_year < dummy_in_between_date < start_first_period_next_year:
+            return self.periods[-1]
+
+        raise AssertionError(f"code error, pgid={self.pgid}, periods={[x for x in self.periods]}")
 
 
 class PeilbesluitPeil(BuilderBase):
     def __init__(self, eind_winter: str, begin_zomer: str, eind_zomer: str, begin_winter: str, **kwargs):
-        assert [x for x in (eind_winter, begin_winter, eind_zomer, begin_winter)]
+        assert [x for x in (eind_winter, begin_zomer, eind_zomer, begin_winter)]
         self.eind_winter = eind_winter
         self.begin_zomer = begin_zomer
         self.eind_zomer = eind_zomer
@@ -124,3 +151,33 @@ class PeilbesluitPeil(BuilderBase):
         p3 = ConstantPeriod(start=self.eind_zomer, end=self.begin_winter, level=(self.zomerpeil + self.winterpeil) / 2)
         p4 = ConstantPeriod(start=self.begin_winter, end=self.eind_winter, level=self.winterpeil)
         return [p1, p2, p3, p4]
+
+
+class Ondergrens(BuilderBase):
+    def __init__(self, begin_zomer: str, eind_zomer: str, marge: float, **kwargs):
+        assert [x for x in (begin_zomer, eind_zomer, marge)]
+        self.begin_zomer = begin_zomer
+        self.eind_zomer = eind_zomer
+        self.marge = marge / 100  # convert from cm to m
+        super().__init__(**kwargs)
+
+    @property
+    def periods(self) -> list:
+        p1 = ConstantPeriod(start=self.begin_zomer, end=self.eind_zomer, level=self.zomerpeil - self.marge)
+        p2 = ConstantPeriod(start=self.eind_zomer, end=self.begin_zomer, level=self.winterpeil - self.marge)
+        return [p1, p2]
+
+
+class Bovengrens(BuilderBase):
+    def __init__(self, begin_winter: str, eind_winter: str, marge: float, **kwargs):
+        assert [x for x in (begin_winter, eind_winter, marge)]
+        self.begin_winter = begin_winter
+        self.eind_winter = eind_winter
+        self.marge = marge / 100  # convert from cm to m
+        super().__init__(**kwargs)
+
+    @property
+    def periods(self) -> list:
+        p1 = ConstantPeriod(start=self.eind_winter, end=self.begin_winter, level=self.zomerpeil + self.marge)
+        p2 = ConstantPeriod(start=self.begin_winter, end=self.eind_winter, level=self.zomerpeil + self.marge)
+        return [p1, p2]
