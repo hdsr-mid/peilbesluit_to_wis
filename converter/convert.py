@@ -81,7 +81,7 @@ class DateColumn(ColumnBase):
             else:
                 date_obj = datetime.strptime(f"{value_stripped}", self.date_format.value)
         except Exception as err:
-            raise AssertionError(f"could not transform date_string {value_stripped} to date_object, err={err}")
+            raise AssertionError(f"could not transform date_string '{value_stripped}' to date_object, err={err}")
 
         if self.min_value:
             assert date_obj > self.min_value, f"{date_obj} must be greater than {self.min_value}"
@@ -219,7 +219,7 @@ class ConvertCsvToXml:
             zipped_cols_values = [x for x in zip(self.orig_csv_header, row)]
             peilgebied_id = self.get_value(col_name="pgid", zipped_cols_values=zipped_cols_values)
 
-            logger.debug("check 1 (error) nr columns in this row must equal nr headers")
+            logger.debug("check 1: (error) nr columns in this row must equal nr headers")
             nr_columns = len(row)
             if nr_columns != nr_expected_columns:
                 msg = f"nr cells does not match nr csv columns {self.orig_csv_header}"
@@ -236,14 +236,14 @@ class ConvertCsvToXml:
                 )
                 continue
 
-            logger.debug("check 2 validate values")
+            logger.debug("check 2: validate values and their dtype")
             for column_name, column_value in zipped_cols_values:
                 error_type_id += 1
                 column_validator = COLUMN_VALIDATORS[column_name]
                 try:
                     column_validator.validate(value=column_value)
                 except Exception as err:
-                    msg = f"column={column_name}, err={err}"
+                    msg = f"column='{column_name}', err={err}"
                     if constants.RAISE_ON_CSV_ERROR_ROW:
                         raise AssertionError(msg)
 
@@ -273,7 +273,7 @@ class ConvertCsvToXml:
             begin_winter = self.get_value(col_name="begin_winter", zipped_cols_values=zipped_cols_values)
             dates_are_ordered_ok = eind_winter < begin_zomer < eind_zomer < begin_winter
             if not dates_are_ordered_ok:
-                msg = f"dates are not ordered (eind_winter < begin_zomer < eind_zomer < begin_winter)"
+                msg = "dates are not ordered (eind_winter < begin_zomer < eind_zomer < begin_winter)"
                 error_dict_index, error_peilgebied = self.save_error(
                     row_index=row_index,
                     error_type_id=len(self.orig_csv_header) + 1,
@@ -286,9 +286,11 @@ class ConvertCsvToXml:
             # check 3b: validate bovenmarges onderling
             _2e_marge_boven = self.get_value(col_name="2e_marge_boven", zipped_cols_values=zipped_cols_values)
             _1e_marge_boven = self.get_value(col_name="1e_marge_boven", zipped_cols_values=zipped_cols_values)
-            boven_marges_are_ok = 0 < _1e_marge_boven < _2e_marge_boven
+            _min = constants.MIN_ALLOW_UPPER_MARGIN_CM
+            _max = constants.MAX_ALLOW_UPPER_MARGIN_CM
+            boven_marges_are_ok = _min <= _1e_marge_boven < _2e_marge_boven < _max
             if not boven_marges_are_ok:
-                msg = f"boven marges are wrong, we expected 0 < _1e_marge_boven < _2e_marge_boven"
+                msg = f"boven marges are wrong, we expected {_min} <= _1e_marge_boven < _2e_marge_boven < {_max}"
                 error_dict_index, error_peilgebied = self.save_error(
                     row_index=row_index,
                     error_type_id=len(self.orig_csv_header) + 2,
@@ -301,9 +303,12 @@ class ConvertCsvToXml:
             # check 3c: validate ondermarges onderling
             _2e_marge_onder = self.get_value(col_name="2e_marge_onder", zipped_cols_values=zipped_cols_values)
             _1e_marge_onder = self.get_value(col_name="1e_marge_onder", zipped_cols_values=zipped_cols_values)
-            onder_marges_are_ok = 0 < _1e_marge_onder < _2e_marge_onder
+
+            _min = constants.MIN_ALLOW_LOWER_MARGIN_CM
+            _max = constants.MAX_ALLOW_LOWER_MARGIN_CM
+            onder_marges_are_ok = _min <= _1e_marge_onder < _2e_marge_onder < _max
             if not onder_marges_are_ok:
-                msg = f"onder marges are wrong, we expected 0 < _1e_marge_onder < _2e_marge_onder"
+                msg = f"onder marges are wrong, we expected {_min} <= _1e_marge_onder < _2e_marge_onder < {_max}"
                 error_dict_index, error_peilgebied = self.save_error(
                     row_index=row_index,
                     error_type_id=len(self.orig_csv_header) + 3,
@@ -313,7 +318,7 @@ class ConvertCsvToXml:
                     error_peilgebied=error_peilgebied,
                 )
 
-        logger.debug(f"check 4: subsequent rows of the same pgid must connect (no gap, and no overlap")
+        logger.debug("check 4: subsequent rows of the same pgid must connect (no gap, and no overlap")
         index_pgid_column = self.orig_csv_header.index("pgid")
         all_pgids = [x[index_pgid_column] for x in self.orig_csv_row_no_header]
         pgid_dict = {}
@@ -358,7 +363,7 @@ class ConvertCsvToXml:
             peilgebied_id = self.get_value(col_name="pgid", zipped_cols_values=zipped_cols_values)
 
             if peilgebied_id in error_peilgebied:
-                msg = f"skip this okay row as in other row(s) this pgid has an error"
+                msg = "skip this okay row as in other row(s) this pgid has an error"
                 error_dict_index, error_peilgebied = self.save_error(
                     row_index=row_index,
                     error_type_id=len(self.orig_csv_header) + 5,
@@ -408,7 +413,7 @@ class ConvertCsvToXml:
     def _add_xml_first_rows(xml_file):
         xml_file.write('<?xml version="1.0" encoding="UTF-8" ?>\n')
         xml_file.write(
-            '<TimeSeries xmlns="http://www.wldelft.nl/fews/PI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.wldelft.nl/fews/PI http://fews.wldelft.nl/schemas/version1.0/pi-schemas/pi_timeseriesextended.xsd" version="1.2">\n'
+            '<TimeSeries xmlns="http://www.wldelft.nl/fews/PI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.wldelft.nl/fews/PI http://fews.wldelft.nl/schemas/version1.0/pi-schemas/pi_timeseriesextended.xsd" version="1.2">\n'  # noqa
         )
         xml_file.write(f"{TAB}<timeZone>1.0</timeZone>\n")
         return xml_file
@@ -450,8 +455,12 @@ class ConvertCsvToXml:
         xml_file = self._add_xml_first_rows(xml_file=xml_file)
         pgid_done = []
         nr_to_do = len(self.csv_rows_no_error)
+        progress = 0
         for index, row in enumerate(self.csv_rows_no_error):
-            logger.info(f"progress = {get_progress(iteration_nr=index, nr_to_do=nr_to_do)}%")
+            new_progress = get_progress(iteration_nr=index, nr_to_do=nr_to_do)
+            if new_progress != progress:
+                logger.info(f"build .xml progress = {get_progress(iteration_nr=index, nr_to_do=nr_to_do)}%")
+                progress = new_progress
             kwargs = dict(zip(self.orig_csv_header, row))
             pgid = kwargs["pgid"]
 
