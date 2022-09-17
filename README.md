@@ -1,4 +1,4 @@
-[mit]: https://github.com/hdsr-mid/peilmarges_csv_to_xml/blob/main/LICENSE.txt
+[mit]: https://github.com/hdsr-mid/peilbesluitmarges/blob/main/LICENSE.txt
 [marges_csv_png]: ./converter/images/wis_marges_csv.png
 [marges_png]: ./converter/images/wis_marges.png
 
@@ -44,14 +44,14 @@ to this (straight lines):
 ### Usage
 1. build conda environment from file if you don't have environment already
 ```
-> conda env create --name peilmarges_csv_to_xml --file <path_to_project>/environment.yml
+> conda env create --name peilbesluitmarges --file <path_to_project>/environment.yml
 ```
-2. Define all constants in peilmarges_csv_to_xml/converter/constants.py
+2. Define all constants in peilbesluitmarges/converter/constants.py
    - set CREATE_CSV_WITH_ERRORS=False to create the validation result of the .csv 
    - set CREATE_XML=True to create the .xml that goes into FEWS  
 3. run project:
 ```
-> conda activate peilmarges_csv_to_xml
+> conda activate peilbesluitmarges
 > python <path_to_project>/main.py
 ```
 
@@ -65,7 +65,7 @@ None
 
 ### Contributions
 All contributions, bug reports, bug fixes, documentation improvements, enhancements and ideas are
-welcome on https://github.com/hdsr-mid/peilmarges_csv_to_xml/issues
+welcome on https://github.com/hdsr-mid/peilbesluitmarges/issues
 
 
 ### Test Coverage
