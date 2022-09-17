@@ -10,11 +10,11 @@ class XmlSeriesBuilder:
     """
     Below the first three rows of the input csv are shown:
 
-    pgid    startdatum	einddatum   eind_winter begin_zomer eind_zomer  begin_winter    zomerpeil   winterpeil  2e_marge_onder  1e_marge_onder  1e_marge_boven  2e_marge_boven
-    --------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    PG0566  20190101    20201023	01-04	    01-05       01-09	    01-10           1.5         1.25        25              10	            10	            25
-    PG0566  20201023	20210610	01-04	    01-05       01-09	    01-10           915         915	        25              50.5            50.5	        25
-    PG0064  20190101	20190717	01-04	    01-05	    01-09       01-10           1.65	    1.45        25              10              10              25
+    pgid    startdatum	einddatum   eind_winter begin_zomer eind_zomer  begin_winter    zomerpeil   winterpeil  2e_marge_onder  1e_marge_onder  1e_marge_boven  2e_marge_boven  # noqa
+    --------------------------------------------------------------------------------------------------------------------------------------------------------------------------  # noqa
+    PG0566  20190101    20201023	01-04	    01-05       01-09	    01-10           1.5         1.25        25              10	            10	            25              # noqa
+    PG0566  20201023	20210610	01-04	    01-05       01-09	    01-10           915         915	        25              50.5            50.5	        25              # noqa
+    PG0064  20190101	20190717	01-04	    01-05	    01-09       01-10           1.65	    1.45        25              10              10              25              # noqa
 
     In WIS 7.0 Productie one can see that peilbesluit graphs (grafieken > ster > peilbesluitevaluatie > marges aanzetten (knopje rechtsboven)).
     The graphs shows a waterlevel line and 5 "block" lines:

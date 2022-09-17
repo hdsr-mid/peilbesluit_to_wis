@@ -19,19 +19,23 @@ LOG_FILE_PATH = LOG_DIR / "main.log"
 
 PEILMARGE_GIS_EXPORT_DIR = (
     O_drive
-    / "Planvorming\Gebiedsgerichte_plannen\Peilbesluiten\Algemeen\Peilbesluitevaluatie\Product script Inger - peilen, marges en datum"
+    / "Planvorming\Gebiedsgerichte_plannen\Peilbesluiten\Algemeen\Peilbesluitevaluatie\Product script Inger - peilen, marges en datum"  # noqa
 )
 PEILMARGE_GIS_EXPORT_FILE_PATH = PEILMARGE_GIS_EXPORT_DIR / "Peilbesluitpeilen2019_1107.csv"
 
-CREATE_CSV_WITH_ERRORS = False
+CREATE_CSV_WITH_ERRORS = True
 CREATE_XML = True
 RAISE_ON_CSV_WARNING_ROW = False
 RAISE_ON_CSV_ERROR_ROW = False
 
 MIN_ALLOWED_MNAP = -10
 MAX_ALLOWED_MNAP = 10
-MAX_ALLOW_LOWER_MARGIN_CM = 50
-MAX_ALLOW_UPPER_MARGIN_CM = 50
+
+MIN_ALLOW_LOWER_MARGIN_CM = 0
+MAX_ALLOW_LOWER_MARGIN_CM = 100 * 10  # yes... 10 meters
+
+MIN_ALLOW_UPPER_MARGIN_CM = 0
+MAX_ALLOW_UPPER_MARGIN_CM = 100 * 10  # yes... 10 meters
 
 TAB = "    "
 
