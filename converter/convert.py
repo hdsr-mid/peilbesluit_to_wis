@@ -288,9 +288,9 @@ class ConvertCsvToXml:
             _1e_marge_boven = self.get_value(col_name="1e_marge_boven", zipped_cols_values=zipped_cols_values)
             _min = constants.MIN_ALLOW_UPPER_MARGIN_CM
             _max = constants.MAX_ALLOW_UPPER_MARGIN_CM
-            boven_marges_are_ok = _min <= _1e_marge_boven < _2e_marge_boven < _max
+            boven_marges_are_ok = _min <= _1e_marge_boven < _2e_marge_boven <= _max
             if not boven_marges_are_ok:
-                msg = f"boven marges are wrong, we expected {_min} <= _1e_marge_boven < _2e_marge_boven < {_max}"
+                msg = f"boven marges are wrong, we expected {_min} <= _1e_marge_boven < _2e_marge_boven <= {_max}"
                 error_dict_index, error_peilgebied = self.save_error(
                     row_index=row_index,
                     error_type_id=len(self.orig_csv_header) + 2,
@@ -306,9 +306,9 @@ class ConvertCsvToXml:
 
             _min = constants.MIN_ALLOW_LOWER_MARGIN_CM
             _max = constants.MAX_ALLOW_LOWER_MARGIN_CM
-            onder_marges_are_ok = _min <= _1e_marge_onder < _2e_marge_onder < _max
+            onder_marges_are_ok = _min <= _1e_marge_onder < _2e_marge_onder <= _max
             if not onder_marges_are_ok:
-                msg = f"onder marges are wrong, we expected {_min} <= _1e_marge_onder < _2e_marge_onder < {_max}"
+                msg = f"onder marges are wrong, we expected {_min} <= _1e_marge_onder < _2e_marge_onder <= {_max}"
                 error_dict_index, error_peilgebied = self.save_error(
                     row_index=row_index,
                     error_type_id=len(self.orig_csv_header) + 3,
