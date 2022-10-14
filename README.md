@@ -18,7 +18,7 @@ assumptions for validation:
       - MAX_ALLOW_LOWER_MARGIN_CM = 100 * 10  # yes... 10 meters
       - MIN_ALLOW_UPPER_MARGIN_CM = 0
       - MAX_ALLOW_UPPER_MARGIN_CM = 100 * 10  # yes... 10 meters
-  - niet hoogwatervoorziening mag niet 0 zijn in csv (in BR, maar in Inger's FME script niet)
+  - niet hoogwatervoorziening mag niet 0 zijn in .csv (in BR wel, maar in Inger's FME script niet)
   - peilgebied waar geen marges zijn worden gefixed (weggelaten/ingevuld) in Inger's FME script
   - marges moeten te converteren zijn naar floats
   - marges moeten altijd ingevuld zijn (regels zonder marge fixen (bijv weglaten) in Inger's FME script)
