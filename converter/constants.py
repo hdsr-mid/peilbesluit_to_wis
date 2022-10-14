@@ -1,3 +1,4 @@
+from datetime import datetime
 from enum import Enum
 from pathlib import Path
 
@@ -32,15 +33,17 @@ CREATE_XML = True
 RAISE_ON_CSV_WARNING_ROW = False
 RAISE_ON_CSV_ERROR_ROW = False
 
+START_YEAR_PEILBESLUTIEN = 2000
+END_YEAR_PEILBESLUTIEN = 2035
+DUMMY_YEAR = 2000
+DUMMY_STARTDATE = datetime(year=DUMMY_YEAR, month=1, day=1)
+DUMMY_ENDDATE = datetime(year=DUMMY_YEAR, month=12, day=31)
 MIN_ALLOWED_MNAP = -10
 MAX_ALLOWED_MNAP = 10
-
 MIN_ALLOW_LOWER_MARGIN_CM = 0
 MAX_ALLOW_LOWER_MARGIN_CM = 100 * 10  # yes... 10 meters
-
 MIN_ALLOW_UPPER_MARGIN_CM = 0
 MAX_ALLOW_UPPER_MARGIN_CM = 100 * 10  # yes... 10 meters
-
 TAB = "    "
 
 

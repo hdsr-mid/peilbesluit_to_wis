@@ -6,6 +6,13 @@ import logging
 import sys
 
 
+# TODO: use pandas and thereby reduce the codebase.
+#  @future developer: the initial idea was to run this code in FEWS (called by general adapter). So the code should
+#  have minimal dependencies and thus I (renier) decided to not use pandas but to write a lot of code instead..
+#  Unfortunately, when I completed this code it became clear that this code could run outside FEWS.
+#  So in short, I'm sorry for all the unnecessary complexity
+
+
 def check_python_version():
     major = sys.version_info.major
     minor = sys.version_info.minor

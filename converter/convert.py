@@ -1,5 +1,16 @@
 from converter import constants
 from converter.constants import DateFormats
+from converter.constants import DUMMY_ENDDATE
+from converter.constants import DUMMY_STARTDATE
+from converter.constants import DUMMY_YEAR
+from converter.constants import END_YEAR_PEILBESLUTIEN
+from converter.constants import MAX_ALLOW_LOWER_MARGIN_CM
+from converter.constants import MAX_ALLOW_UPPER_MARGIN_CM
+from converter.constants import MAX_ALLOWED_MNAP
+from converter.constants import MIN_ALLOW_LOWER_MARGIN_CM
+from converter.constants import MIN_ALLOW_UPPER_MARGIN_CM
+from converter.constants import MIN_ALLOWED_MNAP
+from converter.constants import START_YEAR_PEILBESLUTIEN
 from converter.constants import TAB
 from converter.utils import get_progress
 from converter.xml_builder import XmlSeriesBuilder
@@ -11,16 +22,6 @@ import logging
 
 
 logger = logging.getLogger(__name__)
-
-START_YEAR_PEILBESLUTIEN = 2000
-END_YEAR_PEILBESLUTIEN = 2035
-DUMMY_YEAR = 2000
-DUMMY_STARTDATE = datetime(year=DUMMY_YEAR, month=1, day=1)
-DUMMY_ENDDATE = datetime(year=DUMMY_YEAR, month=12, day=31)
-MIN_PEIL = -10  # [mnap]
-MAX_PEIL = 10  # [mnap]
-MIN_MARGE = 1  # [cm]
-MAX_MARGE = 100  # [cm]
 
 
 class ColumnBase:
@@ -45,11 +46,10 @@ class GeneralColumn(ColumnBase):
             raise AssertionError(
                 f"could not convert column {self.name} value '{value}' to target_dtype {self.target_dtype}"
             )
-
-        if self.min_value:
-            assert target_value > self.min_value, f"value '{value}' must be larger than {self.min_value}"
-        if self.max_value:
-            assert target_value < self.max_value, f"value '{value}' must be smaller than {self.max_value}"
+        if self.min_value and target_value <= self.min_value:
+            raise AssertionError(f"value '{value}' must be larger than {self.min_value}")
+        if self.max_value and target_value >= self.max_value:
+            raise AssertionError(f"value '{value}' must be smaller than {self.max_value}")
         return target_value
 
 
@@ -100,39 +100,55 @@ COLUMN_VALIDATORS = {
         date_format=DateFormats.yyyymmdd,
         min_value=datetime(year=START_YEAR_PEILBESLUTIEN, month=1, day=1),
         max_value=datetime(year=END_YEAR_PEILBESLUTIEN, month=12, day=31),
-    ),  # 20190101
+    ),  # e.g. 20190101
     "einddatum": DateColumn(
         name="einddatum",
         date_format=DateFormats.yyyymmdd,
         min_value=datetime(year=START_YEAR_PEILBESLUTIEN, month=1, day=1),
         max_value=datetime(year=END_YEAR_PEILBESLUTIEN, month=12, day=31),
-    ),  # 20231023
+    ),  # e.g. 20231023
     "eind_winter": DateColumn(
         name="eind_winter", date_format=DateFormats.dd_mm, min_value=DUMMY_STARTDATE, max_value=DUMMY_ENDDATE
-    ),  # 01-04
+    ),  # e.g. 01-04
     "begin_zomer": DateColumn(
         name="begin_zomer", date_format=DateFormats.dd_mm, min_value=DUMMY_STARTDATE, max_value=DUMMY_ENDDATE
-    ),  # 01-05
+    ),  # e.g. 01-05
     "eind_zomer": DateColumn(
         name="eind_zomer", date_format=DateFormats.dd_mm, min_value=DUMMY_STARTDATE, max_value=DUMMY_ENDDATE
-    ),  # 01-09
+    ),  # e.g. 01-09
     "begin_winter": DateColumn(
         name="begin_winter", date_format=DateFormats.dd_mm, min_value=DUMMY_STARTDATE, max_value=DUMMY_ENDDATE
-    ),  # 01-10
-    "zomerpeil": GeneralColumn(name="zomerpeil", target_dtype=float, min_value=MIN_PEIL, max_value=MAX_PEIL),  # 1.5
-    "winterpeil": GeneralColumn(name="winterpeil", target_dtype=float, min_value=MIN_PEIL, max_value=MAX_PEIL),  # 1.25
+    ),  # e.g. 01-10
+    "zomerpeil": GeneralColumn(
+        name="zomerpeil", target_dtype=float, min_value=MIN_ALLOWED_MNAP, max_value=MAX_ALLOWED_MNAP
+    ),  # e.g. 1.5
+    "winterpeil": GeneralColumn(
+        name="winterpeil", target_dtype=float, min_value=MIN_ALLOWED_MNAP, max_value=MAX_ALLOWED_MNAP
+    ),  # e.g. 1.25
     "2e_marge_onder": GeneralColumn(
-        name="_2e_marge_onder", target_dtype=float, min_value=MIN_MARGE, max_value=MAX_MARGE
-    ),  # 25
+        name="_2e_marge_onder",
+        target_dtype=float,
+        min_value=MIN_ALLOW_LOWER_MARGIN_CM,
+        max_value=MAX_ALLOW_LOWER_MARGIN_CM,
+    ),  # e.g. 25
     "1e_marge_onder": GeneralColumn(
-        name="_1e_marge_onder", target_dtype=float, min_value=MIN_MARGE, max_value=MAX_MARGE
-    ),  # 10
+        name="_1e_marge_onder",
+        target_dtype=float,
+        min_value=MIN_ALLOW_LOWER_MARGIN_CM,
+        max_value=MAX_ALLOW_LOWER_MARGIN_CM,
+    ),  # e.g. 10
     "1e_marge_boven": GeneralColumn(
-        name="_1e_marge_boven", target_dtype=float, min_value=MIN_MARGE, max_value=MAX_MARGE
-    ),  # 10
+        name="_1e_marge_boven",
+        target_dtype=float,
+        min_value=MIN_ALLOW_UPPER_MARGIN_CM,
+        max_value=MAX_ALLOW_UPPER_MARGIN_CM,
+    ),  # e.g. 10
     "2e_marge_boven": GeneralColumn(
-        name="_2e_marge_boven", target_dtype=float, min_value=MIN_MARGE, max_value=MAX_MARGE
-    ),  # 25
+        name="_2e_marge_boven",
+        target_dtype=float,
+        min_value=MIN_ALLOW_UPPER_MARGIN_CM,
+        max_value=MAX_ALLOW_UPPER_MARGIN_CM,
+    ),  # e.g. 25
 }
 
 
