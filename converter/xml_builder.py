@@ -1,11 +1,14 @@
 from converter import constants
 from converter import timeseries_builder
+from converter.constants import ColumnNameDtypeConstants
 from converter.constants import TAB
 from converter.constants import XmlConstants
 from datetime import datetime
 
+import pandas as pd
 
-class XmlSeriesBuilder:
+
+class XmlSeriesBuilder(ColumnNameDtypeConstants):
 
     """
     Below the first three rows of the input csv are shown:
@@ -34,23 +37,23 @@ class XmlSeriesBuilder:
     We see the xml result of the first csv two rows (the share the same pgid):
     """
 
-    def __init__(self, xml_file, is_first_pgid_csv_row: bool, is_last_pgid_csv_row: bool, **kwargs):
+    def __init__(self, xml_file, is_first_pgid_csv_row: bool, is_last_pgid_csv_row: bool, df_pgid_row: pd.Series):
         self.xml_file = xml_file
         self.is_first_pgid_csv_row = is_first_pgid_csv_row
         self.is_last_pgid_csv_row = is_last_pgid_csv_row
-        self.pgid = str(kwargs.pop("pgid"))
-        self.startdatum = datetime.strptime(kwargs.pop("startdatum"), "%Y%m%d")
-        self.einddatum = datetime.strptime(kwargs.pop("einddatum"), "%Y%m%d")
-        self.eind_winter = str(kwargs.pop("eind_winter"))
-        self.begin_zomer = str(kwargs.pop("begin_zomer"))
-        self.eind_zomer = str(kwargs.pop("eind_zomer"))
-        self.begin_winter = str(kwargs.pop("begin_winter"))
-        self.zomerpeil = float(kwargs.pop("zomerpeil"))
-        self.winterpeil = float(kwargs.pop("winterpeil"))
-        self._2e_marge_onder = float(kwargs.pop("2e_marge_onder"))
-        self._1e_marge_onder = float(kwargs.pop("1e_marge_onder"))
-        self._1e_marge_boven = float(kwargs.pop("1e_marge_boven"))
-        self._2e_marge_boven = float(kwargs.pop("2e_marge_boven"))
+        self.pgid = str(df_pgid_row[self.col_pgid])
+        self.startdatum = df_pgid_row[self.col_startdatum]
+        self.einddatum = df_pgid_row[self.col_einddatum]
+        self.eind_winter = str(df_pgid_row[self.col_eind_winter])
+        self.begin_zomer = str(df_pgid_row[self.col_begin_zomer])
+        self.eind_zomer = str(df_pgid_row[self.col_eind_zomer])
+        self.begin_winter = str(df_pgid_row[self.col_begin_winter])
+        self.zomerpeil = float(df_pgid_row[self.col_zomerpeil])
+        self.winterpeil = float(df_pgid_row[self.col_winterpeil])
+        self._2e_marge_onder = float(df_pgid_row[self.col_2e_marge_onder])
+        self._1e_marge_onder = float(df_pgid_row[self.col_1e_marge_onder])
+        self._1e_marge_boven = float(df_pgid_row[self.col_1e_marge_boven])
+        self._2e_marge_boven = float(df_pgid_row[self.col_2e_marge_boven])
 
     @staticmethod
     def add_xml_series(xml_file):
