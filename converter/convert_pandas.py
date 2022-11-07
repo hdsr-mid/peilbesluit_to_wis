@@ -70,7 +70,10 @@ class ConvertCsvToXml(ColumnNameDtypeConstants):
         try:
             date_obj = pd.to_datetime(datestr_m_d, format=fmt)
         except Exception:
-            raise AssertionError(f"we expected date format '{fmt}' so e.g. '01-04' (in other words: April 1)")
+            raise AssertionError(
+                f"we expected date format '{fmt}' so e.g. '01-04' (in other words: April 1), but "
+                f"found {datestr_m_d}"
+            )
         return date_obj.month, date_obj.day
 
     def get_dummy_date(self, dummy_year: int, datestr_m_d: str) -> pd.Timestamp:
@@ -145,7 +148,9 @@ class ConvertCsvToXml(ColumnNameDtypeConstants):
         wrong_marge_row_indices = sorted(set(wrong_marge_row_indices))  # noqa
         wrong_marge_pgids = sorted(set(wrong_marge_pgids))  # noqa
         if wrong_marge_row_indices:
-            logger.warning(f"found {len(wrong_marge_row_indices)} rows with a invalid marge: {wrong_marge_row_indices}")
+            logger.warning(
+                f"found {len(wrong_marge_row_indices)} rows with an invalid marge: {wrong_marge_row_indices}"
+            )
             # remove all pgids that have 1 or more wrong marge
             mask_wrong_marge_pgids = self._df[self.col_pgid].isin(wrong_marge_pgids)
             logger.warning(f"removing {len(wrong_marge_pgids)} pgid from input")
@@ -154,7 +159,7 @@ class ConvertCsvToXml(ColumnNameDtypeConstants):
         wrong_peil_row_indices = sorted(set(wrong_peil_row_indices))  # noqa
         wrong_peil_pgids = list(set(wrong_peil_pgids))  # noqa
         if wrong_peil_row_indices:
-            logger.warning(f"found {len(wrong_peil_row_indices)} rows with a invalid peil: {wrong_peil_row_indices}")
+            logger.warning(f"found {len(wrong_peil_row_indices)} rows with an invalid peil: {wrong_peil_row_indices}")
             # remove all pgids that have 1 or more wrong peil
             mask_wrong_peil_pgids = self._df[self.col_pgid].isin(wrong_peil_pgids)
             logger.warning(f"removing {len(wrong_peil_pgids)} pgid from input")
@@ -222,12 +227,20 @@ class ConvertCsvToXml(ColumnNameDtypeConstants):
             xml_file = xml_builder_method()
         return xml_builder.xml_file
 
-    def _create_xml(self, xml_path: Path) -> None:
+    def _create_xml(self, xml_path: Path, create_small_test_sample: bool = False) -> None:
         xml_file = open(xml_path.as_posix(), mode="w")
         xml_file = self._add_xml_first_rows(xml_file=xml_file)
 
+        xml_small_file = None
+        if create_small_test_sample:
+            logger.info("creating also a small test sample (.xml)")
+            file_path = xml_path.parent / f"{xml_path.stem}_test_sample{xml_path.suffix}"
+            xml_small_file = open(file_path.as_posix(), mode="w")
+            xml_small_file = self._add_xml_first_rows(xml_file=xml_small_file)
+
         df_grouped_by_pgid = self.df.groupby(by=self.col_pgid)
         nr_to_do = len(df_grouped_by_pgid)
+        xml_small_file_max_index = int(nr_to_do / 10)  # use ~10% of all data
         progress = 0
         for index, (pgid, df_pgid) in enumerate(df_grouped_by_pgid):
             new_progress = get_progress(iteration_nr=index, nr_to_do=nr_to_do)
@@ -242,11 +255,18 @@ class ConvertCsvToXml(ColumnNameDtypeConstants):
                 XmlSeriesBuilder.add_series_tweede_bovengrens,
             ):
                 xml_file = self._add_xml_series(xml_file=xml_file, df_pgid=df_pgid, _func=_func)
+                if create_small_test_sample and index < xml_small_file_max_index:
+                    xml_small_file = self._add_xml_series(xml_file=xml_small_file, df_pgid=df_pgid, _func=_func)
+
         xml_file = self._add_xml_last_rows(xml_file=xml_file)
         xml_file.close()
 
+        if create_small_test_sample:
+            xml_small_file = self._add_xml_last_rows(xml_file=xml_small_file)
+            xml_small_file.close()
+
     def run(self):
-        self.validate_df()
+        # self.validate_df()
         if not constants.CREATE_XML:
             logger.info("skip creating xml")
             return
@@ -259,4 +279,4 @@ class ConvertCsvToXml(ColumnNameDtypeConstants):
         self.df.to_csv(path_or_buf=csv_source_path, sep=",", index=False)
 
         # create .xml
-        self._create_xml(xml_path=xml_path)
+        self._create_xml(xml_path=xml_path, create_small_test_sample=True)
