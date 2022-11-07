@@ -240,7 +240,7 @@ class ConvertCsvToXml(ColumnNameDtypeConstants):
 
         df_grouped_by_pgid = self.df.groupby(by=self.col_pgid)
         nr_to_do = len(df_grouped_by_pgid)
-        xml_small_file_max_index = int(nr_to_do / 2)  # use ~10% of all data
+        xml_small_file_max_index = int(nr_to_do / 2)  # use ~2% of all data
         progress = 0
         for index, (pgid, df_pgid) in enumerate(df_grouped_by_pgid):
             new_progress = get_progress(iteration_nr=index, nr_to_do=nr_to_do)
