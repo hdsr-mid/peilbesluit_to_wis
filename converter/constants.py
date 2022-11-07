@@ -1,9 +1,7 @@
-from datetime import datetime
 from enum import Enum
 from pathlib import Path
 
-import glob
-import os
+import numpy as np
 
 
 O_drive = Path("O:")
@@ -17,27 +15,25 @@ DATA_EXAMPLE_DIR = DATA_DIR / "example"
 LOG_DIR = DATA_OUTPUT_DIR / "log_rotating"
 LOG_FILE_PATH = LOG_DIR / "main.log"
 
-# PEILMARGE_GIS_EXPORT_DIR = (
-#     O_drive
-#     / "Planvorming\Gebiedsgerichte_plannen\Peilbesluiten\Algemeen\Peilbesluitevaluatie\Product script Inger - peilen, marges en datum"  # noqa
-# )
-# PEILMARGE_GIS_EXPORT_FILE_PATH = PEILMARGE_GIS_EXPORT_DIR / "Peilbesluitpeilen2019_1107.csv"
 
 PEILMARGE_GIS_EXPORT_DIR = (
     O_drive / "Planvorming\GIS\Peilbesluiten\Aanpak Actuele Peilbesluiten\Output FME-script"  # noqa
 )  # noqa
-PEILMARGE_GIS_EXPORT_FILE_PATH = PEILMARGE_GIS_EXPORT_DIR / "Koppeling_AAP.csv"
 
-CREATE_CSV_WITH_ERRORS = True
+# deze doet het wel
+PEILMARGE_GIS_EXPORT_FILE_PATH = PEILMARGE_GIS_EXPORT_DIR / "Koppeling_AAP_31102022.csv"
+# deze doet het niet
+PEILMARGE_GIS_EXPORT_FILE_PATH = PEILMARGE_GIS_EXPORT_DIR / "Koppeling_AAP_test_bestand.csv"
+# # deze doet het niet
+PEILMARGE_GIS_EXPORT_FILE_PATH = PEILMARGE_GIS_EXPORT_DIR / "Koppeling_AAP_retry2_1.csv"
+# # deze doet het niet
+PEILMARGE_GIS_EXPORT_FILE_PATH = PEILMARGE_GIS_EXPORT_DIR / "Koppeling_AAP_retry3.csv"
+# # deze doet het niet
+PEILMARGE_GIS_EXPORT_FILE_PATH = PEILMARGE_GIS_EXPORT_DIR / "Koppeling_AAP_retry4_1.csv"
+
 CREATE_XML = True
 RAISE_ON_CSV_WARNING_ROW = False
 RAISE_ON_CSV_ERROR_ROW = False
-
-START_YEAR_PEILBESLUTIEN = 2000
-END_YEAR_PEILBESLUTIEN = 2035
-DUMMY_YEAR = 2000
-DUMMY_STARTDATE = datetime(year=DUMMY_YEAR, month=1, day=1)
-DUMMY_ENDDATE = datetime(year=DUMMY_YEAR, month=12, day=31)
 MIN_ALLOWED_MNAP = -10
 MAX_ALLOWED_MNAP = 10
 MIN_ALLOW_LOWER_MARGIN_CM = 0
@@ -47,22 +43,52 @@ MAX_ALLOW_UPPER_MARGIN_CM = 100 * 10  # yes... 10 meters
 TAB = "    "
 
 
-def get_last_gis_export_peilmarges_csv() -> Path:
-    if PEILMARGE_GIS_EXPORT_FILE_PATH:
-        return PEILMARGE_GIS_EXPORT_FILE_PATH
-    list_of_files = glob.glob(pathname=(PEILMARGE_GIS_EXPORT_DIR / "*.csv").as_posix())  # noqa
-    assert list_of_files, f"could not find any gis export. We expected at =>1 .csv files in {PEILMARGE_GIS_EXPORT_DIR}"
-    latest_file = max(list_of_files, key=os.path.getctime)
-    latest_file_path = Path(latest_file)
-    assert latest_file_path.is_file()
-    return latest_file_path
+class ColumnNameDtypeConstants:
+    col_pgid = "pgid"
+    col_startdatum = "startdatum"
+    col_einddatum = "einddatum"
+    col_eind_winter = "eind_winter"
+    col_begin_zomer = "begin_zomer"
+    col_eind_zomer = "eind_zomer"
+    col_begin_winter = "begin_winter"
+    col_zomerpeil = "zomerpeil"
+    col_winterpeil = "winterpeil"
+    col_2e_marge_onder = "2e marge onder"
+    col_1e_marge_onder = "1e marge onder"
+    col_1e_marge_boven = "1e marge boven"
+    col_2e_marge_boven = "2e marge boven"
 
+    all_cols = [
+        col_pgid,
+        col_startdatum,
+        col_einddatum,
+        col_eind_winter,
+        col_begin_zomer,
+        col_eind_zomer,
+        col_begin_winter,
+        col_zomerpeil,
+        col_winterpeil,
+        col_2e_marge_onder,
+        col_1e_marge_onder,
+        col_1e_marge_boven,
+        col_2e_marge_boven,
+    ]
 
-def check_constants():
-    assert CONVERTER_DIR.is_dir()
-    assert DATA_DIR.is_dir()
-    assert DATA_OUTPUT_DIR.is_dir()
-    assert LOG_DIR.is_dir()
+    dtypes = {
+        col_pgid: str,
+        col_startdatum: np.datetime64,
+        col_einddatum: np.datetime64,
+        col_eind_winter: str,
+        col_begin_zomer: str,
+        col_eind_zomer: str,
+        col_begin_winter: str,
+        col_zomerpeil: float,
+        col_winterpeil: float,
+        col_2e_marge_onder: int,
+        col_1e_marge_onder: int,
+        col_1e_marge_boven: int,
+        col_2e_marge_boven: int,
+    }
 
 
 class DateFormats(Enum):
@@ -73,10 +99,10 @@ class DateFormats(Enum):
 
 
 class TimestampColumns:
-    eind_winter = "eind_winter"
-    begin_zomer = "begin_zomer"
-    eind_zomer = "eind_winter"
-    begin_winter = "begin_winter"
+    eind_winter = ColumnNameDtypeConstants.col_eind_winter
+    begin_zomer = ColumnNameDtypeConstants.col_begin_zomer
+    eind_zomer = ColumnNameDtypeConstants.col_eind_winter
+    begin_winter = ColumnNameDtypeConstants.col_begin_winter
 
 
 class TimeSeriesMetaBase:
@@ -161,3 +187,11 @@ class XmlConstants:
     tweede_ondergrens = TweedeOndergrens()
     eerste_bovengrens = EersteBovengrens()
     tweede_bovengrens = TweedeBovengrens()
+
+
+def check_constants():
+    assert CONVERTER_DIR.is_dir()
+    assert DATA_DIR.is_dir()
+    assert DATA_OUTPUT_DIR.is_dir()
+    assert LOG_DIR.is_dir()
+    assert PEILMARGE_GIS_EXPORT_FILE_PATH.is_file()

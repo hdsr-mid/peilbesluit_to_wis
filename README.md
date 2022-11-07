@@ -13,7 +13,7 @@ the .csv, each row with a startdate and enddate, so that these peilmarges can va
 assumptions for validation:
 - marges:
   - marges zijn altijd in cm (in csv)
-  - 0cm <= eerste marge < tweede marge <= 10meter, so:
+  - 0cm <= eerste marge <= tweede marge <= 10meter, so:
       - MIN_ALLOW_LOWER_MARGIN_CM = 0
       - MAX_ALLOW_LOWER_MARGIN_CM = 100 * 10  # yes... 10 meters
       - MIN_ALLOW_UPPER_MARGIN_CM = 0

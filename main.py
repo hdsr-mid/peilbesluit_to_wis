@@ -1,16 +1,10 @@
 from converter import constants
-from converter.convert import ConvertCsvToXml
+from converter.convert_pandas import ConvertCsvToXml
 from logging.handlers import RotatingFileHandler
 
+import converter.utils
 import logging
 import sys
-
-
-# TODO: use pandas and thereby reduce the codebase.
-#  @future developer: the initial idea was to run this code in FEWS (called by general adapter). So the code should
-#  have minimal dependencies and thus I (renier) decided to not use pandas but to write a lot of code instead..
-#  Unfortunately, when I completed this code it became clear that this code could run outside FEWS.
-#  So in short, I'm sorry for all the unnecessary complexity
 
 
 def check_python_version():
@@ -65,7 +59,11 @@ if __name__ == "__main__":
     setup_logging()
     logger = logging.getLogger(__name__)
 
-    latest_gis_export_peilmarges_csv = constants.get_last_gis_export_peilmarges_csv()
-    data_converter = ConvertCsvToXml(orig_csv_path=latest_gis_export_peilmarges_csv)
+    csv_path = (
+        constants.PEILMARGE_GIS_EXPORT_FILE_PATH
+        if constants.PEILMARGE_GIS_EXPORT_FILE_PATH
+        else converter.utils.get_last_gis_export_peilmarges_csv()
+    )
+    data_converter = ConvertCsvToXml(orig_csv_path=csv_path)
     data_converter.run()
     logger.info("shutting down app")
