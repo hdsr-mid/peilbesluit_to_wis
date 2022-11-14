@@ -1,5 +1,5 @@
 from converter import constants
-from converter.convert_pandas import ConvertCsvToXml
+from converter.convert import ConvertCsvToXml
 from logging.handlers import RotatingFileHandler
 
 import converter.utils
