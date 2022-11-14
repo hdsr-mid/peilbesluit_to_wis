@@ -16,12 +16,21 @@ import pandas as pd
 logger = logging.getLogger(__name__)
 
 
+class CsvError:
+    def __init__(self, csv_row: int, pgid: str, error_msg: str):
+        self.csv_row = csv_row
+        self.pgid = pgid
+        self.error_msg = error_msg
+        assert "," not in error_msg, "code error. avoid ',' in value (difficult in excel)"
+
+
 class ConvertCsvToXml(ColumnNameDtypeConstants):
     def __init__(self, orig_csv_path: Path):
         self.orig_csv_path = orig_csv_path
         self._df = None
         self._csv_rows_no_error = None
         self._output_xml_path = None
+        self._outputdir = None
         self.datecolumn_start = DatesColumns(column_name=self.col_startdatum, date_format="%Y%m%d", errors="raise")
         self.datecolumn_eind = DatesColumns(column_name=self.col_einddatum, date_format="%Y%m%d", errors="raise")
 
@@ -45,24 +54,14 @@ class ConvertCsvToXml(ColumnNameDtypeConstants):
                 logger.error(f"could not convert col {col} to dtype {dtype} because of {err}")
         return self._df
 
-    @classmethod
-    def save_error(
-        cls,
-        row_index: int,
-        error_type_id: int,
-        msg: str,
-        peilgebied_id: str,
-        error_dict_index: dict = None,
-        error_peilgebied: set = None,
-    ):
-        if error_dict_index is not None:
-            if row_index not in error_dict_index:
-                error_dict_index[row_index] = {error_type_id: msg}
-            else:
-                error_dict_index[row_index][error_type_id] = msg
-        if error_peilgebied is not None:
-            error_peilgebied.add(peilgebied_id)
-        return error_dict_index, error_peilgebied
+    @property
+    def output_dir(self) -> Path:
+        if self._outputdir:
+            return self._outputdir
+        datetime_str_now = datetime.now().strftime("%Y%m%d_%H%M%S")
+        self._outputdir = constants.DATA_OUTPUT_DIR / datetime_str_now
+        self._outputdir.mkdir(parents=True, exist_ok=False)
+        return self._outputdir
 
     @staticmethod
     def get_month_day_from_string(datestr_m_d: str) -> Tuple[int, int]:
@@ -94,11 +93,10 @@ class ConvertCsvToXml(ColumnNameDtypeConstants):
         logger.info(f"specific validating csv {self.orig_csv_path}")
 
         # We already validated if columns exist and dtypes
-        wrong_peil_row_indices = []
-        wrong_peil_pgids = []
-        wrong_marge_row_indices = []
-        wrong_marge_pgids = []
+        error_list = []  # {<csv_row_index>:<error_message>}
         for index, row in self.df.iterrows():
+
+            pgid = row[self.col_pgid]
 
             # check 1: ensure that dates in 1 row are ordered (eind_winter < begin_zomer < eind_zomer < begin_winter)
             try:
@@ -113,16 +111,16 @@ class ConvertCsvToXml(ColumnNameDtypeConstants):
                 raise AssertionError(f"dates are not ordered, row={index}")
 
             # check 2: validate onder marges per row
+
             _min = constants.MIN_ALLOW_LOWER_MARGIN_CM
             _max = constants.MAX_ALLOW_LOWER_MARGIN_CM
             try:
                 boven_marges_are_ok = _min <= row[self.col_1e_marge_onder] <= row[self.col_2e_marge_onder] <= _max
                 if not boven_marges_are_ok:
                     msg = f"invalid onder marges as we expected {_min} <= _1e_marge_onder <= _2e_marge_onder <= {_max}"
-                    raise AssertionError(msg)
+                    error_list.append(CsvError(csv_row=index, pgid=pgid, error_msg=msg))
             except KeyError:
-                wrong_marge_row_indices.append(index)
-                wrong_marge_pgids.append(index)
+                error_list.append(CsvError(csv_row=index, pgid=pgid, error_msg="onder marges could not be checked"))
 
             # check 3: validate boven marges per row
             _min = constants.MIN_ALLOW_UPPER_MARGIN_CM
@@ -131,46 +129,27 @@ class ConvertCsvToXml(ColumnNameDtypeConstants):
                 boven_marges_are_ok = _min <= row[self.col_1e_marge_boven] <= row[self.col_2e_marge_boven] <= _max
                 if not boven_marges_are_ok:
                     msg = f"invalid boven marges as we expected {_min} <= _1e_marge_boven <= _2e_marge_boven <= {_max}"
-                    raise AssertionError(msg)
+                    error_list.append(CsvError(csv_row=index, pgid=pgid, error_msg=msg))
             except KeyError:
-                wrong_marge_row_indices.append(index)
-                wrong_marge_pgids.append(index)
+                error_list.append(CsvError(csv_row=index, pgid=pgid, error_msg="boven marges could not be checked"))
 
             # check 4: check peilen
             _min = constants.MIN_ALLOWED_MNAP
             _max = constants.MAX_ALLOWED_MNAP
             zomerpeil_ok = _min <= row[self.col_zomerpeil] <= _max
+            if not zomerpeil_ok:
+                msg = f"invalid zomerpeil as we expected {_min} <= zomerpeil <= {_max}"
+                error_list.append(CsvError(csv_row=index, pgid=pgid, error_msg=msg))
             winterpeil_ok = _min <= row[self.col_winterpeil] <= _max
-            if not zomerpeil_ok or not winterpeil_ok:
-                wrong_peil_row_indices.append(index)
-                wrong_peil_pgids.append(row[self.col_pgid])
-
-        wrong_marge_row_indices = sorted(set(wrong_marge_row_indices))  # noqa
-        wrong_marge_pgids = sorted(set(wrong_marge_pgids))  # noqa
-        if wrong_marge_row_indices:
-            logger.warning(
-                f"found {len(wrong_marge_row_indices)} rows with an invalid marge: {wrong_marge_row_indices}"
-            )
-            # remove all pgids that have 1 or more wrong marge
-            mask_wrong_marge_pgids = self._df[self.col_pgid].isin(wrong_marge_pgids)
-            logger.warning(f"removing {len(wrong_marge_pgids)} pgid from input")
-            self._df = self._df[~mask_wrong_marge_pgids]
-
-        wrong_peil_row_indices = sorted(set(wrong_peil_row_indices))  # noqa
-        wrong_peil_pgids = list(set(wrong_peil_pgids))  # noqa
-        if wrong_peil_row_indices:
-            logger.warning(f"found {len(wrong_peil_row_indices)} rows with an invalid peil: {wrong_peil_row_indices}")
-            # remove all pgids that have 1 or more wrong peil
-            mask_wrong_peil_pgids = self._df[self.col_pgid].isin(wrong_peil_pgids)
-            logger.warning(f"removing {len(wrong_peil_pgids)} pgid from input")
-            self._df = self._df[~mask_wrong_peil_pgids]
+            if not winterpeil_ok:
+                msg = f"invalid winterpeil as we expected {_min} <= winterpeil <= {_max}"
+                error_list.append(CsvError(csv_row=index, pgid=pgid, error_msg=msg))
 
         # check 5: col_startdatum < col_einddatum
         mask_error = self.df[self.col_startdatum] >= self.df[self.col_einddatum]
-        nr_errors = mask_error.sum()
-        if nr_errors:
-            rows_index = [idx for idx in mask_error.index if mask_error[idx]]  # noqa
-            raise AssertionError(f"{self.col_startdatum} < {self.col_einddatum} error in rows {rows_index}")
+        for index, row in self.df[mask_error].iterrows():
+            pgid = row[self.col_pgid]
+            error_list.append(CsvError(csv_row=index, pgid=pgid, error_msg="start < einddatum"))
 
         # check 6: subsequent rows of the same pgid must connect (no gap, and no overlap)
         default_msg = "subsequent rows of the same pgid must connect (no gap, and no overlap)"
@@ -188,8 +167,25 @@ class ConvertCsvToXml(ColumnNameDtypeConstants):
                         f"{default_msg}: {self.col_pgid}={pgid}, row={row_index}, {self.col_startdatum}="
                         f"{current_start}, previous_end={previous_end}"
                     )
-                    raise AssertionError(msg)
+                    error_list.append(CsvError(csv_row=row_index, pgid=pgid, error_msg=msg))
                 previous_end = row[self.col_einddatum]
+
+        # create feedback csv
+        error_dict = {}
+        for error in error_list:
+            existing_error = error_dict.get(error.csv_row, "")
+            error_dict[error.csv_row] = f"{existing_error} | {error.error_msg}" if existing_error else error.error_msg
+        df_error = self.df.copy()
+        df_error["error"] = pd.Series(error_dict)
+        df_error_path = self.output_dir / "csv_errors.csv"
+        logger.info(f"creating {df_error_path}")
+        df_error.to_csv(path_or_buf=df_error_path, sep=",", index=False)
+
+        # remove all pgids that have 1 or more errors
+        index_errors = sorted(set([x.pgid for x in error_list]))
+        mask_pgid_error = self._df[self.col_pgid].isin(index_errors)
+        logger.warning(f"removing {sum(mask_pgid_error)} rows where pgid has 1 or more more invalid rows")
+        self._df = self._df[~mask_pgid_error]
 
         # ensure df is sorted
         self._df = self._df.sort_values([self.col_pgid, self.col_startdatum], ascending=[True, False])
@@ -266,17 +262,21 @@ class ConvertCsvToXml(ColumnNameDtypeConstants):
             xml_small_file.close()
 
     def run(self):
+        csv_orig = self.output_dir / "csv_orig.csv"
+        logger.info(f"creating {csv_orig}")
+        self.df.to_csv(path_or_buf=csv_orig, sep=",", index=False)
+
         self.validate_df()
         if not constants.CREATE_XML:
             logger.info("skip creating xml")
             return
 
-        datetime_str_now = datetime.now().strftime("%Y%m%d_%H%M%S")
-        csv_source_path = constants.DATA_OUTPUT_DIR / f"PeilbesluitPi_{datetime_str_now}_valid_input_for_xml.csv"
-        xml_path = constants.DATA_OUTPUT_DIR / f"PeilbesluitPi_{datetime_str_now}.xml"
-
         # create csv that was used as input for xml
+        csv_source_path = self.output_dir / "csv_no_errors.csv"
+        logger.info(f"creating {csv_source_path}")
         self.df.to_csv(path_or_buf=csv_source_path, sep=",", index=False)
 
         # create .xml
+        xml_path = self.output_dir / "PeilbesluitPi.xml"
+        logger.info(f"creating {xml_path}")
         self._create_xml(xml_path=xml_path, create_small_test_sample=True)
