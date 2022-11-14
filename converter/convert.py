@@ -31,8 +31,12 @@ class ConvertCsvToXml(ColumnNameDtypeConstants):
         self._csv_rows_no_error = None
         self._output_xml_path = None
         self._outputdir = None
-        self.datecolumn_start = DatesColumns(column_name=self.col_startdatum, date_format="%Y%m%d", errors="raise")
-        self.datecolumn_eind = DatesColumns(column_name=self.col_einddatum, date_format="%Y%m%d", errors="raise")
+        self.datecolumn_start = DatesColumns(
+            column_name=self.col_startdatum, date_format=constants.DateFormats.yyyymmdd.value, errors="raise"
+        )
+        self.datecolumn_eind = DatesColumns(
+            column_name=self.col_einddatum, date_format=constants.DateFormats.yyyymmdd.value, errors="raise"
+        )
 
     @property
     def df(self) -> pd.DataFrame:

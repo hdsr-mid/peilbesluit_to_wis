@@ -19,22 +19,7 @@ LOG_FILE_PATH = LOG_DIR / "main.log"
 PEILMARGE_GIS_EXPORT_DIR = (
     O_drive / "Planvorming\GIS\Peilbesluiten\Aanpak Actuele Peilbesluiten\Output FME-script"  # noqa
 )  # noqa
-
-# deze doet het wel
 PEILMARGE_GIS_EXPORT_FILE_PATH = PEILMARGE_GIS_EXPORT_DIR / "Koppeling_AAP_31102022.csv"
-
-# PEILMARGE_GIS_EXPORT_FILE_PATH = PEILMARGE_GIS_EXPORT_DIR / "Koppeling_AAP_20221108.csv"
-#
-# # deze doet het niet
-# # PEILMARGE_GIS_EXPORT_FILE_PATH = PEILMARGE_GIS_EXPORT_DIR / "Koppeling_AAP_test_bestand.csv"
-# # # deze doet het niet
-# # PEILMARGE_GIS_EXPORT_FILE_PATH = PEILMARGE_GIS_EXPORT_DIR / "Koppeling_AAP_retry2_1.csv"
-# # # deze doet het niet
-# # PEILMARGE_GIS_EXPORT_FILE_PATH = PEILMARGE_GIS_EXPORT_DIR / "Koppeling_AAP_retry3.csv"
-# # # deze doet het niet
-# # PEILMARGE_GIS_EXPORT_FILE_PATH = PEILMARGE_GIS_EXPORT_DIR / "Koppeling_AAP_retry4_1.csv"
-
-
 CREATE_XML = True
 RAISE_ON_CSV_WARNING_ROW = False
 RAISE_ON_CSV_ERROR_ROW = False
