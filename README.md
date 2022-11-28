@@ -82,8 +82,19 @@ welcome on https://github.com/hdsr-mid/peilbesluitmarges/issues
 
 
 ### Test Coverage
-no test exists yet...
-
+```
+---------- coverage: platform win32, python 3.7.12-final-0 -----------
+Name                              Stmts   Miss  Cover
+-----------------------------------------------------
+converter\constants.py              106      5    95%
+converter\convert.py                212     50    76%
+converter\timeseries_builder.py     122      8    93%
+converter\utils.py                   26      6    77%
+converter\xml_builder.py            134      5    96%
+main.py                              36     36     0%
+-----------------------------------------------------
+TOTAL                               636    110    83%
+```
 
 ### Conda general tips
 #### Build conda environment (on Windows) from any directory using environment.yml:
