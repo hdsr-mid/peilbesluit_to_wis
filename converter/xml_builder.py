@@ -112,7 +112,9 @@ class XmlSeriesBuilder(ColumnNameDtypeConstants):
             eind_zomer=self.eind_zomer,
             begin_winter=self.begin_winter,
         )
-        series_data = ts_builder.get_series()
+        series_data = ts_builder.get_series(
+            is_first_pgid_csv_row=self.is_first_pgid_csv_row, is_last_pgid_csv_row=self.is_last_pgid_csv_row
+        )
         for series in series_data:
             date, level = series
             date_string = date.strftime(constants.DateFormats.yyyy_mm_dd.value)
@@ -143,7 +145,9 @@ class XmlSeriesBuilder(ColumnNameDtypeConstants):
             eind_zomer=self.eind_zomer,
             marge=self._1e_marge_onder,
         )
-        series_data = ts_builder.get_series()
+        series_data = ts_builder.get_series(
+            is_first_pgid_csv_row=self.is_first_pgid_csv_row, is_last_pgid_csv_row=self.is_last_pgid_csv_row
+        )
         for series in series_data:
             date, level = series
             date_string = date.strftime(constants.DateFormats.yyyy_mm_dd.value)
@@ -174,7 +178,9 @@ class XmlSeriesBuilder(ColumnNameDtypeConstants):
             eind_zomer=self.eind_zomer,
             marge=self._2e_marge_onder,
         )
-        series_data = ts_builder.get_series()
+        series_data = ts_builder.get_series(
+            is_first_pgid_csv_row=self.is_first_pgid_csv_row, is_last_pgid_csv_row=self.is_last_pgid_csv_row
+        )
         for series in series_data:
             date, level = series
             date_string = date.strftime(constants.DateFormats.yyyy_mm_dd.value)
@@ -205,7 +211,9 @@ class XmlSeriesBuilder(ColumnNameDtypeConstants):
             begin_winter=self.begin_winter,
             marge=self._1e_marge_boven,
         )
-        series_data = ts_builder.get_series()
+        series_data = ts_builder.get_series(
+            is_first_pgid_csv_row=self.is_first_pgid_csv_row, is_last_pgid_csv_row=self.is_last_pgid_csv_row
+        )
         for series in series_data:
             date, level = series
             date_string = date.strftime(constants.DateFormats.yyyy_mm_dd.value)
@@ -236,7 +244,9 @@ class XmlSeriesBuilder(ColumnNameDtypeConstants):
             begin_winter=self.begin_winter,
             marge=self._2e_marge_boven,
         )
-        series_data = ts_builder.get_series()
+        series_data = ts_builder.get_series(
+            is_first_pgid_csv_row=self.is_first_pgid_csv_row, is_last_pgid_csv_row=self.is_last_pgid_csv_row
+        )
         for series in series_data:
             date, level = series
             date_string = date.strftime(constants.DateFormats.yyyy_mm_dd.value)

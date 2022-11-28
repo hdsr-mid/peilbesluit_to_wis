@@ -70,7 +70,7 @@ class BuilderBase:
             last_end = current_end
         assert last_end == first_start, f"{default_msg}: last_end {last_end} must be first_start {first_start}"
 
-    def get_series(self) -> list:
+    def get_series(self, is_first_pgid_csv_row: bool, is_last_pgid_csv_row: bool) -> list:
         startdatum_period = self.get_period_in_between_date(month=self.startdatum.month, day=self.startdatum.day)
         einddatum_period = self.get_period_in_between_date(month=self.einddatum.month, day=self.einddatum.day)
         series_data = [(self.startdatum, startdatum_period.level)]
@@ -83,6 +83,13 @@ class BuilderBase:
                 if last_date < possible_date < self.einddatum:
                     series_data.append((possible_date, period.level))
         series_data.append((self.einddatum, einddatum_period.level))
+
+        if not is_last_pgid_csv_row:
+            only_one_row_exists = is_first_pgid_csv_row and is_last_pgid_csv_row
+            if not only_one_row_exists:
+                # remove last series to avoid duplicate dates in series. The first series of the 2nd row dominates
+                # the last series of the 1st row (otherwise duplicate dates)
+                series_data = series_data[:-1]
         return series_data
 
     def get_period_in_between_date(self, month: int, day: int) -> ConstantPeriod:
