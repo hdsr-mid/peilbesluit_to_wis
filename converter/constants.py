@@ -15,8 +15,8 @@ DATA_EXAMPLE_DIR = DATA_DIR / "example"
 LOG_DIR = DATA_OUTPUT_DIR / "log_rotating"
 LOG_FILE_PATH = LOG_DIR / "main.log"
 DATA_DIR_TEST_INPUT = CONVERTER_DIR / "tests" / "data" / "input"
-CSV_TEST_INPUT = DATA_DIR_TEST_INPUT / "Koppeling_AAP_20221108.csv"
-XML_TEST_INPUT = DATA_DIR_TEST_INPUT / "expected_small.xml"
+PATH_CSV_TEST_INPUT = DATA_DIR_TEST_INPUT / "Koppeling_AAP_20221108.csv"
+PATH_XML_TEST_EXPECTED_OUTPUT = DATA_DIR_TEST_INPUT / "expected_small.xml"
 
 
 PEILMARGE_GIS_EXPORT_DIR = (
@@ -187,8 +187,8 @@ def check_constants():
     assert DATA_OUTPUT_DIR.is_dir()
     assert LOG_DIR.is_dir()
     assert PEILMARGE_GIS_EXPORT_FILE_PATH.is_file()
-    assert CSV_TEST_INPUT.is_file()
-    assert XML_TEST_INPUT.is_file()
+    assert PATH_CSV_TEST_INPUT.is_file()
+    assert PATH_XML_TEST_EXPECTED_OUTPUT.is_file()
 
 
 check_constants()

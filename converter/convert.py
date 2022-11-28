@@ -193,7 +193,7 @@ class ConvertCsvToXml(ColumnNameDtypeConstants):
         self._df = self._df[~mask_pgid_error]
 
         # ensure df is sorted
-        self._df = self._df.sort_values([self.col_pgid, self.col_startdatum], ascending=[True, False])
+        self._df = self._df.sort_values([self.col_pgid, self.col_startdatum], ascending=[True, True])
 
     @staticmethod
     def _add_xml_first_rows(xml_file):
@@ -257,10 +257,6 @@ class ConvertCsvToXml(ColumnNameDtypeConstants):
 
         progress = 0
         for index, (pgid, df_pgid) in enumerate(df_grouped_by_pgid):
-
-            if pgid == "PG0016":
-                print(1)
-
             new_progress = get_progress(iteration_nr=index, nr_to_do=nr_to_do)
             if new_progress != progress:
                 logger.info(f"build .xml progress = {get_progress(iteration_nr=index, nr_to_do=nr_to_do)}%")

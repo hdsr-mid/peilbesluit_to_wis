@@ -1392,6 +1392,29 @@
         <event date="2022-10-01" time="00:00:00" value="2.65" flag="0"/>
         <event date="2022-12-31" time="00:00:00" value="2.65" flag="0"/>
     </series>
+        <event date="2018-04-04" time="00:00:00" value="0.04" flag="0"/>
+        <event date="2018-05-01" time="00:00:00" value="0.14" flag="0"/>
+        <event date="2018-09-01" time="00:00:00" value="0.04" flag="0"/>
+        <event date="2018-10-01" time="00:00:00" value="-0.06" flag="0"/>
+        <event date="2019-04-01" time="00:00:00" value="0.04" flag="0"/>
+        <event date="2019-05-01" time="00:00:00" value="0.14" flag="0"/>
+        <event date="2019-09-01" time="00:00:00" value="0.04" flag="0"/>
+        <event date="2019-10-01" time="00:00:00" value="-0.06" flag="0"/>
+        <event date="2020-04-01" time="00:00:00" value="0.04" flag="0"/>
+        <event date="2020-05-01" time="00:00:00" value="0.14" flag="0"/>
+        <event date="2020-09-01" time="00:00:00" value="0.04" flag="0"/>
+        <event date="2020-10-01" time="00:00:00" value="-0.06" flag="0"/>
+        <event date="2021-04-01" time="00:00:00" value="0.04" flag="0"/>
+        <event date="2021-05-01" time="00:00:00" value="0.14" flag="0"/>
+        <event date="2021-09-01" time="00:00:00" value="0.04" flag="0"/>
+        <event date="2021-10-01" time="00:00:00" value="-0.06" flag="0"/>
+        <event date="2022-04-01" time="00:00:00" value="0.04" flag="0"/>
+        <event date="2022-05-01" time="00:00:00" value="0.14" flag="0"/>
+        <event date="2022-09-01" time="00:00:00" value="0.04" flag="0"/>
+        <event date="2022-10-01" time="00:00:00" value="-0.06" flag="0"/>
+        <event date="2023-04-01" time="00:00:00" value="0.04" flag="0"/>
+        <event date="2023-04-04" time="00:00:00" value="0.04" flag="0"/>
+    </series>
     <series>
         <header>
             <type>instantaneous</type>
@@ -1429,28 +1452,19 @@
         <event date="2017-09-01" time="00:00:00" value="0.06" flag="0"/>
         <event date="2017-10-01" time="00:00:00" value="-0.04" flag="0"/>
         <event date="2018-04-01" time="00:00:00" value="0.06" flag="0"/>
-        <event date="2018-04-04" time="00:00:00" value="0.04" flag="0"/>
-        <event date="2018-05-01" time="00:00:00" value="0.14" flag="0"/>
-        <event date="2018-09-01" time="00:00:00" value="0.04" flag="0"/>
-        <event date="2018-10-01" time="00:00:00" value="-0.06" flag="0"/>
-        <event date="2019-04-01" time="00:00:00" value="0.04" flag="0"/>
-        <event date="2019-05-01" time="00:00:00" value="0.14" flag="0"/>
-        <event date="2019-09-01" time="00:00:00" value="0.04" flag="0"/>
-        <event date="2019-10-01" time="00:00:00" value="-0.06" flag="0"/>
-        <event date="2020-04-01" time="00:00:00" value="0.04" flag="0"/>
-        <event date="2020-05-01" time="00:00:00" value="0.14" flag="0"/>
-        <event date="2020-09-01" time="00:00:00" value="0.04" flag="0"/>
-        <event date="2020-10-01" time="00:00:00" value="-0.06" flag="0"/>
-        <event date="2021-04-01" time="00:00:00" value="0.04" flag="0"/>
-        <event date="2021-05-01" time="00:00:00" value="0.14" flag="0"/>
-        <event date="2021-09-01" time="00:00:00" value="0.04" flag="0"/>
-        <event date="2021-10-01" time="00:00:00" value="-0.06" flag="0"/>
-        <event date="2022-04-01" time="00:00:00" value="0.04" flag="0"/>
-        <event date="2022-05-01" time="00:00:00" value="0.14" flag="0"/>
-        <event date="2022-09-01" time="00:00:00" value="0.04" flag="0"/>
-        <event date="2022-10-01" time="00:00:00" value="-0.06" flag="0"/>
-        <event date="2023-04-01" time="00:00:00" value="0.04" flag="0"/>
-        <event date="2023-04-04" time="00:00:00" value="0.04" flag="0"/>
+        <event date="2018-04-04" time="00:00:00" value="0.06" flag="0"/>
+        <event date="2018-04-04" time="00:00:00" value="-0.16" flag="0"/>
+        <event date="2018-05-01" time="00:00:00" value="0.04" flag="0"/>
+        <event date="2018-09-01" time="00:00:00" value="-0.16" flag="0"/>
+        <event date="2019-05-01" time="00:00:00" value="0.04" flag="0"/>
+        <event date="2019-09-01" time="00:00:00" value="-0.16" flag="0"/>
+        <event date="2020-05-01" time="00:00:00" value="0.04" flag="0"/>
+        <event date="2020-09-01" time="00:00:00" value="-0.16" flag="0"/>
+        <event date="2021-05-01" time="00:00:00" value="0.04" flag="0"/>
+        <event date="2021-09-01" time="00:00:00" value="-0.16" flag="0"/>
+        <event date="2022-05-01" time="00:00:00" value="0.04" flag="0"/>
+        <event date="2022-09-01" time="00:00:00" value="-0.16" flag="0"/>
+        <event date="2023-04-04" time="00:00:00" value="-0.16" flag="0"/>
     </series>
     <series>
         <header>
@@ -1479,18 +1493,19 @@
         <event date="2016-09-01" time="00:00:00" value="-0.14" flag="0"/>
         <event date="2017-05-01" time="00:00:00" value="0.06" flag="0"/>
         <event date="2017-09-01" time="00:00:00" value="-0.14" flag="0"/>
-        <event date="2018-04-04" time="00:00:00" value="-0.16" flag="0"/>
-        <event date="2018-05-01" time="00:00:00" value="0.04" flag="0"/>
-        <event date="2018-09-01" time="00:00:00" value="-0.16" flag="0"/>
-        <event date="2019-05-01" time="00:00:00" value="0.04" flag="0"/>
-        <event date="2019-09-01" time="00:00:00" value="-0.16" flag="0"/>
-        <event date="2020-05-01" time="00:00:00" value="0.04" flag="0"/>
-        <event date="2020-09-01" time="00:00:00" value="-0.16" flag="0"/>
-        <event date="2021-05-01" time="00:00:00" value="0.04" flag="0"/>
-        <event date="2021-09-01" time="00:00:00" value="-0.16" flag="0"/>
-        <event date="2022-05-01" time="00:00:00" value="0.04" flag="0"/>
-        <event date="2022-09-01" time="00:00:00" value="-0.16" flag="0"/>
-        <event date="2023-04-04" time="00:00:00" value="-0.16" flag="0"/>
+        <event date="2018-04-04" time="00:00:00" value="-0.14" flag="0"/>
+        <event date="2018-04-04" time="00:00:00" value="-0.31" flag="0"/>
+        <event date="2018-05-01" time="00:00:00" value="-0.11" flag="0"/>
+        <event date="2018-09-01" time="00:00:00" value="-0.31" flag="0"/>
+        <event date="2019-05-01" time="00:00:00" value="-0.11" flag="0"/>
+        <event date="2019-09-01" time="00:00:00" value="-0.31" flag="0"/>
+        <event date="2020-05-01" time="00:00:00" value="-0.11" flag="0"/>
+        <event date="2020-09-01" time="00:00:00" value="-0.31" flag="0"/>
+        <event date="2021-05-01" time="00:00:00" value="-0.11" flag="0"/>
+        <event date="2021-09-01" time="00:00:00" value="-0.31" flag="0"/>
+        <event date="2022-05-01" time="00:00:00" value="-0.11" flag="0"/>
+        <event date="2022-09-01" time="00:00:00" value="-0.31" flag="0"/>
+        <event date="2023-04-04" time="00:00:00" value="-0.31" flag="0"/>
     </series>
     <series>
         <header>
@@ -1519,18 +1534,19 @@
         <event date="2016-09-01" time="00:00:00" value="-0.29" flag="0"/>
         <event date="2017-05-01" time="00:00:00" value="-0.09" flag="0"/>
         <event date="2017-09-01" time="00:00:00" value="-0.29" flag="0"/>
-        <event date="2018-04-04" time="00:00:00" value="-0.31" flag="0"/>
-        <event date="2018-05-01" time="00:00:00" value="-0.11" flag="0"/>
-        <event date="2018-09-01" time="00:00:00" value="-0.31" flag="0"/>
-        <event date="2019-05-01" time="00:00:00" value="-0.11" flag="0"/>
-        <event date="2019-09-01" time="00:00:00" value="-0.31" flag="0"/>
-        <event date="2020-05-01" time="00:00:00" value="-0.11" flag="0"/>
-        <event date="2020-09-01" time="00:00:00" value="-0.31" flag="0"/>
-        <event date="2021-05-01" time="00:00:00" value="-0.11" flag="0"/>
-        <event date="2021-09-01" time="00:00:00" value="-0.31" flag="0"/>
-        <event date="2022-05-01" time="00:00:00" value="-0.11" flag="0"/>
-        <event date="2022-09-01" time="00:00:00" value="-0.31" flag="0"/>
-        <event date="2023-04-04" time="00:00:00" value="-0.31" flag="0"/>
+        <event date="2018-04-04" time="00:00:00" value="-0.29" flag="0"/>
+        <event date="2018-04-04" time="00:00:00" value="0.24" flag="0"/>
+        <event date="2018-10-01" time="00:00:00" value="0.24" flag="0"/>
+        <event date="2019-04-01" time="00:00:00" value="0.24" flag="0"/>
+        <event date="2019-10-01" time="00:00:00" value="0.24" flag="0"/>
+        <event date="2020-04-01" time="00:00:00" value="0.24" flag="0"/>
+        <event date="2020-10-01" time="00:00:00" value="0.24" flag="0"/>
+        <event date="2021-04-01" time="00:00:00" value="0.24" flag="0"/>
+        <event date="2021-10-01" time="00:00:00" value="0.24" flag="0"/>
+        <event date="2022-04-01" time="00:00:00" value="0.24" flag="0"/>
+        <event date="2022-10-01" time="00:00:00" value="0.24" flag="0"/>
+        <event date="2023-04-01" time="00:00:00" value="0.24" flag="0"/>
+        <event date="2023-04-04" time="00:00:00" value="0.24" flag="0"/>
     </series>
     <series>
         <header>
@@ -1559,18 +1575,19 @@
         <event date="2017-04-01" time="00:00:00" value="0.26" flag="0"/>
         <event date="2017-10-01" time="00:00:00" value="0.26" flag="0"/>
         <event date="2018-04-01" time="00:00:00" value="0.26" flag="0"/>
-        <event date="2018-04-04" time="00:00:00" value="0.24" flag="0"/>
-        <event date="2018-10-01" time="00:00:00" value="0.24" flag="0"/>
-        <event date="2019-04-01" time="00:00:00" value="0.24" flag="0"/>
-        <event date="2019-10-01" time="00:00:00" value="0.24" flag="0"/>
-        <event date="2020-04-01" time="00:00:00" value="0.24" flag="0"/>
-        <event date="2020-10-01" time="00:00:00" value="0.24" flag="0"/>
-        <event date="2021-04-01" time="00:00:00" value="0.24" flag="0"/>
-        <event date="2021-10-01" time="00:00:00" value="0.24" flag="0"/>
-        <event date="2022-04-01" time="00:00:00" value="0.24" flag="0"/>
-        <event date="2022-10-01" time="00:00:00" value="0.24" flag="0"/>
-        <event date="2023-04-01" time="00:00:00" value="0.24" flag="0"/>
-        <event date="2023-04-04" time="00:00:00" value="0.24" flag="0"/>
+        <event date="2018-04-04" time="00:00:00" value="0.26" flag="0"/>
+        <event date="2018-04-04" time="00:00:00" value="0.39" flag="0"/>
+        <event date="2018-10-01" time="00:00:00" value="0.39" flag="0"/>
+        <event date="2019-04-01" time="00:00:00" value="0.39" flag="0"/>
+        <event date="2019-10-01" time="00:00:00" value="0.39" flag="0"/>
+        <event date="2020-04-01" time="00:00:00" value="0.39" flag="0"/>
+        <event date="2020-10-01" time="00:00:00" value="0.39" flag="0"/>
+        <event date="2021-04-01" time="00:00:00" value="0.39" flag="0"/>
+        <event date="2021-10-01" time="00:00:00" value="0.39" flag="0"/>
+        <event date="2022-04-01" time="00:00:00" value="0.39" flag="0"/>
+        <event date="2022-10-01" time="00:00:00" value="0.39" flag="0"/>
+        <event date="2023-04-01" time="00:00:00" value="0.39" flag="0"/>
+        <event date="2023-04-04" time="00:00:00" value="0.39" flag="0"/>
     </series>
     <series>
         <header>
@@ -1599,18 +1616,49 @@
         <event date="2017-04-01" time="00:00:00" value="0.41" flag="0"/>
         <event date="2017-10-01" time="00:00:00" value="0.41" flag="0"/>
         <event date="2018-04-01" time="00:00:00" value="0.41" flag="0"/>
-        <event date="2018-04-04" time="00:00:00" value="0.39" flag="0"/>
-        <event date="2018-10-01" time="00:00:00" value="0.39" flag="0"/>
-        <event date="2019-04-01" time="00:00:00" value="0.39" flag="0"/>
-        <event date="2019-10-01" time="00:00:00" value="0.39" flag="0"/>
-        <event date="2020-04-01" time="00:00:00" value="0.39" flag="0"/>
-        <event date="2020-10-01" time="00:00:00" value="0.39" flag="0"/>
-        <event date="2021-04-01" time="00:00:00" value="0.39" flag="0"/>
-        <event date="2021-10-01" time="00:00:00" value="0.39" flag="0"/>
-        <event date="2022-04-01" time="00:00:00" value="0.39" flag="0"/>
-        <event date="2022-10-01" time="00:00:00" value="0.39" flag="0"/>
-        <event date="2023-04-01" time="00:00:00" value="0.39" flag="0"/>
-        <event date="2023-04-04" time="00:00:00" value="0.39" flag="0"/>
+        <event date="2018-04-04" time="00:00:00" value="0.41" flag="0"/>
+        <event date="2023-04-04" time="00:00:00" value="-1.85" flag="0"/>
+        <event date="2023-05-01" time="00:00:00" value="-1.80" flag="0"/>
+        <event date="2023-09-01" time="00:00:00" value="-1.85" flag="0"/>
+        <event date="2023-10-01" time="00:00:00" value="-1.90" flag="0"/>
+        <event date="2024-04-01" time="00:00:00" value="-1.85" flag="0"/>
+        <event date="2024-05-01" time="00:00:00" value="-1.80" flag="0"/>
+        <event date="2024-09-01" time="00:00:00" value="-1.85" flag="0"/>
+        <event date="2024-10-01" time="00:00:00" value="-1.90" flag="0"/>
+        <event date="2025-04-01" time="00:00:00" value="-1.85" flag="0"/>
+        <event date="2025-05-01" time="00:00:00" value="-1.80" flag="0"/>
+        <event date="2025-09-01" time="00:00:00" value="-1.85" flag="0"/>
+        <event date="2025-10-01" time="00:00:00" value="-1.90" flag="0"/>
+        <event date="2026-04-01" time="00:00:00" value="-1.85" flag="0"/>
+        <event date="2026-05-01" time="00:00:00" value="-1.80" flag="0"/>
+        <event date="2026-09-01" time="00:00:00" value="-1.85" flag="0"/>
+        <event date="2026-10-01" time="00:00:00" value="-1.90" flag="0"/>
+        <event date="2027-04-01" time="00:00:00" value="-1.85" flag="0"/>
+        <event date="2027-05-01" time="00:00:00" value="-1.80" flag="0"/>
+        <event date="2027-09-01" time="00:00:00" value="-1.85" flag="0"/>
+        <event date="2027-10-01" time="00:00:00" value="-1.90" flag="0"/>
+        <event date="2028-04-01" time="00:00:00" value="-1.85" flag="0"/>
+        <event date="2028-05-01" time="00:00:00" value="-1.80" flag="0"/>
+        <event date="2028-09-01" time="00:00:00" value="-1.85" flag="0"/>
+        <event date="2028-10-01" time="00:00:00" value="-1.90" flag="0"/>
+        <event date="2029-04-01" time="00:00:00" value="-1.85" flag="0"/>
+        <event date="2029-05-01" time="00:00:00" value="-1.80" flag="0"/>
+        <event date="2029-09-01" time="00:00:00" value="-1.85" flag="0"/>
+        <event date="2029-10-01" time="00:00:00" value="-1.90" flag="0"/>
+        <event date="2030-04-01" time="00:00:00" value="-1.85" flag="0"/>
+        <event date="2030-05-01" time="00:00:00" value="-1.80" flag="0"/>
+        <event date="2030-09-01" time="00:00:00" value="-1.85" flag="0"/>
+        <event date="2030-10-01" time="00:00:00" value="-1.90" flag="0"/>
+        <event date="2031-04-01" time="00:00:00" value="-1.85" flag="0"/>
+        <event date="2031-05-01" time="00:00:00" value="-1.80" flag="0"/>
+        <event date="2031-09-01" time="00:00:00" value="-1.85" flag="0"/>
+        <event date="2031-10-01" time="00:00:00" value="-1.90" flag="0"/>
+        <event date="2032-04-01" time="00:00:00" value="-1.85" flag="0"/>
+        <event date="2032-05-01" time="00:00:00" value="-1.80" flag="0"/>
+        <event date="2032-09-01" time="00:00:00" value="-1.85" flag="0"/>
+        <event date="2032-10-01" time="00:00:00" value="-1.90" flag="0"/>
+        <event date="2033-04-01" time="00:00:00" value="-1.85" flag="0"/>
+        <event date="2033-04-04" time="00:00:00" value="-1.85" flag="0"/>
     </series>
     <series>
         <header>
@@ -1669,48 +1717,29 @@
         <event date="2022-09-01" time="00:00:00" value="-1.82" flag="0"/>
         <event date="2022-10-01" time="00:00:00" value="-1.87" flag="0"/>
         <event date="2023-04-01" time="00:00:00" value="-1.82" flag="0"/>
-        <event date="2023-04-04" time="00:00:00" value="-1.85" flag="0"/>
-        <event date="2023-05-01" time="00:00:00" value="-1.80" flag="0"/>
-        <event date="2023-09-01" time="00:00:00" value="-1.85" flag="0"/>
-        <event date="2023-10-01" time="00:00:00" value="-1.90" flag="0"/>
-        <event date="2024-04-01" time="00:00:00" value="-1.85" flag="0"/>
-        <event date="2024-05-01" time="00:00:00" value="-1.80" flag="0"/>
-        <event date="2024-09-01" time="00:00:00" value="-1.85" flag="0"/>
-        <event date="2024-10-01" time="00:00:00" value="-1.90" flag="0"/>
-        <event date="2025-04-01" time="00:00:00" value="-1.85" flag="0"/>
-        <event date="2025-05-01" time="00:00:00" value="-1.80" flag="0"/>
-        <event date="2025-09-01" time="00:00:00" value="-1.85" flag="0"/>
-        <event date="2025-10-01" time="00:00:00" value="-1.90" flag="0"/>
-        <event date="2026-04-01" time="00:00:00" value="-1.85" flag="0"/>
-        <event date="2026-05-01" time="00:00:00" value="-1.80" flag="0"/>
-        <event date="2026-09-01" time="00:00:00" value="-1.85" flag="0"/>
-        <event date="2026-10-01" time="00:00:00" value="-1.90" flag="0"/>
-        <event date="2027-04-01" time="00:00:00" value="-1.85" flag="0"/>
-        <event date="2027-05-01" time="00:00:00" value="-1.80" flag="0"/>
-        <event date="2027-09-01" time="00:00:00" value="-1.85" flag="0"/>
-        <event date="2027-10-01" time="00:00:00" value="-1.90" flag="0"/>
-        <event date="2028-04-01" time="00:00:00" value="-1.85" flag="0"/>
-        <event date="2028-05-01" time="00:00:00" value="-1.80" flag="0"/>
-        <event date="2028-09-01" time="00:00:00" value="-1.85" flag="0"/>
-        <event date="2028-10-01" time="00:00:00" value="-1.90" flag="0"/>
-        <event date="2029-04-01" time="00:00:00" value="-1.85" flag="0"/>
-        <event date="2029-05-01" time="00:00:00" value="-1.80" flag="0"/>
-        <event date="2029-09-01" time="00:00:00" value="-1.85" flag="0"/>
-        <event date="2029-10-01" time="00:00:00" value="-1.90" flag="0"/>
-        <event date="2030-04-01" time="00:00:00" value="-1.85" flag="0"/>
-        <event date="2030-05-01" time="00:00:00" value="-1.80" flag="0"/>
-        <event date="2030-09-01" time="00:00:00" value="-1.85" flag="0"/>
-        <event date="2030-10-01" time="00:00:00" value="-1.90" flag="0"/>
-        <event date="2031-04-01" time="00:00:00" value="-1.85" flag="0"/>
-        <event date="2031-05-01" time="00:00:00" value="-1.80" flag="0"/>
-        <event date="2031-09-01" time="00:00:00" value="-1.85" flag="0"/>
-        <event date="2031-10-01" time="00:00:00" value="-1.90" flag="0"/>
-        <event date="2032-04-01" time="00:00:00" value="-1.85" flag="0"/>
-        <event date="2032-05-01" time="00:00:00" value="-1.80" flag="0"/>
-        <event date="2032-09-01" time="00:00:00" value="-1.85" flag="0"/>
-        <event date="2032-10-01" time="00:00:00" value="-1.90" flag="0"/>
-        <event date="2033-04-01" time="00:00:00" value="-1.85" flag="0"/>
-        <event date="2033-04-04" time="00:00:00" value="-1.85" flag="0"/>
+        <event date="2023-04-04" time="00:00:00" value="-1.82" flag="0"/>
+        <event date="2023-04-04" time="00:00:00" value="-2.00" flag="0"/>
+        <event date="2023-05-01" time="00:00:00" value="-1.90" flag="0"/>
+        <event date="2023-09-01" time="00:00:00" value="-2.00" flag="0"/>
+        <event date="2024-05-01" time="00:00:00" value="-1.90" flag="0"/>
+        <event date="2024-09-01" time="00:00:00" value="-2.00" flag="0"/>
+        <event date="2025-05-01" time="00:00:00" value="-1.90" flag="0"/>
+        <event date="2025-09-01" time="00:00:00" value="-2.00" flag="0"/>
+        <event date="2026-05-01" time="00:00:00" value="-1.90" flag="0"/>
+        <event date="2026-09-01" time="00:00:00" value="-2.00" flag="0"/>
+        <event date="2027-05-01" time="00:00:00" value="-1.90" flag="0"/>
+        <event date="2027-09-01" time="00:00:00" value="-2.00" flag="0"/>
+        <event date="2028-05-01" time="00:00:00" value="-1.90" flag="0"/>
+        <event date="2028-09-01" time="00:00:00" value="-2.00" flag="0"/>
+        <event date="2029-05-01" time="00:00:00" value="-1.90" flag="0"/>
+        <event date="2029-09-01" time="00:00:00" value="-2.00" flag="0"/>
+        <event date="2030-05-01" time="00:00:00" value="-1.90" flag="0"/>
+        <event date="2030-09-01" time="00:00:00" value="-2.00" flag="0"/>
+        <event date="2031-05-01" time="00:00:00" value="-1.90" flag="0"/>
+        <event date="2031-09-01" time="00:00:00" value="-2.00" flag="0"/>
+        <event date="2032-05-01" time="00:00:00" value="-1.90" flag="0"/>
+        <event date="2032-09-01" time="00:00:00" value="-2.00" flag="0"/>
+        <event date="2033-04-04" time="00:00:00" value="-2.00" flag="0"/>
     </series>
     <series>
         <header>
@@ -1749,28 +1778,29 @@
         <event date="2021-09-01" time="00:00:00" value="-1.97" flag="0"/>
         <event date="2022-05-01" time="00:00:00" value="-1.87" flag="0"/>
         <event date="2022-09-01" time="00:00:00" value="-1.97" flag="0"/>
-        <event date="2023-04-04" time="00:00:00" value="-2.00" flag="0"/>
-        <event date="2023-05-01" time="00:00:00" value="-1.90" flag="0"/>
-        <event date="2023-09-01" time="00:00:00" value="-2.00" flag="0"/>
-        <event date="2024-05-01" time="00:00:00" value="-1.90" flag="0"/>
-        <event date="2024-09-01" time="00:00:00" value="-2.00" flag="0"/>
-        <event date="2025-05-01" time="00:00:00" value="-1.90" flag="0"/>
-        <event date="2025-09-01" time="00:00:00" value="-2.00" flag="0"/>
-        <event date="2026-05-01" time="00:00:00" value="-1.90" flag="0"/>
-        <event date="2026-09-01" time="00:00:00" value="-2.00" flag="0"/>
-        <event date="2027-05-01" time="00:00:00" value="-1.90" flag="0"/>
-        <event date="2027-09-01" time="00:00:00" value="-2.00" flag="0"/>
-        <event date="2028-05-01" time="00:00:00" value="-1.90" flag="0"/>
-        <event date="2028-09-01" time="00:00:00" value="-2.00" flag="0"/>
-        <event date="2029-05-01" time="00:00:00" value="-1.90" flag="0"/>
-        <event date="2029-09-01" time="00:00:00" value="-2.00" flag="0"/>
-        <event date="2030-05-01" time="00:00:00" value="-1.90" flag="0"/>
-        <event date="2030-09-01" time="00:00:00" value="-2.00" flag="0"/>
-        <event date="2031-05-01" time="00:00:00" value="-1.90" flag="0"/>
-        <event date="2031-09-01" time="00:00:00" value="-2.00" flag="0"/>
-        <event date="2032-05-01" time="00:00:00" value="-1.90" flag="0"/>
-        <event date="2032-09-01" time="00:00:00" value="-2.00" flag="0"/>
-        <event date="2033-04-04" time="00:00:00" value="-2.00" flag="0"/>
+        <event date="2023-04-04" time="00:00:00" value="-1.97" flag="0"/>
+        <event date="2023-04-04" time="00:00:00" value="-2.15" flag="0"/>
+        <event date="2023-05-01" time="00:00:00" value="-2.05" flag="0"/>
+        <event date="2023-09-01" time="00:00:00" value="-2.15" flag="0"/>
+        <event date="2024-05-01" time="00:00:00" value="-2.05" flag="0"/>
+        <event date="2024-09-01" time="00:00:00" value="-2.15" flag="0"/>
+        <event date="2025-05-01" time="00:00:00" value="-2.05" flag="0"/>
+        <event date="2025-09-01" time="00:00:00" value="-2.15" flag="0"/>
+        <event date="2026-05-01" time="00:00:00" value="-2.05" flag="0"/>
+        <event date="2026-09-01" time="00:00:00" value="-2.15" flag="0"/>
+        <event date="2027-05-01" time="00:00:00" value="-2.05" flag="0"/>
+        <event date="2027-09-01" time="00:00:00" value="-2.15" flag="0"/>
+        <event date="2028-05-01" time="00:00:00" value="-2.05" flag="0"/>
+        <event date="2028-09-01" time="00:00:00" value="-2.15" flag="0"/>
+        <event date="2029-05-01" time="00:00:00" value="-2.05" flag="0"/>
+        <event date="2029-09-01" time="00:00:00" value="-2.15" flag="0"/>
+        <event date="2030-05-01" time="00:00:00" value="-2.05" flag="0"/>
+        <event date="2030-09-01" time="00:00:00" value="-2.15" flag="0"/>
+        <event date="2031-05-01" time="00:00:00" value="-2.05" flag="0"/>
+        <event date="2031-09-01" time="00:00:00" value="-2.15" flag="0"/>
+        <event date="2032-05-01" time="00:00:00" value="-2.05" flag="0"/>
+        <event date="2032-09-01" time="00:00:00" value="-2.15" flag="0"/>
+        <event date="2033-04-04" time="00:00:00" value="-2.15" flag="0"/>
     </series>
     <series>
         <header>
@@ -1809,28 +1839,29 @@
         <event date="2021-09-01" time="00:00:00" value="-2.12" flag="0"/>
         <event date="2022-05-01" time="00:00:00" value="-2.02" flag="0"/>
         <event date="2022-09-01" time="00:00:00" value="-2.12" flag="0"/>
-        <event date="2023-04-04" time="00:00:00" value="-2.15" flag="0"/>
-        <event date="2023-05-01" time="00:00:00" value="-2.05" flag="0"/>
-        <event date="2023-09-01" time="00:00:00" value="-2.15" flag="0"/>
-        <event date="2024-05-01" time="00:00:00" value="-2.05" flag="0"/>
-        <event date="2024-09-01" time="00:00:00" value="-2.15" flag="0"/>
-        <event date="2025-05-01" time="00:00:00" value="-2.05" flag="0"/>
-        <event date="2025-09-01" time="00:00:00" value="-2.15" flag="0"/>
-        <event date="2026-05-01" time="00:00:00" value="-2.05" flag="0"/>
-        <event date="2026-09-01" time="00:00:00" value="-2.15" flag="0"/>
-        <event date="2027-05-01" time="00:00:00" value="-2.05" flag="0"/>
-        <event date="2027-09-01" time="00:00:00" value="-2.15" flag="0"/>
-        <event date="2028-05-01" time="00:00:00" value="-2.05" flag="0"/>
-        <event date="2028-09-01" time="00:00:00" value="-2.15" flag="0"/>
-        <event date="2029-05-01" time="00:00:00" value="-2.05" flag="0"/>
-        <event date="2029-09-01" time="00:00:00" value="-2.15" flag="0"/>
-        <event date="2030-05-01" time="00:00:00" value="-2.05" flag="0"/>
-        <event date="2030-09-01" time="00:00:00" value="-2.15" flag="0"/>
-        <event date="2031-05-01" time="00:00:00" value="-2.05" flag="0"/>
-        <event date="2031-09-01" time="00:00:00" value="-2.15" flag="0"/>
-        <event date="2032-05-01" time="00:00:00" value="-2.05" flag="0"/>
-        <event date="2032-09-01" time="00:00:00" value="-2.15" flag="0"/>
-        <event date="2033-04-04" time="00:00:00" value="-2.15" flag="0"/>
+        <event date="2023-04-04" time="00:00:00" value="-2.12" flag="0"/>
+        <event date="2023-04-04" time="00:00:00" value="-1.70" flag="0"/>
+        <event date="2023-10-01" time="00:00:00" value="-1.70" flag="0"/>
+        <event date="2024-04-01" time="00:00:00" value="-1.70" flag="0"/>
+        <event date="2024-10-01" time="00:00:00" value="-1.70" flag="0"/>
+        <event date="2025-04-01" time="00:00:00" value="-1.70" flag="0"/>
+        <event date="2025-10-01" time="00:00:00" value="-1.70" flag="0"/>
+        <event date="2026-04-01" time="00:00:00" value="-1.70" flag="0"/>
+        <event date="2026-10-01" time="00:00:00" value="-1.70" flag="0"/>
+        <event date="2027-04-01" time="00:00:00" value="-1.70" flag="0"/>
+        <event date="2027-10-01" time="00:00:00" value="-1.70" flag="0"/>
+        <event date="2028-04-01" time="00:00:00" value="-1.70" flag="0"/>
+        <event date="2028-10-01" time="00:00:00" value="-1.70" flag="0"/>
+        <event date="2029-04-01" time="00:00:00" value="-1.70" flag="0"/>
+        <event date="2029-10-01" time="00:00:00" value="-1.70" flag="0"/>
+        <event date="2030-04-01" time="00:00:00" value="-1.70" flag="0"/>
+        <event date="2030-10-01" time="00:00:00" value="-1.70" flag="0"/>
+        <event date="2031-04-01" time="00:00:00" value="-1.70" flag="0"/>
+        <event date="2031-10-01" time="00:00:00" value="-1.70" flag="0"/>
+        <event date="2032-04-01" time="00:00:00" value="-1.70" flag="0"/>
+        <event date="2032-10-01" time="00:00:00" value="-1.70" flag="0"/>
+        <event date="2033-04-01" time="00:00:00" value="-1.70" flag="0"/>
+        <event date="2033-04-04" time="00:00:00" value="-1.70" flag="0"/>
     </series>
     <series>
         <header>
@@ -1869,28 +1900,29 @@
         <event date="2022-04-01" time="00:00:00" value="-1.67" flag="0"/>
         <event date="2022-10-01" time="00:00:00" value="-1.67" flag="0"/>
         <event date="2023-04-01" time="00:00:00" value="-1.67" flag="0"/>
-        <event date="2023-04-04" time="00:00:00" value="-1.70" flag="0"/>
-        <event date="2023-10-01" time="00:00:00" value="-1.70" flag="0"/>
-        <event date="2024-04-01" time="00:00:00" value="-1.70" flag="0"/>
-        <event date="2024-10-01" time="00:00:00" value="-1.70" flag="0"/>
-        <event date="2025-04-01" time="00:00:00" value="-1.70" flag="0"/>
-        <event date="2025-10-01" time="00:00:00" value="-1.70" flag="0"/>
-        <event date="2026-04-01" time="00:00:00" value="-1.70" flag="0"/>
-        <event date="2026-10-01" time="00:00:00" value="-1.70" flag="0"/>
-        <event date="2027-04-01" time="00:00:00" value="-1.70" flag="0"/>
-        <event date="2027-10-01" time="00:00:00" value="-1.70" flag="0"/>
-        <event date="2028-04-01" time="00:00:00" value="-1.70" flag="0"/>
-        <event date="2028-10-01" time="00:00:00" value="-1.70" flag="0"/>
-        <event date="2029-04-01" time="00:00:00" value="-1.70" flag="0"/>
-        <event date="2029-10-01" time="00:00:00" value="-1.70" flag="0"/>
-        <event date="2030-04-01" time="00:00:00" value="-1.70" flag="0"/>
-        <event date="2030-10-01" time="00:00:00" value="-1.70" flag="0"/>
-        <event date="2031-04-01" time="00:00:00" value="-1.70" flag="0"/>
-        <event date="2031-10-01" time="00:00:00" value="-1.70" flag="0"/>
-        <event date="2032-04-01" time="00:00:00" value="-1.70" flag="0"/>
-        <event date="2032-10-01" time="00:00:00" value="-1.70" flag="0"/>
-        <event date="2033-04-01" time="00:00:00" value="-1.70" flag="0"/>
-        <event date="2033-04-04" time="00:00:00" value="-1.70" flag="0"/>
+        <event date="2023-04-04" time="00:00:00" value="-1.67" flag="0"/>
+        <event date="2023-04-04" time="00:00:00" value="-1.55" flag="0"/>
+        <event date="2023-10-01" time="00:00:00" value="-1.55" flag="0"/>
+        <event date="2024-04-01" time="00:00:00" value="-1.55" flag="0"/>
+        <event date="2024-10-01" time="00:00:00" value="-1.55" flag="0"/>
+        <event date="2025-04-01" time="00:00:00" value="-1.55" flag="0"/>
+        <event date="2025-10-01" time="00:00:00" value="-1.55" flag="0"/>
+        <event date="2026-04-01" time="00:00:00" value="-1.55" flag="0"/>
+        <event date="2026-10-01" time="00:00:00" value="-1.55" flag="0"/>
+        <event date="2027-04-01" time="00:00:00" value="-1.55" flag="0"/>
+        <event date="2027-10-01" time="00:00:00" value="-1.55" flag="0"/>
+        <event date="2028-04-01" time="00:00:00" value="-1.55" flag="0"/>
+        <event date="2028-10-01" time="00:00:00" value="-1.55" flag="0"/>
+        <event date="2029-04-01" time="00:00:00" value="-1.55" flag="0"/>
+        <event date="2029-10-01" time="00:00:00" value="-1.55" flag="0"/>
+        <event date="2030-04-01" time="00:00:00" value="-1.55" flag="0"/>
+        <event date="2030-10-01" time="00:00:00" value="-1.55" flag="0"/>
+        <event date="2031-04-01" time="00:00:00" value="-1.55" flag="0"/>
+        <event date="2031-10-01" time="00:00:00" value="-1.55" flag="0"/>
+        <event date="2032-04-01" time="00:00:00" value="-1.55" flag="0"/>
+        <event date="2032-10-01" time="00:00:00" value="-1.55" flag="0"/>
+        <event date="2033-04-01" time="00:00:00" value="-1.55" flag="0"/>
+        <event date="2033-04-04" time="00:00:00" value="-1.55" flag="0"/>
     </series>
     <series>
         <header>
@@ -1929,29 +1961,7 @@
         <event date="2022-04-01" time="00:00:00" value="-1.52" flag="0"/>
         <event date="2022-10-01" time="00:00:00" value="-1.52" flag="0"/>
         <event date="2023-04-01" time="00:00:00" value="-1.52" flag="0"/>
-        <event date="2023-04-04" time="00:00:00" value="-1.55" flag="0"/>
-        <event date="2023-10-01" time="00:00:00" value="-1.55" flag="0"/>
-        <event date="2024-04-01" time="00:00:00" value="-1.55" flag="0"/>
-        <event date="2024-10-01" time="00:00:00" value="-1.55" flag="0"/>
-        <event date="2025-04-01" time="00:00:00" value="-1.55" flag="0"/>
-        <event date="2025-10-01" time="00:00:00" value="-1.55" flag="0"/>
-        <event date="2026-04-01" time="00:00:00" value="-1.55" flag="0"/>
-        <event date="2026-10-01" time="00:00:00" value="-1.55" flag="0"/>
-        <event date="2027-04-01" time="00:00:00" value="-1.55" flag="0"/>
-        <event date="2027-10-01" time="00:00:00" value="-1.55" flag="0"/>
-        <event date="2028-04-01" time="00:00:00" value="-1.55" flag="0"/>
-        <event date="2028-10-01" time="00:00:00" value="-1.55" flag="0"/>
-        <event date="2029-04-01" time="00:00:00" value="-1.55" flag="0"/>
-        <event date="2029-10-01" time="00:00:00" value="-1.55" flag="0"/>
-        <event date="2030-04-01" time="00:00:00" value="-1.55" flag="0"/>
-        <event date="2030-10-01" time="00:00:00" value="-1.55" flag="0"/>
-        <event date="2031-04-01" time="00:00:00" value="-1.55" flag="0"/>
-        <event date="2031-10-01" time="00:00:00" value="-1.55" flag="0"/>
-        <event date="2032-04-01" time="00:00:00" value="-1.55" flag="0"/>
-        <event date="2032-10-01" time="00:00:00" value="-1.55" flag="0"/>
-        <event date="2033-04-01" time="00:00:00" value="-1.55" flag="0"/>
-        <event date="2033-04-04" time="00:00:00" value="-1.55" flag="0"/>
-    </series>
+        <event date="2023-04-04" time="00:00:00" value="-1.52" flag="0"/>
     <series>
         <header>
             <type>instantaneous</type>
@@ -3450,6 +3460,29 @@
         <event date="2022-10-01" time="00:00:00" value="-1.21" flag="0"/>
         <event date="2022-12-31" time="00:00:00" value="-1.21" flag="0"/>
     </series>
+        <event date="2018-04-04" time="00:00:00" value="-0.82" flag="0"/>
+        <event date="2018-05-01" time="00:00:00" value="-0.82" flag="0"/>
+        <event date="2018-09-01" time="00:00:00" value="-0.82" flag="0"/>
+        <event date="2018-10-01" time="00:00:00" value="-0.82" flag="0"/>
+        <event date="2019-04-01" time="00:00:00" value="-0.82" flag="0"/>
+        <event date="2019-05-01" time="00:00:00" value="-0.82" flag="0"/>
+        <event date="2019-09-01" time="00:00:00" value="-0.82" flag="0"/>
+        <event date="2019-10-01" time="00:00:00" value="-0.82" flag="0"/>
+        <event date="2020-04-01" time="00:00:00" value="-0.82" flag="0"/>
+        <event date="2020-05-01" time="00:00:00" value="-0.82" flag="0"/>
+        <event date="2020-09-01" time="00:00:00" value="-0.82" flag="0"/>
+        <event date="2020-10-01" time="00:00:00" value="-0.82" flag="0"/>
+        <event date="2021-04-01" time="00:00:00" value="-0.82" flag="0"/>
+        <event date="2021-05-01" time="00:00:00" value="-0.82" flag="0"/>
+        <event date="2021-09-01" time="00:00:00" value="-0.82" flag="0"/>
+        <event date="2021-10-01" time="00:00:00" value="-0.82" flag="0"/>
+        <event date="2022-04-01" time="00:00:00" value="-0.82" flag="0"/>
+        <event date="2022-05-01" time="00:00:00" value="-0.82" flag="0"/>
+        <event date="2022-09-01" time="00:00:00" value="-0.82" flag="0"/>
+        <event date="2022-10-01" time="00:00:00" value="-0.82" flag="0"/>
+        <event date="2023-04-01" time="00:00:00" value="-0.82" flag="0"/>
+        <event date="2023-04-04" time="00:00:00" value="-0.82" flag="0"/>
+    </series>
     <series>
         <header>
             <type>instantaneous</type>
@@ -3487,28 +3520,19 @@
         <event date="2017-09-01" time="00:00:00" value="-0.80" flag="0"/>
         <event date="2017-10-01" time="00:00:00" value="-0.80" flag="0"/>
         <event date="2018-04-01" time="00:00:00" value="-0.80" flag="0"/>
-        <event date="2018-04-04" time="00:00:00" value="-0.82" flag="0"/>
-        <event date="2018-05-01" time="00:00:00" value="-0.82" flag="0"/>
-        <event date="2018-09-01" time="00:00:00" value="-0.82" flag="0"/>
-        <event date="2018-10-01" time="00:00:00" value="-0.82" flag="0"/>
-        <event date="2019-04-01" time="00:00:00" value="-0.82" flag="0"/>
-        <event date="2019-05-01" time="00:00:00" value="-0.82" flag="0"/>
-        <event date="2019-09-01" time="00:00:00" value="-0.82" flag="0"/>
-        <event date="2019-10-01" time="00:00:00" value="-0.82" flag="0"/>
-        <event date="2020-04-01" time="00:00:00" value="-0.82" flag="0"/>
-        <event date="2020-05-01" time="00:00:00" value="-0.82" flag="0"/>
-        <event date="2020-09-01" time="00:00:00" value="-0.82" flag="0"/>
-        <event date="2020-10-01" time="00:00:00" value="-0.82" flag="0"/>
-        <event date="2021-04-01" time="00:00:00" value="-0.82" flag="0"/>
-        <event date="2021-05-01" time="00:00:00" value="-0.82" flag="0"/>
-        <event date="2021-09-01" time="00:00:00" value="-0.82" flag="0"/>
-        <event date="2021-10-01" time="00:00:00" value="-0.82" flag="0"/>
-        <event date="2022-04-01" time="00:00:00" value="-0.82" flag="0"/>
-        <event date="2022-05-01" time="00:00:00" value="-0.82" flag="0"/>
-        <event date="2022-09-01" time="00:00:00" value="-0.82" flag="0"/>
-        <event date="2022-10-01" time="00:00:00" value="-0.82" flag="0"/>
-        <event date="2023-04-01" time="00:00:00" value="-0.82" flag="0"/>
-        <event date="2023-04-04" time="00:00:00" value="-0.82" flag="0"/>
+        <event date="2018-04-04" time="00:00:00" value="-0.80" flag="0"/>
+        <event date="2018-04-04" time="00:00:00" value="-0.92" flag="0"/>
+        <event date="2018-05-01" time="00:00:00" value="-0.92" flag="0"/>
+        <event date="2018-09-01" time="00:00:00" value="-0.92" flag="0"/>
+        <event date="2019-05-01" time="00:00:00" value="-0.92" flag="0"/>
+        <event date="2019-09-01" time="00:00:00" value="-0.92" flag="0"/>
+        <event date="2020-05-01" time="00:00:00" value="-0.92" flag="0"/>
+        <event date="2020-09-01" time="00:00:00" value="-0.92" flag="0"/>
+        <event date="2021-05-01" time="00:00:00" value="-0.92" flag="0"/>
+        <event date="2021-09-01" time="00:00:00" value="-0.92" flag="0"/>
+        <event date="2022-05-01" time="00:00:00" value="-0.92" flag="0"/>
+        <event date="2022-09-01" time="00:00:00" value="-0.92" flag="0"/>
+        <event date="2023-04-04" time="00:00:00" value="-0.92" flag="0"/>
     </series>
     <series>
         <header>
@@ -3537,18 +3561,19 @@
         <event date="2016-09-01" time="00:00:00" value="-0.90" flag="0"/>
         <event date="2017-05-01" time="00:00:00" value="-0.90" flag="0"/>
         <event date="2017-09-01" time="00:00:00" value="-0.90" flag="0"/>
-        <event date="2018-04-04" time="00:00:00" value="-0.92" flag="0"/>
-        <event date="2018-05-01" time="00:00:00" value="-0.92" flag="0"/>
-        <event date="2018-09-01" time="00:00:00" value="-0.92" flag="0"/>
-        <event date="2019-05-01" time="00:00:00" value="-0.92" flag="0"/>
-        <event date="2019-09-01" time="00:00:00" value="-0.92" flag="0"/>
-        <event date="2020-05-01" time="00:00:00" value="-0.92" flag="0"/>
-        <event date="2020-09-01" time="00:00:00" value="-0.92" flag="0"/>
-        <event date="2021-05-01" time="00:00:00" value="-0.92" flag="0"/>
-        <event date="2021-09-01" time="00:00:00" value="-0.92" flag="0"/>
-        <event date="2022-05-01" time="00:00:00" value="-0.92" flag="0"/>
-        <event date="2022-09-01" time="00:00:00" value="-0.92" flag="0"/>
-        <event date="2023-04-04" time="00:00:00" value="-0.92" flag="0"/>
+        <event date="2018-04-04" time="00:00:00" value="-0.90" flag="0"/>
+        <event date="2018-04-04" time="00:00:00" value="-1.07" flag="0"/>
+        <event date="2018-05-01" time="00:00:00" value="-1.07" flag="0"/>
+        <event date="2018-09-01" time="00:00:00" value="-1.07" flag="0"/>
+        <event date="2019-05-01" time="00:00:00" value="-1.07" flag="0"/>
+        <event date="2019-09-01" time="00:00:00" value="-1.07" flag="0"/>
+        <event date="2020-05-01" time="00:00:00" value="-1.07" flag="0"/>
+        <event date="2020-09-01" time="00:00:00" value="-1.07" flag="0"/>
+        <event date="2021-05-01" time="00:00:00" value="-1.07" flag="0"/>
+        <event date="2021-09-01" time="00:00:00" value="-1.07" flag="0"/>
+        <event date="2022-05-01" time="00:00:00" value="-1.07" flag="0"/>
+        <event date="2022-09-01" time="00:00:00" value="-1.07" flag="0"/>
+        <event date="2023-04-04" time="00:00:00" value="-1.07" flag="0"/>
     </series>
     <series>
         <header>
@@ -3577,18 +3602,19 @@
         <event date="2016-09-01" time="00:00:00" value="-1.05" flag="0"/>
         <event date="2017-05-01" time="00:00:00" value="-1.05" flag="0"/>
         <event date="2017-09-01" time="00:00:00" value="-1.05" flag="0"/>
-        <event date="2018-04-04" time="00:00:00" value="-1.07" flag="0"/>
-        <event date="2018-05-01" time="00:00:00" value="-1.07" flag="0"/>
-        <event date="2018-09-01" time="00:00:00" value="-1.07" flag="0"/>
-        <event date="2019-05-01" time="00:00:00" value="-1.07" flag="0"/>
-        <event date="2019-09-01" time="00:00:00" value="-1.07" flag="0"/>
-        <event date="2020-05-01" time="00:00:00" value="-1.07" flag="0"/>
-        <event date="2020-09-01" time="00:00:00" value="-1.07" flag="0"/>
-        <event date="2021-05-01" time="00:00:00" value="-1.07" flag="0"/>
-        <event date="2021-09-01" time="00:00:00" value="-1.07" flag="0"/>
-        <event date="2022-05-01" time="00:00:00" value="-1.07" flag="0"/>
-        <event date="2022-09-01" time="00:00:00" value="-1.07" flag="0"/>
-        <event date="2023-04-04" time="00:00:00" value="-1.07" flag="0"/>
+        <event date="2018-04-04" time="00:00:00" value="-1.05" flag="0"/>
+        <event date="2018-04-04" time="00:00:00" value="-0.72" flag="0"/>
+        <event date="2018-10-01" time="00:00:00" value="-0.72" flag="0"/>
+        <event date="2019-04-01" time="00:00:00" value="-0.72" flag="0"/>
+        <event date="2019-10-01" time="00:00:00" value="-0.72" flag="0"/>
+        <event date="2020-04-01" time="00:00:00" value="-0.72" flag="0"/>
+        <event date="2020-10-01" time="00:00:00" value="-0.72" flag="0"/>
+        <event date="2021-04-01" time="00:00:00" value="-0.72" flag="0"/>
+        <event date="2021-10-01" time="00:00:00" value="-0.72" flag="0"/>
+        <event date="2022-04-01" time="00:00:00" value="-0.72" flag="0"/>
+        <event date="2022-10-01" time="00:00:00" value="-0.72" flag="0"/>
+        <event date="2023-04-01" time="00:00:00" value="-0.72" flag="0"/>
+        <event date="2023-04-04" time="00:00:00" value="-0.72" flag="0"/>
     </series>
     <series>
         <header>
@@ -3617,18 +3643,19 @@
         <event date="2017-04-01" time="00:00:00" value="-0.70" flag="0"/>
         <event date="2017-10-01" time="00:00:00" value="-0.70" flag="0"/>
         <event date="2018-04-01" time="00:00:00" value="-0.70" flag="0"/>
-        <event date="2018-04-04" time="00:00:00" value="-0.72" flag="0"/>
-        <event date="2018-10-01" time="00:00:00" value="-0.72" flag="0"/>
-        <event date="2019-04-01" time="00:00:00" value="-0.72" flag="0"/>
-        <event date="2019-10-01" time="00:00:00" value="-0.72" flag="0"/>
-        <event date="2020-04-01" time="00:00:00" value="-0.72" flag="0"/>
-        <event date="2020-10-01" time="00:00:00" value="-0.72" flag="0"/>
-        <event date="2021-04-01" time="00:00:00" value="-0.72" flag="0"/>
-        <event date="2021-10-01" time="00:00:00" value="-0.72" flag="0"/>
-        <event date="2022-04-01" time="00:00:00" value="-0.72" flag="0"/>
-        <event date="2022-10-01" time="00:00:00" value="-0.72" flag="0"/>
-        <event date="2023-04-01" time="00:00:00" value="-0.72" flag="0"/>
-        <event date="2023-04-04" time="00:00:00" value="-0.72" flag="0"/>
+        <event date="2018-04-04" time="00:00:00" value="-0.70" flag="0"/>
+        <event date="2018-04-04" time="00:00:00" value="-0.57" flag="0"/>
+        <event date="2018-10-01" time="00:00:00" value="-0.57" flag="0"/>
+        <event date="2019-04-01" time="00:00:00" value="-0.57" flag="0"/>
+        <event date="2019-10-01" time="00:00:00" value="-0.57" flag="0"/>
+        <event date="2020-04-01" time="00:00:00" value="-0.57" flag="0"/>
+        <event date="2020-10-01" time="00:00:00" value="-0.57" flag="0"/>
+        <event date="2021-04-01" time="00:00:00" value="-0.57" flag="0"/>
+        <event date="2021-10-01" time="00:00:00" value="-0.57" flag="0"/>
+        <event date="2022-04-01" time="00:00:00" value="-0.57" flag="0"/>
+        <event date="2022-10-01" time="00:00:00" value="-0.57" flag="0"/>
+        <event date="2023-04-01" time="00:00:00" value="-0.57" flag="0"/>
+        <event date="2023-04-04" time="00:00:00" value="-0.57" flag="0"/>
     </series>
     <series>
         <header>
@@ -3657,19 +3684,7 @@
         <event date="2017-04-01" time="00:00:00" value="-0.55" flag="0"/>
         <event date="2017-10-01" time="00:00:00" value="-0.55" flag="0"/>
         <event date="2018-04-01" time="00:00:00" value="-0.55" flag="0"/>
-        <event date="2018-04-04" time="00:00:00" value="-0.57" flag="0"/>
-        <event date="2018-10-01" time="00:00:00" value="-0.57" flag="0"/>
-        <event date="2019-04-01" time="00:00:00" value="-0.57" flag="0"/>
-        <event date="2019-10-01" time="00:00:00" value="-0.57" flag="0"/>
-        <event date="2020-04-01" time="00:00:00" value="-0.57" flag="0"/>
-        <event date="2020-10-01" time="00:00:00" value="-0.57" flag="0"/>
-        <event date="2021-04-01" time="00:00:00" value="-0.57" flag="0"/>
-        <event date="2021-10-01" time="00:00:00" value="-0.57" flag="0"/>
-        <event date="2022-04-01" time="00:00:00" value="-0.57" flag="0"/>
-        <event date="2022-10-01" time="00:00:00" value="-0.57" flag="0"/>
-        <event date="2023-04-01" time="00:00:00" value="-0.57" flag="0"/>
-        <event date="2023-04-04" time="00:00:00" value="-0.57" flag="0"/>
-    </series>
+        <event date="2018-04-04" time="00:00:00" value="-0.55" flag="0"/>
     <series>
         <header>
             <type>instantaneous</type>

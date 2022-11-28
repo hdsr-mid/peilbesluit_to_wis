@@ -1429,6 +1429,7 @@
         <event date="2017-09-01" time="00:00:00" value="0.06" flag="0"/>
         <event date="2017-10-01" time="00:00:00" value="-0.04" flag="0"/>
         <event date="2018-04-01" time="00:00:00" value="0.06" flag="0"/>
+        <event date="2018-04-04" time="00:00:00" value="0.06" flag="0"/>
         <event date="2018-04-04" time="00:00:00" value="0.04" flag="0"/>
         <event date="2018-05-01" time="00:00:00" value="0.14" flag="0"/>
         <event date="2018-09-01" time="00:00:00" value="0.04" flag="0"/>
@@ -1479,6 +1480,7 @@
         <event date="2016-09-01" time="00:00:00" value="-0.14" flag="0"/>
         <event date="2017-05-01" time="00:00:00" value="0.06" flag="0"/>
         <event date="2017-09-01" time="00:00:00" value="-0.14" flag="0"/>
+        <event date="2018-04-04" time="00:00:00" value="-0.14" flag="0"/>
         <event date="2018-04-04" time="00:00:00" value="-0.16" flag="0"/>
         <event date="2018-05-01" time="00:00:00" value="0.04" flag="0"/>
         <event date="2018-09-01" time="00:00:00" value="-0.16" flag="0"/>
@@ -1519,6 +1521,7 @@
         <event date="2016-09-01" time="00:00:00" value="-0.29" flag="0"/>
         <event date="2017-05-01" time="00:00:00" value="-0.09" flag="0"/>
         <event date="2017-09-01" time="00:00:00" value="-0.29" flag="0"/>
+        <event date="2018-04-04" time="00:00:00" value="-0.29" flag="0"/>
         <event date="2018-04-04" time="00:00:00" value="-0.31" flag="0"/>
         <event date="2018-05-01" time="00:00:00" value="-0.11" flag="0"/>
         <event date="2018-09-01" time="00:00:00" value="-0.31" flag="0"/>
@@ -1559,6 +1562,7 @@
         <event date="2017-04-01" time="00:00:00" value="0.26" flag="0"/>
         <event date="2017-10-01" time="00:00:00" value="0.26" flag="0"/>
         <event date="2018-04-01" time="00:00:00" value="0.26" flag="0"/>
+        <event date="2018-04-04" time="00:00:00" value="0.26" flag="0"/>
         <event date="2018-04-04" time="00:00:00" value="0.24" flag="0"/>
         <event date="2018-10-01" time="00:00:00" value="0.24" flag="0"/>
         <event date="2019-04-01" time="00:00:00" value="0.24" flag="0"/>
@@ -1599,6 +1603,7 @@
         <event date="2017-04-01" time="00:00:00" value="0.41" flag="0"/>
         <event date="2017-10-01" time="00:00:00" value="0.41" flag="0"/>
         <event date="2018-04-01" time="00:00:00" value="0.41" flag="0"/>
+        <event date="2018-04-04" time="00:00:00" value="0.41" flag="0"/>
         <event date="2018-04-04" time="00:00:00" value="0.39" flag="0"/>
         <event date="2018-10-01" time="00:00:00" value="0.39" flag="0"/>
         <event date="2019-04-01" time="00:00:00" value="0.39" flag="0"/>
@@ -1669,6 +1674,7 @@
         <event date="2022-09-01" time="00:00:00" value="-1.82" flag="0"/>
         <event date="2022-10-01" time="00:00:00" value="-1.87" flag="0"/>
         <event date="2023-04-01" time="00:00:00" value="-1.82" flag="0"/>
+        <event date="2023-04-04" time="00:00:00" value="-1.82" flag="0"/>
         <event date="2023-04-04" time="00:00:00" value="-1.85" flag="0"/>
         <event date="2023-05-01" time="00:00:00" value="-1.80" flag="0"/>
         <event date="2023-09-01" time="00:00:00" value="-1.85" flag="0"/>
@@ -1749,6 +1755,7 @@
         <event date="2021-09-01" time="00:00:00" value="-1.97" flag="0"/>
         <event date="2022-05-01" time="00:00:00" value="-1.87" flag="0"/>
         <event date="2022-09-01" time="00:00:00" value="-1.97" flag="0"/>
+        <event date="2023-04-04" time="00:00:00" value="-1.97" flag="0"/>
         <event date="2023-04-04" time="00:00:00" value="-2.00" flag="0"/>
         <event date="2023-05-01" time="00:00:00" value="-1.90" flag="0"/>
         <event date="2023-09-01" time="00:00:00" value="-2.00" flag="0"/>
@@ -1809,6 +1816,7 @@
         <event date="2021-09-01" time="00:00:00" value="-2.12" flag="0"/>
         <event date="2022-05-01" time="00:00:00" value="-2.02" flag="0"/>
         <event date="2022-09-01" time="00:00:00" value="-2.12" flag="0"/>
+        <event date="2023-04-04" time="00:00:00" value="-2.12" flag="0"/>
         <event date="2023-04-04" time="00:00:00" value="-2.15" flag="0"/>
         <event date="2023-05-01" time="00:00:00" value="-2.05" flag="0"/>
         <event date="2023-09-01" time="00:00:00" value="-2.15" flag="0"/>
@@ -1869,6 +1877,7 @@
         <event date="2022-04-01" time="00:00:00" value="-1.67" flag="0"/>
         <event date="2022-10-01" time="00:00:00" value="-1.67" flag="0"/>
         <event date="2023-04-01" time="00:00:00" value="-1.67" flag="0"/>
+        <event date="2023-04-04" time="00:00:00" value="-1.67" flag="0"/>
         <event date="2023-04-04" time="00:00:00" value="-1.70" flag="0"/>
         <event date="2023-10-01" time="00:00:00" value="-1.70" flag="0"/>
         <event date="2024-04-01" time="00:00:00" value="-1.70" flag="0"/>
@@ -1929,6 +1938,7 @@
         <event date="2022-04-01" time="00:00:00" value="-1.52" flag="0"/>
         <event date="2022-10-01" time="00:00:00" value="-1.52" flag="0"/>
         <event date="2023-04-01" time="00:00:00" value="-1.52" flag="0"/>
+        <event date="2023-04-04" time="00:00:00" value="-1.52" flag="0"/>
         <event date="2023-04-04" time="00:00:00" value="-1.55" flag="0"/>
         <event date="2023-10-01" time="00:00:00" value="-1.55" flag="0"/>
         <event date="2024-04-01" time="00:00:00" value="-1.55" flag="0"/>
@@ -3487,6 +3497,7 @@
         <event date="2017-09-01" time="00:00:00" value="-0.80" flag="0"/>
         <event date="2017-10-01" time="00:00:00" value="-0.80" flag="0"/>
         <event date="2018-04-01" time="00:00:00" value="-0.80" flag="0"/>
+        <event date="2018-04-04" time="00:00:00" value="-0.80" flag="0"/>
         <event date="2018-04-04" time="00:00:00" value="-0.82" flag="0"/>
         <event date="2018-05-01" time="00:00:00" value="-0.82" flag="0"/>
         <event date="2018-09-01" time="00:00:00" value="-0.82" flag="0"/>
@@ -3537,6 +3548,7 @@
         <event date="2016-09-01" time="00:00:00" value="-0.90" flag="0"/>
         <event date="2017-05-01" time="00:00:00" value="-0.90" flag="0"/>
         <event date="2017-09-01" time="00:00:00" value="-0.90" flag="0"/>
+        <event date="2018-04-04" time="00:00:00" value="-0.90" flag="0"/>
         <event date="2018-04-04" time="00:00:00" value="-0.92" flag="0"/>
         <event date="2018-05-01" time="00:00:00" value="-0.92" flag="0"/>
         <event date="2018-09-01" time="00:00:00" value="-0.92" flag="0"/>
@@ -3577,6 +3589,7 @@
         <event date="2016-09-01" time="00:00:00" value="-1.05" flag="0"/>
         <event date="2017-05-01" time="00:00:00" value="-1.05" flag="0"/>
         <event date="2017-09-01" time="00:00:00" value="-1.05" flag="0"/>
+        <event date="2018-04-04" time="00:00:00" value="-1.05" flag="0"/>
         <event date="2018-04-04" time="00:00:00" value="-1.07" flag="0"/>
         <event date="2018-05-01" time="00:00:00" value="-1.07" flag="0"/>
         <event date="2018-09-01" time="00:00:00" value="-1.07" flag="0"/>
@@ -3617,6 +3630,7 @@
         <event date="2017-04-01" time="00:00:00" value="-0.70" flag="0"/>
         <event date="2017-10-01" time="00:00:00" value="-0.70" flag="0"/>
         <event date="2018-04-01" time="00:00:00" value="-0.70" flag="0"/>
+        <event date="2018-04-04" time="00:00:00" value="-0.70" flag="0"/>
         <event date="2018-04-04" time="00:00:00" value="-0.72" flag="0"/>
         <event date="2018-10-01" time="00:00:00" value="-0.72" flag="0"/>
         <event date="2019-04-01" time="00:00:00" value="-0.72" flag="0"/>
@@ -3657,6 +3671,7 @@
         <event date="2017-04-01" time="00:00:00" value="-0.55" flag="0"/>
         <event date="2017-10-01" time="00:00:00" value="-0.55" flag="0"/>
         <event date="2018-04-01" time="00:00:00" value="-0.55" flag="0"/>
+        <event date="2018-04-04" time="00:00:00" value="-0.55" flag="0"/>
         <event date="2018-04-04" time="00:00:00" value="-0.57" flag="0"/>
         <event date="2018-10-01" time="00:00:00" value="-0.57" flag="0"/>
         <event date="2019-04-01" time="00:00:00" value="-0.57" flag="0"/>
