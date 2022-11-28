@@ -7,6 +7,7 @@ from converter.xml_builder import XmlSeriesBuilder
 from datetime import datetime
 from hdsr_wis_config_reader.utils import PdReadFlexibleCsv
 from pathlib import Path
+from typing import Optional
 from typing import Tuple
 
 import logging
@@ -227,22 +228,39 @@ class ConvertCsvToXml(ColumnNameDtypeConstants):
             xml_file = xml_builder_method()
         return xml_builder.xml_file
 
-    def _create_xml(self, xml_path: Path, create_small_test_sample: bool = False) -> None:
-        xml_file = open(xml_path.as_posix(), mode="w")
-        xml_file = self._add_xml_first_rows(xml_file=xml_file)
+    def _create_xml(
+        self, xml_path: Path, create_small_xml: bool = False, create_large_xml: bool = True
+    ) -> Tuple[Optional[Path], Optional[Path]]:
+        if not create_small_xml and not create_large_xml:
+            logger.warning("skip creating xmls as create_small_xml=False, create_large_xml=False")
+
+        assert xml_path.suffix == ".xml"
+
+        xml_large_file = None
+        xml_large_file_path = None
+        if create_large_xml:
+            xml_large_file_path = xml_path
+            xml_large_file = open(xml_large_file_path.as_posix(), mode="w")
+            xml_large_file = self._add_xml_first_rows(xml_file=xml_large_file)
 
         xml_small_file = None
-        if create_small_test_sample:
+        xml_small_file_path = None
+        if create_small_xml:
+            xml_small_file_path = xml_path.parent / f"{xml_path.stem}_test_sample{xml_path.suffix}"
             logger.info("creating also a small test sample (.xml)")
-            file_path = xml_path.parent / f"{xml_path.stem}_test_sample{xml_path.suffix}"
-            xml_small_file = open(file_path.as_posix(), mode="w")
+            xml_small_file = open(xml_small_file_path.as_posix(), mode="w")
             xml_small_file = self._add_xml_first_rows(xml_file=xml_small_file)
 
         df_grouped_by_pgid = self.df.groupby(by=self.col_pgid)
         nr_to_do = len(df_grouped_by_pgid)
         xml_small_file_max_index = int(nr_to_do / 50)  # use ~2% of all data
+
         progress = 0
         for index, (pgid, df_pgid) in enumerate(df_grouped_by_pgid):
+
+            if pgid == "PG0016":
+                print(1)
+
             new_progress = get_progress(iteration_nr=index, nr_to_do=nr_to_do)
             if new_progress != progress:
                 logger.info(f"build .xml progress = {get_progress(iteration_nr=index, nr_to_do=nr_to_do)}%")
@@ -254,33 +272,35 @@ class ConvertCsvToXml(ColumnNameDtypeConstants):
                 XmlSeriesBuilder.add_series_eerste_bovengrens,
                 XmlSeriesBuilder.add_series_tweede_bovengrens,
             ):
-                xml_file = self._add_xml_series(xml_file=xml_file, df_pgid=df_pgid, _func=_func)
-                if create_small_test_sample and index < xml_small_file_max_index:
+                if create_small_xml and index < xml_small_file_max_index:
                     xml_small_file = self._add_xml_series(xml_file=xml_small_file, df_pgid=df_pgid, _func=_func)
+                if create_large_xml:
+                    xml_large_file = self._add_xml_series(xml_file=xml_large_file, df_pgid=df_pgid, _func=_func)
 
-        xml_file = self._add_xml_last_rows(xml_file=xml_file)
-        xml_file.close()
-
-        if create_small_test_sample:
+        if create_small_xml:
             xml_small_file = self._add_xml_last_rows(xml_file=xml_small_file)
             xml_small_file.close()
+        if create_large_xml:
+            xml_large_file = self._add_xml_last_rows(xml_file=xml_large_file)
+            xml_large_file.close()
+
+        return xml_small_file_path, xml_large_file_path
 
     def run(self):
         csv_orig = self.output_dir / "csv_orig.csv"
         logger.info(f"creating {csv_orig}")
         self.df.to_csv(path_or_buf=csv_orig, sep=",", index=False)
 
-        self.validate_df()
-        if not constants.CREATE_XML:
-            logger.info("skip creating xml")
-            return
-
         # create csv that was used as input for xml
+        self.validate_df()
         csv_source_path = self.output_dir / "csv_no_errors.csv"
         logger.info(f"creating {csv_source_path}")
         self.df.to_csv(path_or_buf=csv_source_path, sep=",", index=False)
 
         # create .xml
+        if not constants.CREATE_XML:
+            logger.info("skip creating xml")
+            return
         xml_path = self.output_dir / "PeilbesluitPi.xml"
         logger.info(f"creating {xml_path}")
-        self._create_xml(xml_path=xml_path, create_small_test_sample=True)
+        _, _ = self._create_xml(xml_path=xml_path, create_small_xml=True)

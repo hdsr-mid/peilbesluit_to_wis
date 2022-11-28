@@ -14,15 +14,18 @@ DATA_OUTPUT_DIR = DATA_DIR / "output"
 DATA_EXAMPLE_DIR = DATA_DIR / "example"
 LOG_DIR = DATA_OUTPUT_DIR / "log_rotating"
 LOG_FILE_PATH = LOG_DIR / "main.log"
+DATA_DIR_TEST_INPUT = CONVERTER_DIR / "tests" / "data" / "input"
+CSV_TEST_INPUT = DATA_DIR_TEST_INPUT / "Koppeling_AAP_20221108.csv"
+XML_TEST_INPUT = DATA_DIR_TEST_INPUT / "expected_small.xml"
 
 
 PEILMARGE_GIS_EXPORT_DIR = (
     O_drive / "Planvorming\GIS\Peilbesluiten\Aanpak Actuele Peilbesluiten\Output FME-script"  # noqa
 )  # noqa
-PEILMARGE_GIS_EXPORT_FILE_PATH = PEILMARGE_GIS_EXPORT_DIR / "Koppeling_AAP_31102022.csv"
+# PEILMARGE_GIS_EXPORT_FILE_PATH = PEILMARGE_GIS_EXPORT_DIR / "Koppeling_AAP_31102022.csv"
+PEILMARGE_GIS_EXPORT_FILE_PATH = PEILMARGE_GIS_EXPORT_DIR / "Koppeling_AAP_20221108.csv"
+
 CREATE_XML = True
-RAISE_ON_CSV_WARNING_ROW = False
-RAISE_ON_CSV_ERROR_ROW = False
 MIN_ALLOWED_MNAP = -10
 MAX_ALLOWED_MNAP = 10
 MIN_ALLOW_LOWER_MARGIN_CM = 0
@@ -184,3 +187,8 @@ def check_constants():
     assert DATA_OUTPUT_DIR.is_dir()
     assert LOG_DIR.is_dir()
     assert PEILMARGE_GIS_EXPORT_FILE_PATH.is_file()
+    assert CSV_TEST_INPUT.is_file()
+    assert XML_TEST_INPUT.is_file()
+
+
+check_constants()

@@ -55,7 +55,6 @@ def setup_logging() -> None:
 
 if __name__ == "__main__":
     check_python_version()
-    constants.check_constants()
     setup_logging()
     logger = logging.getLogger(__name__)
 
