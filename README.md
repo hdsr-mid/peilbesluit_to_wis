@@ -9,7 +9,7 @@
 
 ### Description
 Covert a .csv to .xml to enable "operationeel peilbesluit" in FEWS WIS. Each peilgebied had 1 or more rows in 
-the .csv, each row with a startdate and enddate, so that these peilmarges can vary of time. We made the following 
+the .csv, each row with a startdate and enddate, so that these peilmarges can vary over time. We made the following 
 assumptions for validation:
 - marges:
   - marges zijn altijd in cm (in csv)
@@ -18,8 +18,8 @@ assumptions for validation:
       - MAX_ALLOW_LOWER_MARGIN_CM = 100 * 10  # yes... 10 meters
       - MIN_ALLOW_UPPER_MARGIN_CM = 0
       - MAX_ALLOW_UPPER_MARGIN_CM = 100 * 10  # yes... 10 meters
-  - niet hoogwatervoorziening mag niet 0 zijn in .csv (in BR wel, maar in Inger's FME script niet)
-  - peilgebied waar geen marges zijn worden gefixed (weggelaten/ingevuld) in Inger's FME script
+  - een niet-hoogwatervoorziening mag niet marge = 0 hebben in .csv (in BR wel, maar in Inger's FME script niet)
+  - peilgebied zonder marges worden gefixed (weggelaten/ingevuld) in Inger's FME script
   - marges moeten te converteren zijn naar floats
   - marges moeten altijd ingevuld zijn (regels zonder marge fixen (bijv weglaten) in Inger's FME script)
 - peilen:
@@ -29,8 +29,8 @@ assumptions for validation:
    - peilen moeten altijd ingevuld zijn (fix nodig (bijv weglaten) in Inger's FME script
 - datums:
   - 1 peilgebied kan >1 csv regels hebben, met elk een eigen start- en einddatum. In geval van >1 regels:
-    - regels moeten chronologisch gesorteerd zijn 
     - geen geen gat/overlap tussen regels
+    - datum format is YYYY-MM-DD
 - foutafhandeling:
    - als 1 csv regel van een peilgebied foutief is, dan worden alle regels van die dat peilgebied niet meegenomen
 
