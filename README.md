@@ -42,27 +42,24 @@ to this (straight lines):
 
 
 ### Usage
-1. Make sure you have Anaconda installed. Verify by:
- ```
-   - or windwos key -> 'Anaconda Prompt 3 (Prod)'
-   - or windows key -> 'cmd' -> type 'conda' # make sure you don't get a 'conda is not recognized'
- ``` 
+1. Make sure you have Anaconda installed. Verify by: windwos key -> 'Anaconda Prompt 3 (Prod)'. CMD is not enough as it may result in CondaHttpError when building conda environment (step 2b)
+
 2a. Check if you have build the conda environment 'peilbesluitmarges'
 ```
 > conda info --envs
-# the list should hold 'peilbesluitmarges
+# the list should hold 'peilbesluitmarges'
 ```
 2b. If not, build the conda environment from file
 ```
 # cd to the root of this code project
-> cd <blabla>/peilbesluitmarges
+> cd peilbesluitmarges
 > conda env create --name peilbesluitmarges --file environment.yml
-# after creating the environment 'peilbesluitmarges' should exisits when doing step 2a 
+# verify with step 2a that env is build
 ```
-2. Define all constants in peilbesluitmarges/converter/constants.py
-   - set CREATE_CSV_WITH_ERRORS=False to create the validation result of the .csv 
-   - and/or set CREATE_XML=True to create the .xml that goes into FEWS  
-3. run project:
+
+3. Optionally edit constants in peilbesluitmarges/converter/constants.py e.g. CREATE_XML=False (to not create the .xml that goes into FEWS)
+
+4. Run project:
 ```
 > conda activate peilbesluitmarges
 > python <path_to_project>/main.py
