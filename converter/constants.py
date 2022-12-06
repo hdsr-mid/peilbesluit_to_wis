@@ -4,7 +4,14 @@ from pathlib import Path
 import numpy as np
 
 
+# USER_SETINGS
 O_drive = Path("O:")
+PEILMARGE_GIS_EXPORT_DIR = (
+    O_drive / "Planvorming\GIS\Peilbesluiten\Aanpak Actuele Peilbesluiten\Output FME-script"  # noqa
+)
+PEILMARGE_GIS_EXPORT_FILE_PATH = PEILMARGE_GIS_EXPORT_DIR / "Koppeling_AAP_20221108.csv"
+CREATE_XML = True
+
 
 # BASE_DIR avoid 'Path.cwd()', as interactive_map.main() should be callable from everywhere
 BASE_DIR = Path(__file__).parent.parent
@@ -18,14 +25,6 @@ DATA_DIR_TEST_INPUT = CONVERTER_DIR / "tests" / "data" / "input"
 PATH_CSV_TEST_INPUT = DATA_DIR_TEST_INPUT / "Koppeling_AAP_20221108.csv"
 PATH_XML_TEST_EXPECTED_OUTPUT = DATA_DIR_TEST_INPUT / "expected_small.xml"
 
-
-PEILMARGE_GIS_EXPORT_DIR = (
-    O_drive / "Planvorming\GIS\Peilbesluiten\Aanpak Actuele Peilbesluiten\Output FME-script"  # noqa
-)  # noqa
-# PEILMARGE_GIS_EXPORT_FILE_PATH = PEILMARGE_GIS_EXPORT_DIR / "Koppeling_AAP_31102022.csv"
-PEILMARGE_GIS_EXPORT_FILE_PATH = PEILMARGE_GIS_EXPORT_DIR / "Koppeling_AAP_20221108.csv"
-
-CREATE_XML = True
 MIN_ALLOWED_MNAP = -10
 MAX_ALLOWED_MNAP = 10
 MIN_ALLOW_LOWER_MARGIN_CM = 0
