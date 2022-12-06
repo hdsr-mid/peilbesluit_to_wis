@@ -8,9 +8,36 @@
 * Python version: >3.6
 
 ### Description
-Covert a .csv to .xml to enable "operationeel peilbesluit" in FEWS WIS. Each peilgebied had 1 or more rows in 
-the .csv, each row with a startdate and enddate, so that these peilmarges can vary over time. We made the following 
-assumptions for validation:
+Validate and covert a .csv to .xml to enable "operationeel peilbesluit" in FEWS WIS. Each peilgebied in the .csv 
+has >=1 rows in the .csv, and each row has a start- and enddate and peilmarges. 
+Thus, these peilmarges can vary over time (see 'Validation assumptions' below). 
+
+### Usage
+1. Make sure you have Anaconda installed. Verify by: windwos key -> 'Anaconda Prompt 3 (Prod)'.  
+   Using cmd is not recommended as it may result in a 'CondaHttpError' when building conda environment (step 2b).
+2. Optionally build conda environment:
+    - Check if you have build the conda environment 'peilbesluitmarges':
+      ```
+      > conda info --envs
+      # the list should hold 'peilbesluitmarges'
+      ```
+    - If not, build the conda environment from file:
+      ```
+      # cd to the root of this code project
+      > cd peilbesluitmarges
+      > conda env create --name peilbesluitmarges --file environment.yml
+      # verify with step 2a that env is build
+      ```
+3. Optionally edit constants in peilbesluitmarges/converter/constants.py 
+    - for example, set CREATE_XML=False to not create the .xml (takes a ~1 minute to run)
+4. Run project:
+```
+> conda activate peilbesluitmarges
+> python <path_to_project>/main.py
+```
+
+### Validation assumptions
+We made the following assumptions for validation:
 - marges:
   - marges zijn altijd in cm (in csv)
   - 0cm <= eerste marge <= tweede marge <= 10meter, so:
@@ -24,7 +51,7 @@ assumptions for validation:
   - marges moeten altijd ingevuld zijn (regels zonder marge fixen (bijv weglaten) in Inger's FME script)
 - peilen:
    - toegestane peilen domein: -10mNAP tm 10mNAP
-   - peilen zijn altijd in mnap
+   - peilen zijn altijd in mNAP
    - peilen moeten te converteren naar floats
    - peilen moeten altijd ingevuld zijn (fix nodig (bijv weglaten) in Inger's FME script
 - datums:
@@ -34,41 +61,14 @@ assumptions for validation:
 - foutafhandeling:
    - als 1 csv regel van een peilgebied foutief is, dan worden alle regels van die dat peilgebied niet meegenomen
 
-
 After validation of the .csv we convert this (yellow rows): 
 ![marges_csv_png]
 to this (straight lines):
 ![marges_png]
 
 
-### Usage
-1. Make sure you have Anaconda installed. Verify by: windwos key -> 'Anaconda Prompt 3 (Prod)'. CMD is not enough as it may result in CondaHttpError when building conda environment (step 2b)
-
-2a. Check if you have build the conda environment 'peilbesluitmarges'
-```
-> conda info --envs
-# the list should hold 'peilbesluitmarges'
-```
-2b. If not, build the conda environment from file
-```
-# cd to the root of this code project
-> cd peilbesluitmarges
-> conda env create --name peilbesluitmarges --file environment.yml
-# verify with step 2a that env is build
-```
-
-3. Optionally edit constants in peilbesluitmarges/converter/constants.py e.g. CREATE_XML=False (to not create the .xml that goes into FEWS)
-
-4. Run project:
-```
-> conda activate peilbesluitmarges
-> python <path_to_project>/main.py
-```
-
 ### License 
 [MIT][mit]
-
-
 
 ### Releases
 None
