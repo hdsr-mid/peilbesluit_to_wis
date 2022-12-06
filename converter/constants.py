@@ -10,7 +10,7 @@ PEILMARGE_GIS_EXPORT_DIR = (
     O_drive / "Planvorming\GIS\Peilbesluiten\Aanpak Actuele Peilbesluiten\Output FME-script"  # noqa
 )
 PEILMARGE_GIS_EXPORT_FILE_PATH = PEILMARGE_GIS_EXPORT_DIR / "Koppeling_AAP_20221108.csv"
-CREATE_XML = True
+CREATE_XML = False
 
 
 # BASE_DIR avoid 'Path.cwd()', as interactive_map.main() should be callable from everywhere

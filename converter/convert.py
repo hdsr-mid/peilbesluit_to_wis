@@ -182,14 +182,20 @@ class ConvertCsvToXml(ColumnNameDtypeConstants):
             error_dict[error.csv_row] = f"{existing_error} | {error.error_msg}" if existing_error else error.error_msg
         df_error = self.df.copy()
         df_error["error"] = pd.Series(error_dict)
-        df_error_path = self.output_dir / "csv_errors.csv"
+        df_error_path = self.output_dir / "csv_with_errors.csv"
         logger.info(f"creating {df_error_path}")
         df_error.to_csv(path_or_buf=df_error_path, sep=",", index=False)
 
         # remove all pgids that have 1 or more errors
         index_errors = sorted(set([x.pgid for x in error_list]))
         mask_pgid_error = self._df[self.col_pgid].isin(index_errors)
-        logger.warning(f"removing {sum(mask_pgid_error)} rows where pgid has 1 or more more invalid rows")
+        nr_pgid_with_error = len(index_errors)
+        nr_rows_with_error = sum(mask_pgid_error)
+        if nr_pgid_with_error or nr_rows_with_error:
+            logger.warning(f"found {nr_pgid_with_error} pgid with an error, and {nr_rows_with_error} with an error")
+            logger.warning(f"deleting {nr_rows_with_error} rows")
+        else:
+            logger.info("no errors found! :)")
         self._df = self._df[~mask_pgid_error]
 
         # ensure df is sorted
@@ -289,7 +295,7 @@ class ConvertCsvToXml(ColumnNameDtypeConstants):
 
         # create csv that was used as input for xml
         self.validate_df()
-        csv_source_path = self.output_dir / "csv_no_errors.csv"
+        csv_source_path = self.output_dir / "csv_without_errors.csv"
         logger.info(f"creating {csv_source_path}")
         self.df.to_csv(path_or_buf=csv_source_path, sep=",", index=False)
 
