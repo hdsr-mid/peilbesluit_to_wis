@@ -182,7 +182,7 @@ class ConvertCsvToXml(ColumnNameDtypeConstants):
             error_dict[error.csv_row] = f"{existing_error} | {error.error_msg}" if existing_error else error.error_msg
         df_error = self.df.copy()
         df_error["error"] = pd.Series(error_dict)
-        df_error_path = self.output_dir / "csv_with_errors.csv"
+        df_error_path = self.output_dir / "orig_with_errors.csv"
         logger.info(f"creating {df_error_path}")
         df_error.to_csv(path_or_buf=df_error_path, sep=",", index=False)
 
@@ -289,13 +289,13 @@ class ConvertCsvToXml(ColumnNameDtypeConstants):
         return xml_small_file_path, xml_large_file_path
 
     def run(self):
-        csv_orig = self.output_dir / "csv_orig.csv"
+        csv_orig = self.output_dir / "orig.csv"
         logger.info(f"creating {csv_orig}")
         self.df.to_csv(path_or_buf=csv_orig, sep=",", index=False)
 
         # create csv that was used as input for xml
         self.validate_df()
-        csv_source_path = self.output_dir / "csv_without_errors.csv"
+        csv_source_path = self.output_dir / "without_errors_that_goes_into_FEWS_WIS.csv"
         logger.info(f"creating {csv_source_path}")
         self.df.to_csv(path_or_buf=csv_source_path, sep=",", index=False)
 

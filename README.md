@@ -5,7 +5,7 @@
 ### Context
 * Created: September 2022
 * Authors: Renier Kramer (renier.kramer@hdsr.nl)
-* Python version: >3.6
+* Python version: 3.7
 
 ### Description
 Validate and covert a .csv to .xml to enable "operationeel peilbesluit" in FEWS WIS. Each peilgebied in the .csv 
@@ -13,28 +13,44 @@ has >=1 rows in the .csv, and each row has a start- and enddate and peilmarges.
 Thus, these peilmarges can vary over time (see 'Validation assumptions' below). 
 
 ### Usage
-1. Make sure you have Anaconda installed. Verify by: windwos key -> 'Anaconda Prompt 3 (Prod)'.  
-   Using cmd is not recommended as it may result in a 'CondaHttpError' when building conda environment (step 2b).
-2. Optionally build conda environment:
-    - Check if you have build the conda environment 'peilbesluitmarges':
+1. Make sure you have Anaconda installed. Verify by: windwos key -> 'Anaconda Prompt 3 (Prod)'. Note that you can not use cmd as:
+   - it may result in a 'CondaHttpError' when building conda environment (step 2b).
+   - Moreover, within VDI you can do 'conda info --envs' but not 'conda activate <env_name>'...
+2. Run this in Anaconda Prompt 3 (Prod):
+    - (2a): go to the O: drive
       ```
-      > conda info --envs
-      # the list should hold 'peilbesluitmarges'
+      O:
       ```
-    - If not, build the conda environment from file:
+    - (2b): change directory (cd) to the root of this code project 
       ```
-      # cd to the root of this code project
-      > cd peilbesluitmarges
-      > conda env create --name peilbesluitmarges --file environment.yml
-      # verify with step 2a that env is build
+      cd Planvorming/GIS/Peilbesluiten/Aanpak Actuele Peilbesluiten/git/peilbesluitmarges_copy
       ```
-3. Optionally edit constants in peilbesluitmarges/converter/constants.py 
-    - for example, set CREATE_XML=False to not create the .xml (takes a ~1 minute to run)
-4. Run project:
-```
-> conda activate peilbesluitmarges
-> python <path_to_project>/main.py
-```
+3. Prepare Check if you have the conda environment:
+    - (3a): get the list with existing conda environments
+      ```
+      conda info --envs
+      ```
+    - (3b): if 'peilbesluitmarges' is listed, go to step (4a)
+    - (3c): build the conda environment (this takes an hour!!) and needs to be done only 1 time  
+      ```
+      conda env create --name peilbesluitmarges --file environment.yml
+      ```
+    - (3d): verify if 3d is success with step (3a)
+      
+4. Point app to the correct input file
+   - (4a): open in 'windows verkenner' file ./peilbesluitmarges_copy/converter/constants.py
+   - (4b): update PEILMARGE_GIS_EXPORT_FILE_PATH to the file you want
+5. Run project:
+   - (5a): activate the conda environment
+     ```
+     conda activate peilbesluitmarges
+     ```
+   - (5b): run the python project
+     ``` 
+     python main.py
+     ```
+6. See output by opening 'windows verkenner' directory ./peilbesluitmarges_copy/converter/data/output/
+
 
 ### Validation assumptions
 We made the following assumptions for validation:
