@@ -7,7 +7,7 @@ import numpy as np
 # USER_SETINGS
 O_drive = Path("O:/")
 PEILMARGE_GIS_EXPORT_DIR = O_drive / "Planvorming\GIS\Peilbesluiten\Aanpak Actuele Peilbesluiten\Output FME-script"
-PEILMARGE_GIS_EXPORT_FILE_PATH = PEILMARGE_GIS_EXPORT_DIR / "Koppeling_AAP_20221108.csv"
+PEILMARGE_GIS_EXPORT_FILE_PATH = PEILMARGE_GIS_EXPORT_DIR / "Koppeling_AAP.csv"
 CREATE_XML = False
 
 
