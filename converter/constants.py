@@ -8,7 +8,7 @@ import numpy as np
 O_drive = Path("O:/")
 PEILMARGE_GIS_EXPORT_DIR = O_drive / "Planvorming\GIS\Peilbesluiten\Aanpak Actuele Peilbesluiten\Output FME-script"
 PEILMARGE_GIS_EXPORT_FILE_PATH = PEILMARGE_GIS_EXPORT_DIR / "Koppeling_AAP.csv"
-CREATE_XML = False
+CREATE_XML = True
 
 
 # BASE_DIR avoid 'Path.cwd()', as interactive_map.main() should be callable from everywhere

@@ -12,6 +12,22 @@ Validate and covert a .csv to .xml to enable "operationeel peilbesluit" in FEWS 
 has >=1 rows in the .csv, and each row has a start- and enddate and peilmarges. 
 Thus, these peilmarges can vary over time (see 'Validation assumptions' below). 
 
+### Workflow
+
+##### Things to do on beforehand:
+- None
+
+##### Input:
+- One .csv with peilmarges that is exported from ArcGis with an FME script: see PEILMARGE_GIS_EXPORT_FILE_PATH in converter/constants.py
+  - This export is carried out on demand by team 'Peilbesluiten'  
+
+##### Output:
+- One data/output/{datetime}/orig.csv
+- One data/output/{datetime}/orig_with_errors.csv
+- One data/output/{datetime}/without_errors_that_will_be_used_for_FEWS_WIS_xml.csv
+- Optionally, one data/output/{datetime}/PeilbesluitPi.xml dependent on CREATE_XML (bool) in converter/constants.py
+
+
 ### Usage
 1. Make sure you have Anaconda installed. Verify by: windwos key -> 'Anaconda Prompt 3 (Prod)'. Note that you can not use cmd as:
    - it may result in a 'CondaHttpError' when building conda environment (step 2b).

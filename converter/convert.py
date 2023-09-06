@@ -295,7 +295,7 @@ class ConvertCsvToXml(ColumnNameDtypeConstants):
 
         # create csv that was used as input for xml
         self.validate_df()
-        csv_source_path = self.output_dir / "without_errors_that_goes_into_FEWS_WIS.csv"
+        csv_source_path = self.output_dir / "without_errors_that_will_be_used_for_FEWS_WIS_xml.csv"
         logger.info(f"creating {csv_source_path}")
         self.df.to_csv(path_or_buf=csv_source_path, sep=",", index=False)
 
