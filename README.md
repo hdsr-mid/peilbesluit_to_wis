@@ -15,11 +15,13 @@ Thus, these peilmarges can vary over time (see 'Validation assumptions' below).
 ### Workflow
 
 ##### Things to do on beforehand:
-- None
+- Ask team 'Peilbesluiten' (see input below) to create a new PEILMARGE_GIS_EXPORT .csv file.
 
 ##### Input:
-- One .csv with peilmarges that is exported from ArcGis with an FME script: see PEILMARGE_GIS_EXPORT_FILE_PATH in converter/constants.py
-  - This export is carried out on demand by team 'Peilbesluiten'  
+- One .csv with peilmarges that is exported from ArcGis with an FME script.
+  - It exports to PEILMARGE_GIS_EXPORT_FILE_PATH (see in converter/constants.py)
+  - The FEM script is developed and maintained by team 'GIS' (Inger) 
+  - This export is not scheduled, but carried out on demand by team 'Peilbesluiten' (Hielke)
 
 ##### Output:
 - One data/output/{datetime}/orig.csv
@@ -29,9 +31,10 @@ Thus, these peilmarges can vary over time (see 'Validation assumptions' below).
 
 
 ### Usage
-1. Make sure you have Anaconda installed. Verify by: windwos key -> 'Anaconda Prompt 3 (Prod)'. Note that you can not use cmd as:
+1. Make sure you have Anaconda installed. Verify by: Windows key -> 'Anaconda Prompt 3 (Prod)'. Note that you can not use cmd as:
    - it may result in a 'CondaHttpError' when building conda environment (step 2b).
    - Moreover, within VDI you can do 'conda info --envs' but not 'conda activate <env_name>'...
+
 2. Run this in Anaconda Prompt 3 (Prod):
     - (2a): go to the O: drive
       ```
@@ -54,8 +57,9 @@ Thus, these peilmarges can vary over time (see 'Validation assumptions' below).
     - (3d): verify if 3d is success with step (3a)
       
 4. Point app to the correct input file
-   - (4a): open in 'windows verkenner' file ./peilbesluitmarges_copy/converter/constants.py
+   - (4a): open in 'Windows verkenner' file ./peilbesluitmarges_copy/converter/constants.py
    - (4b): update PEILMARGE_GIS_EXPORT_FILE_PATH to the file you want
+    
 5. Run project:
    - (5a): activate the conda environment
      ```
@@ -65,7 +69,8 @@ Thus, these peilmarges can vary over time (see 'Validation assumptions' below).
      ``` 
      python main.py
      ```
-6. See output by opening 'windows verkenner' directory ./peilbesluitmarges_copy/converter/data/output/
+
+6. See output by opening 'Windows verkenner' directory ./peilbesluitmarges_copy/converter/data/output/
 
 
 ### Validation assumptions
