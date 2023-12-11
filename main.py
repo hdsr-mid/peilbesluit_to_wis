@@ -10,8 +10,8 @@ import sys
 def check_python_version():
     major = sys.version_info.major
     minor = sys.version_info.minor
-    minor_min = 6
-    minor_max = 9
+    minor_min = 8
+    minor_max = 12
     if major == 3 and minor_min <= minor <= minor_max:
         return
     raise AssertionError(f"your python version = {major}.{minor}. Please use python 3.{minor_min} to 3.{minor_max}")

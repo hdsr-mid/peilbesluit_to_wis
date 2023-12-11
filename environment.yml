@@ -2,12 +2,7 @@ channels:
   - conda-forge
   - hdsr-mid
 dependencies:
-  - python=3.7
+  - python>=3.8,<=3.12
   - hdsr-wis-config-reader # only for PdReadCsvFlexible
-  - pathlib
-  - typing
   - pandas
-  - isort  # only required for auto-format code
-  - black  # only required for auto-format code
-  - pytest  # only required for running tests
-  - pytest-cov  # only required for running tests coverage
+
