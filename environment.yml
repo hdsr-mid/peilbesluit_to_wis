@@ -2,7 +2,7 @@ channels:
   - conda-forge
   - hdsr-mid
 dependencies:
-  - python>=3.8,<=3.12
+  - python=3.9  # >=3.8,<=3.12
   - hdsr-wis-config-reader # only for PdReadCsvFlexible
   - pandas
 

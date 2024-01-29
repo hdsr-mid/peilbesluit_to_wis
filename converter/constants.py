@@ -4,7 +4,7 @@ from pathlib import Path
 import numpy as np
 
 
-# USER_SETINGS
+# USER_SETTINGS
 O_drive = Path("O:/")
 PEILMARGE_GIS_EXPORT_DIR = O_drive / "Planvorming\GIS\Peilbesluiten\Aanpak Actuele Peilbesluiten\Output FME-script"
 PEILMARGE_GIS_EXPORT_FILE_PATH = PEILMARGE_GIS_EXPORT_DIR / "Koppeling_AAP.csv"
@@ -116,58 +116,57 @@ class TimeSeriesMetaBase:
         raise NotImplementedError
 
 
+class TweedeBovengrens(TimeSeriesMetaBase):
+    longname = " Peilbesluitpeil tweede bovengrens"
+    units = "m"
+    parameter_id = "Hpl.2b.0"
+    # timestamp_columns = [
+    #     TimestampColumns.eind_winter,
+    #     TimestampColumns.begin_winter,
+    # ]
+
+
+class EersteBovengrens(TimeSeriesMetaBase):
+    longname = " Peilbesluitpeil eerste bovengrens"
+    units = "m"
+    parameter_id = "Hpl.b.0"
+    # timestamps = [
+    #     TimestampColumns.eind_winter,
+    #     TimestampColumns.begin_winter,
+    # ]
+
+
 class Peilbesluitpeil(TimeSeriesMetaBase):
     longname = "Peilbesluitpeil"
-    units = "m"  # TODO: @roger/job: peil is to mnap en geen m (in voorbeeld xml staat m)
+    units = "m"
     parameter_id = "Hpl"
-    timestamp_columns = [
-        TimestampColumns.eind_winter,
-        TimestampColumns.begin_zomer,
-        TimestampColumns.eind_zomer,
-        TimestampColumns.begin_winter,
-    ]
-
-
-class TweedeOndergrens(TimeSeriesMetaBase):
-    longname = " Peilbesluitpeil tweede ondergrens"
-    units = "m"  # TODO: @roger/job: peil is to mnap en geen m (in voorbeeld xml staat m)
-    parameter_id = "Hpl.2o.0"
-    timestamp_columns = [
-        TimestampColumns.eind_winter,
-        TimestampColumns.begin_zomer,
-        TimestampColumns.eind_zomer,
-        TimestampColumns.begin_winter,
-    ]
+    # timestamp_columns = [
+    #     TimestampColumns.eind_winter,
+    #     TimestampColumns.begin_zomer,
+    #     TimestampColumns.eind_zomer,
+    #     TimestampColumns.begin_winter,
+    # ]
 
 
 class EersteOndergrens(TimeSeriesMetaBase):
     longname = " Peilbesluitpeil eerste ondergrens"
-    units = "m"  # TODO: @roger/job: peil is to mnap en geen m (in voorbeeld xml staat m)
+    units = "m"
     parameter_id = "Hpl.o.0"
-    timestamp_columns = [
-        TimestampColumns.begin_zomer,
-        TimestampColumns.eind_zomer,
-    ]
+    # timestamp_columns = [
+    #     TimestampColumns.begin_zomer,
+    #     TimestampColumns.eind_zomer,
+    # ]
 
 
-class TweedeBovengrens(TimeSeriesMetaBase):
+class TweedeOndergrens(TimeSeriesMetaBase):
     longname = " Peilbesluitpeil tweede ondergrens"
-    units = "m"  # TODO: @roger/job: peil is to mnap en geen m (in voorbeeld xml staat m)
-    parameter_id = "Hpl.b.0"
-    timestamp_columns = [
-        TimestampColumns.eind_winter,
-        TimestampColumns.begin_winter,
-    ]
-
-
-class EersteBovengrens(TimeSeriesMetaBase):
-    longname = " Peilbesluitpeil eerste ondergrens"
-    units = "m"  # TODO: @roger/job: peil is to mnap en geen m (in voorbeeld xml staat m)
-    parameter_id = "Hpl.2b.0"
-    timestamps = [
-        TimestampColumns.eind_winter,
-        TimestampColumns.begin_winter,
-    ]
+    units = "m"
+    parameter_id = "Hpl.2o.0"
+    # timestamp_columns = [
+    #     TimestampColumns.begin_zomer,
+    #     TimestampColumns.eind_zomer,
+    #     TimestampColumns.begin_winter,
+    # ]
 
 
 class XmlConstants:

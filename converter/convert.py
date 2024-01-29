@@ -1,10 +1,10 @@
 from converter import constants
 from converter.constants import ColumnNameDtypeConstants
 from converter.constants import TAB
-from converter.utils import DatesColumns
 from converter.utils import get_progress
 from converter.xml_builder import XmlSeriesBuilder
 from datetime import datetime
+from hdsr_wis_config_reader.utils import DateColumn
 from hdsr_wis_config_reader.utils import PdReadFlexibleCsv
 from pathlib import Path
 from typing import Optional
@@ -32,10 +32,10 @@ class ConvertCsvToXml(ColumnNameDtypeConstants):
         self._csv_rows_no_error = None
         self._output_xml_path = None
         self._outputdir = None
-        self.datecolumn_start = DatesColumns(
+        self.datecolumn_start = DateColumn(
             column_name=self.col_startdatum, date_format=constants.DateFormats.yyyymmdd.value, errors="raise"
         )
-        self.datecolumn_eind = DatesColumns(
+        self.datecolumn_eind = DateColumn(
             column_name=self.col_einddatum, date_format=constants.DateFormats.yyyymmdd.value, errors="raise"
         )
 
@@ -100,7 +100,6 @@ class ConvertCsvToXml(ColumnNameDtypeConstants):
         # We already validated if columns exist and dtypes
         error_list = []  # {<csv_row_index>:<error_message>}
         for index, row in self.df.iterrows():
-
             pgid = row[self.col_pgid]
 
             # check 1: ensure that dates in 1 row are ordered (eind_winter < begin_zomer < eind_zomer < begin_winter)
@@ -305,4 +304,4 @@ class ConvertCsvToXml(ColumnNameDtypeConstants):
             return
         xml_path = self.output_dir / "PeilbesluitPi.xml"
         logger.info(f"creating {xml_path}")
-        _, _ = self._create_xml(xml_path=xml_path, create_small_xml=True)
+        xml_small_file_path, xml_large_file_path = self._create_xml(xml_path=xml_path, create_small_xml=True)  # noqa
