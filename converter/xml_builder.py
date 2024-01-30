@@ -9,7 +9,6 @@ import pandas as pd
 
 
 class XmlSeriesBuilder(ColumnNameDtypeConstants):
-
     """
     Below the first three rows of the input csv are shown:
 

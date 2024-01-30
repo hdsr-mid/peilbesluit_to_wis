@@ -101,8 +101,8 @@ class BuilderBase:
             self.periods:
                 1) (4, 1, 1.375),  # First period starts April 1 and has level 1.375 mNAP
                 2) (5, 1, 1.5),    # Second period starts May 1 and has level 1.5 mNAP
-                3) (9, 1, 1.375),  # etc..
-                4) (10, 1, 1.25)   # etc..
+                3) (9, 1, 1.375),  # etc...
+                4) (10, 1, 1.25)   # etc...
 
             Example 1:
                 input = month=1, day=1
@@ -153,9 +153,10 @@ class PeilbesluitPeil(BuilderBase):
 
     @property
     def periods(self) -> list:
-        p1 = ConstantPeriod(start=self.eind_winter, end=self.begin_zomer, level=(self.zomerpeil + self.winterpeil) / 2)
+        water_level_in_overgangs_period = (self.zomerpeil + self.winterpeil) / 2
+        p1 = ConstantPeriod(start=self.eind_winter, end=self.begin_zomer, level=water_level_in_overgangs_period)
         p2 = ConstantPeriod(start=self.begin_zomer, end=self.eind_zomer, level=self.zomerpeil)
-        p3 = ConstantPeriod(start=self.eind_zomer, end=self.begin_winter, level=(self.zomerpeil + self.winterpeil) / 2)
+        p3 = ConstantPeriod(start=self.eind_zomer, end=self.begin_winter, level=water_level_in_overgangs_period)
         p4 = ConstantPeriod(start=self.begin_winter, end=self.eind_winter, level=self.winterpeil)
         return [p1, p2, p3, p4]
 
@@ -170,6 +171,11 @@ class Ondergrens(BuilderBase):
 
     @property
     def periods(self) -> list:
+        # In de overgangsperiod (tussen zomer- en winter, en vica-versa), dan moeten de marges wat groter zijn:
+        #  - peilbesluitpeil heeft 3 verschillende niveaus/jaar: 1x winterpeil, 1x zomerpeil, 2x hetzelfde overganspeil
+        #  - marges heeft 2 verschillende niveaus per jaar: wintermarge en zomermarge
+
+        # ondermarges zitten aan zomer periode vast (begin tm eind zomer)
         p1 = ConstantPeriod(start=self.begin_zomer, end=self.eind_zomer, level=self.zomerpeil - self.marge)
         p2 = ConstantPeriod(start=self.eind_zomer, end=self.begin_zomer, level=self.winterpeil - self.marge)
         return [p1, p2]
@@ -185,6 +191,11 @@ class Bovengrens(BuilderBase):
 
     @property
     def periods(self) -> list:
+        # In de overgangsperiod (tussen zomer- en winter, en vica-versa), dan moeten de marges wat groter zijn:
+        #  - peilbesluitpeil heeft 3 verschillende niveaus/jaar: 1x winterpeil, 1x zomerpeil, 2x hetzelfde overganspeil
+        #  - marges heeft 2 verschillende niveaus per jaar: winter marge en zomer marge
+
+        # bovenmarges zitten aan winter periode vast (begin winter tm eind winter)
         p1 = ConstantPeriod(start=self.eind_winter, end=self.begin_winter, level=self.zomerpeil + self.marge)
-        p2 = ConstantPeriod(start=self.begin_winter, end=self.eind_winter, level=self.zomerpeil + self.marge)
+        p2 = ConstantPeriod(start=self.begin_winter, end=self.eind_winter, level=self.winterpeil + self.marge)
         return [p1, p2]
