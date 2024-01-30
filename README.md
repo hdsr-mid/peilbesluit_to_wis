@@ -12,6 +12,13 @@ Validate and covert a .csv to .xml to enable "operationeel peilbesluit" in FEWS 
 has >=1 rows in the .csv, and each row has a start- and enddate and peilmarges. 
 Thus, these peilmarges can vary over time (see 'Validation assumptions' below). 
 
+### Development
+This codebase is a mesh and contains a lot of complexity that would have not been there if I used more deps.
+Why? At the start of the project, we (Roger, Job and I) decided this code would run in FEWS itself. Therefore, I used
+as little deps. For example, I used python built-in 'csv' instead of deb 'pandas'. 
+However, at the end of this project, we decided to run this code outside FEWS. I managed to replace most of the 
+'csv-instead-of-pandas' complexity, but a lot of the original code structure still exists.  
+
 ### Workflow
 
 ##### Things to do on beforehand:
