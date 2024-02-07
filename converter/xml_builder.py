@@ -232,6 +232,10 @@ class XmlSeriesBuilder(ColumnNameDtypeConstants):
         if self.is_first_pgid_csv_row:
             self.add_header(timeseries_constants=timeseries_constants)
 
+        # TODO: remove this
+        if self.pgid == "PG0018":
+            a = 2
+
         ts_builder = timeseries_builder.Bovengrens(
             # baseclass arguments
             pgid=self.pgid,

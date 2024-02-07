@@ -1,5 +1,6 @@
 from converter.constants import DateFormats
 from datetime import datetime
+from datetime import timedelta
 
 
 class ConstantPeriod:
@@ -90,7 +91,44 @@ class BuilderBase:
                 # remove last series to avoid duplicate dates in series. The first series of the 2nd row dominates
                 # the last series of the 1st row (otherwise duplicate dates)
                 series_data = series_data[:-1]
+
+        # series_data = self._ugly_fix_peaks(series_data)
         return series_data
+
+    @staticmethod
+    def _ugly_fix_peaks(series_data: list) -> list:
+        """I see some spykes/peak in timeseries + I don't have time find the cause of this. Better would be to do this
+        whole project over (see Development in README.md)."""
+        new_series_data = []
+
+        for index, series in enumerate(series_data):
+            if index == 0:
+                new_series_data.append(series)
+                continue
+            try:
+                _previous = series_data[index - 1]
+                _next = series_data[index + 1]
+            except IndexError:
+                new_series_data.append(series)
+                continue
+
+            previous_date, previous_value = _previous
+            current_date, current_value = series
+            next_date, next_value = _next
+
+            min_timedelta = min(current_date - previous_date, next_date - current_date)
+            is_date_peak = min_timedelta < timedelta(days=2)
+            if not is_date_peak:
+                new_series_data.append(series)
+                continue
+
+            is_value_peak = previous_value == next_value != current_value
+            if not is_value_peak:
+                new_series_data.append(series)
+                continue
+            # TODO
+
+        return new_series_data
 
     def get_period_in_between_date(self, month: int, day: int) -> ConstantPeriod:
         """
