@@ -39,44 +39,47 @@ However, at the end of this project, we decided to run this code outside FEWS. I
 
 ### Usage
 1. Make sure you have Anaconda installed. Verify by: Windows key -> 'Anaconda Prompt 3 (Prod)'. Note that you can not use cmd as:
-   - it may result in a 'CondaHttpError' when building conda environment (step 2b).
+   - It may result in a 'CondaHttpError' when building conda environment (step 2b).
    - Moreover, within VDI you can do 'conda info --envs' but not 'conda activate <env_name>'...
-
-2. Run this in Anaconda Prompt 3 (Prod):
-    - (2a): go to the O: drive
+2. Go to code by running this in Anaconda Prompt 3 (Prod):
+    - (2a): Go to the O: drive
       ```
       O:
       ```
-    - (2b): change directory (cd) to the root of this code project 
+    - (2b): Change directory (cd) to the root of this code project 
       ```
-      cd Planvorming/GIS/Peilbesluiten/Aanpak Actuele Peilbesluiten/git/peilbesluitmarges_copy
+      cd Planvorming/GIS/Peilbesluiten/Aanpak Actuele Peilbesluiten/git/peilbesluit_to_wis
       ```
+      (2c) If this repo/folder does not exist, then manually create its parent folder:
+      - O:/Planvorming/GIS/Peilbesluiten/Aanpak Actuele Peilbesluiten/git/
+      
+      (2d) And then run:
+       ```
+       git clone https://github.com/hdsr-mid/peilbesluit_to_wis.git
+       ```
+      (2e) Again, change directory (cd) to the root of this code project (step 2b)
 3. Prepare Check if you have the conda environment:
-    - (3a): get the list with existing conda environments
+    - (3a): Get the list with existing conda environments
       ```
       conda info --envs
       ```
-    - (3b): if 'peilbesluitmarges' is listed, go to step (4a)
-    - (3c): build the conda environment (this takes an hour!!) and needs to be done only 1 time  
+    - (3b): If 'peilbesluit_to_wis' is listed, go to step (4a)
+    - (3c): Build the conda environment (this takes an hour!!) and needs to be done only 1 time  
       ```
-      conda env create --name peilbesluitmarges --file environment.yml
+      conda env create --name peilbesluit_to_wis --file environment.yml
       ```
-    - (3d): verify if 3d is success with step (3a)
-      
-4. Point app to the correct input file
-   - (4a): open in 'Windows verkenner' file ./peilbesluitmarges_copy/converter/constants.py
-   - (4b): update PEILMARGE_GIS_EXPORT_FILE_PATH to the file you want
-    
+    - (3d): Verify if 3d is success with step (3a)
+4. Optionally, point app to the correct input file by editing PEILMARGE_GIS_EXPORT_FILE_PATH
+    in ./converter/constants.py
 5. Run project:
-   - (5a): activate the conda environment
+   - (5a): Activate the conda environment
      ```
-     conda activate peilbesluitmarges
+     conda activate peilbesluit_to_wis
      ```
-   - (5b): run the python project
+   - (5b): Run the python project
      ``` 
      python main.py
      ```
-
 6. See output by opening 'Windows verkenner' directory ./peilbesluitmarges_copy/converter/data/output/
 
 
@@ -119,22 +122,22 @@ None
 
 ### Contributions
 All contributions, bug reports, bug fixes, documentation improvements, enhancements and ideas are
-welcome on https://github.com/hdsr-mid/peilbesluitmarges/issues
+welcome on https://github.com/hdsr-mid/peilbesluit_to_wis/issues
 
 
-### Test Coverage
+### Test Coverage (March 3 2024)
 ```
----------- coverage: platform win32, python 3.7.12-final-0 -----------
+---------- coverage: platform win32, python 3.10.13-final-0 ----------
 Name                              Stmts   Miss  Cover
 -----------------------------------------------------
-converter\constants.py              106      5    95%
-converter\convert.py                210     50    76%
-converter\timeseries_builder.py     126      8    94%
-converter\utils.py                   26      6    77%
-converter\xml_builder.py            134      5    96%
+converter\constants.py              101      5    95%
+converter\convert.py                217     50    77%
+converter\timeseries_builder.py     127      8    94%
+converter\utils.py                   18      6    67%
+converter\xml_builder.py            135      5    96%
 main.py                              36     36     0%
 -----------------------------------------------------
-TOTAL                               638    110    83%
+TOTAL                               634    110    83%
 ```
 
 ### Conda general tips

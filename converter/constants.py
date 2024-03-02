@@ -120,53 +120,30 @@ class TweedeBovengrens(TimeSeriesMetaBase):
     longname = " Peilbesluitpeil tweede bovengrens"
     units = "m"
     parameter_id = "Hpl.2b.0"
-    # timestamp_columns = [
-    #     TimestampColumns.eind_winter,
-    #     TimestampColumns.begin_winter,
-    # ]
 
 
 class EersteBovengrens(TimeSeriesMetaBase):
     longname = " Peilbesluitpeil eerste bovengrens"
     units = "m"
     parameter_id = "Hpl.b.0"
-    # timestamps = [
-    #     TimestampColumns.eind_winter,
-    #     TimestampColumns.begin_winter,
-    # ]
 
 
 class Peilbesluitpeil(TimeSeriesMetaBase):
     longname = "Peilbesluitpeil"
     units = "m"
-    parameter_id = "Hpl"
-    # timestamp_columns = [
-    #     TimestampColumns.eind_winter,
-    #     TimestampColumns.begin_zomer,
-    #     TimestampColumns.eind_zomer,
-    #     TimestampColumns.begin_winter,
-    # ]
+    parameter_id = "Hpl.0"
 
 
 class EersteOndergrens(TimeSeriesMetaBase):
     longname = " Peilbesluitpeil eerste ondergrens"
     units = "m"
     parameter_id = "Hpl.o.0"
-    # timestamp_columns = [
-    #     TimestampColumns.begin_zomer,
-    #     TimestampColumns.eind_zomer,
-    # ]
 
 
 class TweedeOndergrens(TimeSeriesMetaBase):
     longname = " Peilbesluitpeil tweede ondergrens"
     units = "m"
     parameter_id = "Hpl.2o.0"
-    # timestamp_columns = [
-    #     TimestampColumns.begin_zomer,
-    #     TimestampColumns.eind_zomer,
-    #     TimestampColumns.begin_winter,
-    # ]
 
 
 class XmlConstants:
