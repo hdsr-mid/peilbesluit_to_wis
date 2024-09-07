@@ -33,10 +33,10 @@ class ConvertCsvToXml(ColumnNameDtypeConstants):
         self._output_xml_path = None
         self._outputdir = None
         self.datecolumn_start = DateColumn(
-            column_name=self.col_startdatum, date_format=constants.DateFormats.yyyymmdd.value, errors="raise"
+            column_name=self.col_startdatum, date_format=constants.DateFormats.yyyymmdd.value,
         )
         self.datecolumn_eind = DateColumn(
-            column_name=self.col_einddatum, date_format=constants.DateFormats.yyyymmdd.value, errors="raise"
+            column_name=self.col_einddatum, date_format=constants.DateFormats.yyyymmdd.value,
         )
 
     @property

@@ -21,14 +21,14 @@ However, at the end of this project, we decided to run this code outside FEWS. I
 
 ### Workflow
 
-##### Things to do on beforehand:
+##### Things to do beforehand:
 - Ask team 'Peilbesluiten' (see input below) to create a new PEILMARGE_GIS_EXPORT .csv file.
 
 ##### Input:
 - One .csv with peilmarges that is exported from ArcGis with an FME script.
   - It exports to PEILMARGE_GIS_EXPORT_FILE_PATH (see in converter/constants.py)
   - The FEM script is developed and maintained by team 'GIS' (Inger) 
-  - This export is not scheduled, but carried out on demand by team 'Peilbesluiten' (Hielke)
+  - This export is not scheduled, but carried out on demand by team 'Peilbesluiten' (Hielke/Mathilda)
 
 ##### Output:
 - One data/output/{datetime}/orig.csv
@@ -36,6 +36,10 @@ However, at the end of this project, we decided to run this code outside FEWS. I
 - One data/output/{datetime}/without_errors_that_will_be_used_for_FEWS_WIS_xml.csv
 - Optionally, one data/output/{datetime}/PeilbesluitPi.xml dependent on CREATE_XML (bool) in converter/constants.py
 
+##### Things to do afterwards:
+- Start PBE-specific FEWS-standalone (VAPD-Reken01) that contains the shapefile of peilgebieden representing current year, including relations with measurement locations of waterheight
+- Copy PeilbesluitPi.xml to import folder of FEWS-SA
+- Run workflows "Import peilbesluit", "Nabewerking peilbesluit import" (choose suitable period via T0 and "standaard begintoestand"), "Peilbesluit-evaluatie uur" and "Peilbesluit-evaluatie dag"
 
 ### Usage
 1. Make sure you have Anaconda installed. Verify by: Windows key -> 'Anaconda Prompt 3 (Prod)'. Note that you can not use cmd as:
